@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Seconde – Plateforme QCM</title>
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    font-family: "Segoe UI", sans-serif;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    min-height: 100vh;
+    padding: 30px;
+    color: #2d3436;
+}
+
+h1 {
+    text-align: center;
+    color: white;
+    margin-bottom: 10px;
+    font-size: 2.6em;
+}
+
+.subtitle {
+    text-align: center;
+    color: #ecf0f1;
+    margin-bottom: 40px;
+    font-size: 1.2em;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 25px;
+    max-width: 1300px;
+    margin: auto;
+}
+
+.card {
+    background: white;
+    border-radius: 22px;
+    padding: 25px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.25);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+    position: relative;
+}
+
+.card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 25px 50px rgba(0,0,0,0.35);
+}
+
+.card h2 {
+    margin-bottom: 12px;
+    font-size: 1.5em;
+}
+
+.card p {
+    color: #636e72;
+    font-size: 0.95em;
+}
+
+.badge {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: #6c5ce7;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.75em;
+    font-weight: bold;
+}
+
+.matiere-fr { border-top: 8px solid #e17055; }
+.matiere-maths { border-top: 8px solid #0984e3; }
+.matiere-anglais { border-top: 8px solid #00b894; }
+.matiere-hg { border-top: 8px solid #d63031; }
+.matiere-pc { border-top: 8px solid #6c5ce7; }
+.matiere-svt { border-top: 8px solid #2ecc71; }
+.matiere-esp { border-top: 8px solid #f39c12; }
+.matiere-ses { border-top: 8px solid #e84393; }
+.matiere-arts { border-top: 8px solid #8e44ad; }
+.matiere-cg { border-top: 8px solid #34495e; }
+
+footer {
+    margin-top: 60px;
+    text-align: center;
+    color: #ecf0f1;
+    font-size: 0.9em;
+}
+</style>
+</head>
+
+<body>
+
+<h1>📘 Classe de Seconde</h1>
+<div class="subtitle">
+    Plateforme interactive – Chapitres & QCM par matière
+</div>
+
+<div class="grid" id="matieres"></div>
+
+<footer>
+    © Plateforme pédagogique – Seconde MoIAj 2025-2026
+</footer>
+
+<script>
+const matieres = [
+ { nom:"Français", dossier:"Francais", classe:"matiere-fr" },
+ { nom:"Maths", dossier:"Maths", classe:"matiere-maths" },
+ { nom:"Anglais", dossier:"Anglais", classe:"matiere-anglais" },
+ { nom:"Histoire-Géographie", dossier:"Histoire-Geo", classe:"matiere-hg" },
+ { nom:"Physique-Chimie", dossier:"Physique-Chimie", classe:"matiere-pc" },
+ { nom:"SVT", dossier:"SVT", classe:"matiere-svt" },
+ { nom:"Espagnol", dossier:"Espagnol", classe:"matiere-esp" },
+ { nom:"SES", dossier:"SES", classe:"matiere-ses" },
+ { nom:"Arts", dossier:"Arts", classe:"matiere-arts" },
+ { nom:"Culture Générale", dossier:"Culture-Generale", classe:"matiere-cg" }
+];
+
+const container = document.getElementById("matieres");
+
+matieres.forEach(m => {
+    const div = document.createElement("div");
+    div.className = `card ${m.classe}`;
+    div.innerHTML = `
+        <span class="badge">10 chapitres</span>
+        <h2>📚 ${m.nom}</h2>
+        <p>
+            • 10 chapitres<br>
+            • 5 QCM par chapitre<br>
+            • Entraînement & évaluation
+        </p>
+    `;
+    div.onclick = () => {
+        alert(
+            m.nom +
+            "\\n\\nStructure prévue :\\n" +
+            "→ 10 chapitres\\n" +
+            "→ 5 QCM par chapitre\\n\\n" +
+            "Lien à connecter vers :\\n" +
+            "/Seconde/" + m.dossier + "/"
+        );
+        // PLUS TARD :
+        // window.location.href = m.dossier + "/index.html";
+    };
+    container.appendChild(div);
+});
+</script>
+
+</body>
+</html>
