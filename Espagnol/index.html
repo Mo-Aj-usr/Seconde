@@ -1,1 +1,99 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Español – Plataforma QCM</title>
+<style>
+    body {
+        font-family: "Segoe UI", sans-serif;
+        background: linear-gradient(135deg, #ff9a8b, #ff6a88);
+        min-height: 100vh;
+        padding: 30px;
+        color: #2d3436;
+    }
+    h1 {
+        text-align: center;
+        color: white;
+        margin-bottom: 10px;
+        font-size: 2.6em;
+    }
+    .subtitle {
+        text-align: center;
+        color: #ecf0f1;
+        margin-bottom: 40px;
+        font-size: 1.2em;
+    }
+    .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 25px;
+        max-width: 1300px;
+        margin: auto;
+    }
+    .card {
+        background: white;
+        border-radius: 22px;
+        padding: 25px;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.25);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        cursor: pointer;
+        position: relative;
+    }
+    .card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 25px 50px rgba(0,0,0,0.35);
+    }
+    .card h2 {
+        margin-bottom: 12px;
+        font-size: 1.5em;
+    }
+    footer {
+        margin-top: 60px;
+        text-align: center;
+        color: #ecf0f1;
+        font-size: 0.9em;
+    }
+</style>
+</head>
+
+<body>
+
+<h1>📘 Español</h1>
+<div class="subtitle">
+    Plataforma interactiva – Capítulos & QCM por tema
+</div>
+
+<div class="grid" id="matieres"></div>
+
+<footer>
+    © Plataforma educativa – Seconde MoIAj 2025-2026
+</footer>
+
+<script>
+const matieres = [
+    { nom: "Solidaridad-Navidad", dossier: "Solidaridad-Navidad", classe: "matiere-espagnol" }
+];
+
+const container = document.getElementById("matieres");
+
+matieres.forEach(m => {
+    const div = document.createElement("div");
+    div.className = `card ${m.classe}`;
+    div.innerHTML = `
+        <h2>📚 ${m.nom}</h2>
+        <p>
+            • QCM interactivos sobre Solidaridad y Navidad<br>
+            • 7 QCMs disponibles
+        </p>
+    `;
+    div.onclick = () => {
+        window.open("Seconde/Espagnol/" + m.dossier + "/index.html", "_blank");
+    };
+    container.appendChild(div);
+});
+</script>
+
+</body>
+</html>
 
