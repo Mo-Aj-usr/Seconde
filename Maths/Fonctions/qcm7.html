@@ -1,0 +1,1060 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>QCM Fonctions 7 - 2de</title>
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-light: #dbeafe;
+      --danger: #b91c1c;
+      --success: #15803d;
+      --bg: #f3f4f6;
+      --text: #111827;
+      --card-bg: #ffffff;
+      --border: #e5e7eb;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    .app {
+      max-width: 900px;
+      width: 100%;
+      padding: 24px 16px 32px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+      padding: 24px 24px 20px;
+    }
+
+    h1 {
+      margin-top: 0;
+      margin-bottom: 8px;
+      font-size: 1.6rem;
+      font-weight: 700;
+    }
+
+    .subtitle {
+      color: #4b5563;
+      margin-bottom: 16px;
+      font-size: 0.95rem;
+    }
+
+    .question-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.8rem;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: #eff6ff;
+      color: #1d4ed8;
+      font-weight: 600;
+    }
+
+    .progress-container {
+      flex: 1;
+      background: #e5e7eb;
+      border-radius: 999px;
+      height: 8px;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #2563eb, #4f46e5);
+      transition: width 0.25s ease-out;
+    }
+
+    .question-index {
+      font-size: 0.85rem;
+      color: #6b7280;
+      min-width: 110px;
+      text-align: right;
+    }
+
+    .question-text {
+      font-size: 1.02rem;
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+
+    .question-topic {
+      font-size: 0.82rem;
+      color: #6b7280;
+      margin-bottom: 14px;
+    }
+
+    .answers {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .answer-option {
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      padding: 10px 12px;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      cursor: pointer;
+      transition: background 0.15s ease, border-color 0.15s ease, transform 0.05s ease;
+      background: #f9fafb;
+    }
+
+    .answer-option:hover {
+      background: #eef2ff;
+      border-color: #c7d2fe;
+      transform: translateY(-1px);
+    }
+
+    .answer-option.disabled {
+      cursor: default;
+      opacity: 0.9;
+      transform: none;
+    }
+
+    .answer-option.disabled:hover {
+      background: #f9fafb;
+      border-color: var(--border);
+    }
+
+    .answer-input {
+      margin-top: 3px;
+      accent-color: #2563eb;
+    }
+
+    .answer-label {
+      flex: 1;
+      font-size: 0.95rem;
+    }
+
+    .answer-status {
+      font-size: 0.78rem;
+      font-weight: 600;
+      margin-top: 2px;
+    }
+
+    .answer-option.correct {
+      border-color: var(--success);
+      background: #ecfdf3;
+    }
+
+    .answer-option.incorrect {
+      border-color: var(--danger);
+      background: #fef2f2;
+    }
+
+    .answer-option.correct .answer-status {
+      color: var(--success);
+    }
+
+    .answer-option.incorrect .answer-status {
+      color: var(--danger);
+    }
+
+    .feedback {
+      margin-top: 6px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      line-height: 1.4;
+      border: 1px solid #d1d5db;
+      background: #f9fafb;
+    }
+
+    .feedback.correct {
+      border-color: var(--success);
+      background: #ecfdf3;
+    }
+
+    .feedback.incorrect {
+      border-color: var(--danger);
+      background: #fef2f2;
+    }
+
+    .feedback-title {
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .nav-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 16px;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .nav-buttons {
+      display: flex;
+      gap: 8px;
+    }
+
+    button {
+      border-radius: 999px;
+      border: 1px solid transparent;
+      padding: 7px 14px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease,
+        transform 0.05s ease, box-shadow 0.05s ease;
+      background: white;
+      color: #111827;
+    }
+
+    button:hover {
+      transform: translateY(-0.5px);
+      box-shadow: 0 3px 8px rgba(148, 163, 184, 0.45);
+    }
+
+    button:active {
+      transform: translateY(0);
+      box-shadow: none;
+    }
+
+    .btn-primary {
+      background: linear-gradient(90deg, #2563eb, #4f46e5);
+      color: white;
+      border-color: #1d4ed8;
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(90deg, #1d4ed8, #4338ca);
+    }
+
+    .btn-outline {
+      background: white;
+      border-color: #d1d5db;
+      color: #111827;
+    }
+
+    .btn-ghost {
+      background: transparent;
+      border-color: transparent;
+      color: #4b5563;
+    }
+
+    .btn-small {
+      padding: 6px 12px;
+      font-size: 0.82rem;
+    }
+
+    .score {
+      font-size: 0.9rem;
+      color: #4b5563;
+    }
+
+    .score strong {
+      color: #111827;
+    }
+
+    .pill {
+      border-radius: 999px;
+      padding: 2px 9px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      background: #f3f4f6;
+      color: #374151;
+    }
+
+    .pill-good {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .pill-mid {
+      background: #fef9c3;
+      color: #854d0e;
+    }
+
+    .pill-bad {
+      background: #fee2e2;
+      color: #b91c1c;
+    }
+
+    .results-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.55);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      z-index: 40;
+    }
+
+    .results-modal {
+      background: white;
+      border-radius: 16px;
+      max-width: 460px;
+      width: 100%;
+      padding: 20px 22px 18px;
+      box-shadow: 0 24px 70px rgba(15, 23, 42, 0.4);
+      animation: pop 0.25s ease-out;
+    }
+
+    @keyframes pop {
+      from {
+        opacity: 0;
+        transform: translateY(10px) scale(0.98);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .results-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .results-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+    }
+
+    .results-body {
+      font-size: 0.95rem;
+      color: #374151;
+      margin-bottom: 14px;
+    }
+
+    .results-body p {
+      margin: 4px 0;
+    }
+
+    .results-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    @media (max-width: 600px) {
+      .card {
+        padding: 18px 16px 16px;
+      }
+
+      .question-header {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .question-index {
+        text-align: left;
+      }
+
+      .results-modal {
+        padding: 16px 14px 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="app">
+  <div class="card">
+    <h1>QCM – Fonctions (2de)</h1>
+    <div class="subtitle">
+      15 questions conformes au chapitre « Généralités sur les fonctions » : images, antécédents, courbes, signes et variations.
+    </div>
+
+    <div class="question-header">
+      <div class="badge">
+        <span>Fonctions – 2de</span>
+      </div>
+      <div class="progress-container">
+        <div id="progressBar" class="progress-bar"></div>
+      </div>
+      <div id="questionIndex" class="question-index"></div>
+    </div>
+
+    <div id="questionArea">
+      <!-- Question + réponses injectées en JS -->
+    </div>
+
+    <div class="nav-row">
+      <div class="score" id="scoreInfo"></div>
+      <div class="nav-buttons">
+        <button id="prevBtn" class="btn-outline" type="button">← Précédent</button>
+        <button id="nextBtn" class="btn-outline" type="button">Suivant →</button>
+        <button id="finishBtn" class="btn-primary" type="button">Terminer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Résultats -->
+  <div id="resultsOverlay" class="results-overlay" aria-hidden="true">
+    <div class="results-modal">
+      <div class="results-header">
+        <div class="results-title">Résultats du QCM</div>
+        <span id="resultsPill" class="pill"></span>
+      </div>
+      <div class="results-body" id="resultsBody"></div>
+      <div class="results-footer">
+        <button id="closeResultsBtn" class="btn-ghost btn-small" type="button">Fermer</button>
+        <button id="retryBtn" class="btn-primary btn-small" type="button">Recommencer</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Questions basées sur le chapitre fourni
+  const questions = [
+    {
+      topic: "Définition de fonction",
+      text: "On considère une fonction f : E → F. Laquelle de ces affirmations est vraie ?",
+      options: [
+        {
+          text: "À un élément de E, la fonction peut associer plusieurs éléments de F.",
+          correct: false,
+          explanation: "Par définition, une fonction associe à chaque élément de E au plus un élément de F (une image unique)."
+        },
+        {
+          text: "À chaque élément de E, la fonction associe au plus un élément de F.",
+          correct: true,
+          explanation: "C’est la définition d’une fonction : pour tout x dans E, f(x) est unique."
+        },
+        {
+          text: "À chaque élément de F, la fonction associe un unique élément de E.",
+          correct: false,
+          explanation: "Ceci décrit une situation possible, mais ce n’est pas ce qui définit une fonction. La définition part de E vers F."
+        },
+        {
+          text: "Une fonction est forcément donnée par une formule algébrique.",
+          correct: false,
+          explanation: "Elle peut aussi être donnée par un tableau de valeurs ou une courbe."
+        }
+      ]
+    },
+    {
+      topic: "Ensemble de définition",
+      text: "La fonction f est définie sur l’intervalle [−4 ; 5] par f(x) = 3x + 1. Que signifie « f est définie sur [−4 ; 5] » ?",
+      options: [
+        {
+          text: "Seuls les réels x entre −4 et 5 ont une image par f.",
+          correct: true,
+          explanation: "L’ensemble de définition est l’ensemble des x pour lesquels f(x) existe : ici, x ∈ [−4 ; 5]."
+        },
+        {
+          text: "Tous les réels ont une image par f.",
+          correct: false,
+          explanation: "Ce serait vrai si l’on disait « f est définie sur ℝ », ce qui n’est pas le cas ici."
+        },
+        {
+          text: "Seuls les entiers entre −4 et 5 ont une image par f.",
+          correct: false,
+          explanation: "L’intervalle [−4 ; 5] contient tous les réels compris entre −4 et 5, pas seulement les entiers."
+        },
+        {
+          text: "f(x) est égal à 0 en dehors de [−4 ; 5].",
+          correct: false,
+          explanation: "En dehors de l’intervalle de définition, f n’est tout simplement pas définie."
+        }
+      ]
+    },
+    {
+      topic: "Images et antécédents (calcul)",
+      text: "On considère g(x) = 3x² + 1. Quelle est l’image de 2 par g ?",
+      options: [
+        {
+          text: "g(2) = 3 × 2 + 1 = 7",
+          correct: false,
+          explanation: "Il faut d’abord calculer x² : g(2) = 3 × (2²) + 1 = 3 × 4 + 1 = 13."
+        },
+        {
+          text: "g(2) = 3 × 2² + 1 = 13",
+          correct: true,
+          explanation: "On applique la définition : g(2) = 3 × 4 + 1 = 12 + 1 = 13. L’image de 2 est donc 13."
+        },
+        {
+          text: "g(2) = 3 × 2² = 12",
+          correct: false,
+          explanation: "Il manque le +1 dans l’expression de g(x)."
+        },
+        {
+          text: "g(2) = 2² + 3 = 7",
+          correct: false,
+          explanation: "L’expression est g(x) = 3x² + 1 et non x² + 3."
+        }
+      ]
+    },
+    {
+      topic: "Antécédents (résolution d’équation)",
+      text: "Toujours avec g(x) = 3x² + 1, que signifie « trouver les antécédents éventuels de 7 par g » ?",
+      options: [
+        {
+          text: "Résoudre l’équation g(x) = 7.",
+          correct: true,
+          explanation: "Les antécédents de 7 sont les valeurs de x telles que g(x) = 7."
+        },
+        {
+          text: "Calculer g(7).",
+          correct: false,
+          explanation: "Calculer g(7) donnerait l’image de 7, pas ses antécédents."
+        },
+        {
+          text: "Chercher les x tels que g(x) > 7.",
+          correct: false,
+          explanation: "On cherche l’égalité g(x) = 7, pas l’inéquation g(x) > 7."
+        },
+        {
+          text: "Résoudre l’équation 7x = g(x).",
+          correct: false,
+          explanation: "Les antécédents de 7 sont définis par g(x) = 7, donc 3x² + 1 = 7."
+        }
+      ]
+    },
+    {
+      topic: "Antécédents (existence)",
+      text: "Avec g(x) = 3x² + 1, que peut-on dire des antécédents de −2 par g ?",
+      options: [
+        {
+          text: "Il y a deux antécédents car l’équation est du second degré.",
+          correct: false,
+          explanation: "L’équation 3x² + 1 = −2 donne x² = −1, ce qui n’a pas de solution réelle."
+        },
+        {
+          text: "Il n’y a aucun antécédent réel de −2 par g.",
+          correct: true,
+          explanation: "On résout 3x² + 1 = −2 → 3x² = −3 → x² = −1, impossible dans ℝ : aucun antécédent."
+        },
+        {
+          text: "Il y a un seul antécédent réel.",
+          correct: false,
+          explanation: "Une équation x² = −1 n’a aucune solution réelle."
+        },
+        {
+          text: "Tous les réels sont antécédents de −2.",
+          correct: false,
+          explanation: "Ce serait le cas seulement si g(x) = −2 pour tout x, ce qui est faux."
+        }
+      ]
+    },
+    {
+      topic: "Courbe représentative",
+      text: "Que représente la courbe représentative d’une fonction f dans un repère ?",
+      options: [
+        {
+          text: "Toutes les droites d’équation y = f(x).",
+          correct: false,
+          explanation: "On ne parle pas de toutes les droites, mais de l’ensemble des points liés à la fonction."
+        },
+        {
+          text: "L’ensemble des points de coordonnées (x ; f(x)) avec x dans l’ensemble de définition.",
+          correct: true,
+          explanation: "Par définition, la courbe est l’ensemble des points (x ; f(x)) pour x appartenant à Df."
+        },
+        {
+          text: "Seulement les points où f(x) = 0.",
+          correct: false,
+          explanation: "Ces points sont les intersections avec l’axe des abscisses, pas toute la courbe."
+        },
+        {
+          text: "Un segment reliant les points (min x ; f(min x)) et (max x ; f(max x)).",
+          correct: false,
+          explanation: "La courbe peut avoir une forme beaucoup plus complexe qu’un segment."
+        }
+      ]
+    },
+    {
+      topic: "Fonction ou non ?",
+      text: "Pourquoi une courbe verticale (qui pour x = 1 donne plusieurs valeurs de y) ne peut-elle pas représenter une fonction ?",
+      options: [
+        {
+          text: "Parce qu’une fonction doit toujours être une droite.",
+          correct: false,
+          explanation: "Une fonction peut avoir une courbe de forme quelconque, pas nécessairement une droite."
+        },
+        {
+          text: "Parce qu’un réel ne peut avoir qu’une seule image par une fonction.",
+          correct: true,
+          explanation: "Si pour x = 1 on lit plusieurs y, alors 1 a plusieurs images : ce n’est pas une fonction."
+        },
+        {
+          text: "Parce que la courbe doit toujours couper l’axe des ordonnées.",
+          correct: false,
+          explanation: "Une courbe pourrait ne pas couper l’axe des ordonnées tout en représentant une fonction."
+        },
+        {
+          text: "Parce qu’elle ne passe pas par l’origine.",
+          correct: false,
+          explanation: "Passer par l’origine n’est pas une condition pour être une fonction."
+        }
+      ]
+    },
+    {
+      topic: "Lecture graphique d’une image",
+      text: "Pour lire graphiquement l’image d’un réel a par une fonction f, que fait-on ?",
+      options: [
+        {
+          text: "On repère a sur l’axe des ordonnées et on trace une verticale jusqu’à la courbe.",
+          correct: false,
+          explanation: "On repère a sur l’axe des abscisses, pas des ordonnées."
+        },
+        {
+          text: "On repère a sur l’axe des abscisses, on trace une verticale jusqu’à la courbe, puis on lit l’ordonnée.",
+          correct: true,
+          explanation: "On part de x = a sur l’axe horizontal, puis on monte/descend jusqu’à la courbe pour obtenir f(a)."
+        },
+        {
+          text: "On repère a sur l’axe des abscisses et on lit directement f(a) sur cet axe.",
+          correct: false,
+          explanation: "L’image f(a) se lit sur l’axe des ordonnées, pas sur l’axe des abscisses."
+        },
+        {
+          text: "On trace une horizontale depuis a jusqu’à l’axe des ordonnées.",
+          correct: false,
+          explanation: "On trace une verticale jusqu’à la courbe, puis on lit l’ordonnée."
+        }
+      ]
+    },
+    {
+      topic: "Lecture graphique d’un antécédent",
+      text: "Pour lire graphiquement les antécédents d’un réel k par f, que fait-on ?",
+      options: [
+        {
+          text: "On repère k sur l’axe des abscisses et on trace une verticale.",
+          correct: false,
+          explanation: "L’antécédent est une abscisse ; on part de k sur l’axe des ordonnées."
+        },
+        {
+          text: "On repère k sur l’axe des ordonnées, on trace une horizontale jusqu’à la courbe, puis on lit les abscisses.",
+          correct: true,
+          explanation: "Les abscisses des points d’intersection de cette droite avec la courbe sont les antécédents de k."
+        },
+        {
+          text: "On repère k sur l’axe des ordonnées, on lit directement l’antécédent sur cet axe.",
+          correct: false,
+          explanation: "Les antécédents sont des abscisses, donc se lisent sur l’axe horizontal."
+        },
+        {
+          text: "On résout l’équation f(k) = x graphiquement.",
+          correct: false,
+          explanation: "Graphiquement, on ne manipule pas d’équation : on lit les intersections avec la droite y = k."
+        }
+      ]
+    },
+    {
+      topic: "Résolution graphique d’équation",
+      text: "Résoudre graphiquement f(x) = 0 revient à :",
+      options: [
+        {
+          text: "Chercher les points où la courbe coupe l’axe des ordonnées.",
+          correct: false,
+          explanation: "Ces points ont une abscisse 0, pas une ordonnée 0."
+        },
+        {
+          text: "Chercher les points de la courbe situés au-dessus de l’axe des abscisses.",
+          correct: false,
+          explanation: "Au-dessus correspondrait à f(x) > 0, pas à f(x) = 0."
+        },
+        {
+          text: "Chercher les points d’intersection de la courbe avec l’axe des abscisses.",
+          correct: true,
+          explanation: "Sur l’axe des abscisses, y = 0 : les abscisses des points d’intersection sont les solutions de f(x) = 0."
+        },
+        {
+          text: "Chercher les points d’intersection de la courbe avec l’axe des ordonnées.",
+          correct: false,
+          explanation: "Sur l’axe des ordonnées, x = 0 : cela donne f(0), pas les solutions de f(x) = 0."
+        }
+      ]
+    },
+    {
+      topic: "Inéquations et position relative",
+      text: "Résoudre f(x) > g(x) graphiquement, c’est :",
+      options: [
+        {
+          text: "Chercher les abscisses où la courbe de f est au-dessus de celle de g.",
+          correct: true,
+          explanation: "Quand f(x) > g(x), le point de la courbe de f est plus haut (ordonnée plus grande) que celui de g pour la même abscisse."
+        },
+        {
+          text: "Chercher les abscisses où la courbe de f coupe l’axe des abscisses.",
+          correct: false,
+          explanation: "Cela correspond à f(x) = 0, pas à f(x) > g(x)."
+        },
+        {
+          text: "Chercher les abscisses où la courbe de g est au-dessus de celle de f.",
+          correct: false,
+          explanation: "Cela correspondrait plutôt à g(x) > f(x)."
+        },
+        {
+          text: "Chercher les points où f(x) = g(x).",
+          correct: false,
+          explanation: "Les points d’égalité servent à couper l’axe des solutions, mais ne suffisent pas à eux seuls à décrire f(x) > g(x)."
+        }
+      ]
+    },
+    {
+      topic: "Tableau de signes",
+      text: "Chercher les solutions de f(x) > 0 revient à :",
+      options: [
+        {
+          text: "Chercher les abscisses des points de la courbe situés au-dessus de l’axe des abscisses.",
+          correct: true,
+          explanation: "Au-dessus de l’axe des abscisses signifie que l’ordonnée f(x) est positive."
+        },
+        {
+          text: "Chercher les abscisses des points de la courbe situés en dessous de l’axe des abscisses.",
+          correct: false,
+          explanation: "En dessous, c’est f(x) < 0, pas f(x) > 0."
+        },
+        {
+          text: "Chercher les abscisses des points d’intersection avec l’axe des ordonnées.",
+          correct: false,
+          explanation: "Ces points donnent f(0), pas les intervalles où f(x) > 0."
+        },
+        {
+          text: "Chercher les abscisses des points où f(x) = 0.",
+          correct: false,
+          explanation: "Les zéros servent de bornes, mais ne sont pas les solutions de f(x) > 0 (on les exclut)."
+        }
+      ]
+    },
+    {
+      topic: "Fonction croissante / décroissante",
+      text: "Une fonction f est dite croissante sur un intervalle I lorsque :",
+      options: [
+        {
+          text: "Pour tous réels a et b de I, si a < b alors f(a) ≥ f(b).",
+          correct: false,
+          explanation: "Cette propriété caractérise une fonction décroissante, pas croissante."
+        },
+        {
+          text: "Pour tous réels a et b de I, si a < b alors f(a) ≤ f(b).",
+          correct: true,
+          explanation: "Si les abscisses augmentent, les images ne diminuent pas : c’est la définition d’une fonction croissante."
+        },
+        {
+          text: "Pour tous réels a et b de I, on a f(a) = f(b).",
+          correct: false,
+          explanation: "Cela définit une fonction constante, pas forcément croissante."
+        },
+        {
+          text: "Pour tous réels a et b de I, si a < b alors f(a) > f(b).",
+          correct: false,
+          explanation: "Ici l’ordre est inversé : la fonction est décroissante."
+        }
+      ]
+    },
+    {
+      topic: "Maximum et minimum",
+      text: "On dit que f(a) est le maximum de f sur un intervalle I si :",
+      options: [
+        {
+          text: "Pour tout réel x de I, f(a) ≤ f(x).",
+          correct: false,
+          explanation: "Cette condition décrit un minimum, pas un maximum."
+        },
+        {
+          text: "Pour tout réel x de I, f(a) ≥ f(x).",
+          correct: true,
+          explanation: "Le maximum est la plus grande valeur prise par f sur I : f(a) domine les autres f(x)."
+        },
+        {
+          text: "Pour tout réel x de I, f(x) = f(a).",
+          correct: false,
+          explanation: "Cela décrirait une fonction constante sur I, pas seulement un maximum en a."
+        },
+        {
+          text: "f(a) est la plus petite valeur possible de f sur I.",
+          correct: false,
+          explanation: "C’est la définition du minimum, pas du maximum."
+        }
+      ]
+    },
+    {
+      topic: "Tableau de variations",
+      text: "À quoi sert le tableau de variations d’une fonction f ?",
+      options: [
+        {
+          text: "À connaître tous les antécédents possibles d’un réel k.",
+          correct: false,
+          explanation: "Pour les antécédents, on résout f(x) = k (graphiquement ou algébriquement)."
+        },
+        {
+          text: "À résumer les intervalles où f est croissante ou décroissante, et les valeurs extrémales.",
+          correct: true,
+          explanation: "Le tableau de variations rassemble les informations sur le sens de variation et les maxima/minima."
+        },
+        {
+          text: "À calculer les images exactes de tous les réels.",
+          correct: false,
+          explanation: "On ne peut pas tout lister ; la courbe ou la formule donnent les images, pas seulement le tableau."
+        },
+        {
+          text: "À déterminer l’ensemble de définition de f.",
+          correct: false,
+          explanation: "L’ensemble de définition peut être indiqué, mais le rôle principal est le sens de variation."
+        }
+      ]
+    }
+  ];
+
+  let currentIndex = 0;
+  let userAnswers = Array(questions.length).fill(null); // index de réponse choisi
+  let answerStates = Array(questions.length).fill(null); // true/false/null
+  let answeredCount = 0;
+
+  const questionArea = document.getElementById("questionArea");
+  const questionIndexEl = document.getElementById("questionIndex");
+  const progressBar = document.getElementById("progressBar");
+  const scoreInfo = document.getElementById("scoreInfo");
+  const prevBtn = document.getElementById("prevBtn");
+  const nextBtn = document.getElementById("nextBtn");
+  const finishBtn = document.getElementById("finishBtn");
+  const resultsOverlay = document.getElementById("resultsOverlay");
+  const resultsBody = document.getElementById("resultsBody");
+  const resultsPill = document.getElementById("resultsPill");
+  const closeResultsBtn = document.getElementById("closeResultsBtn");
+  const retryBtn = document.getElementById("retryBtn");
+
+  function renderQuestion(index) {
+    const q = questions[index];
+
+    questionIndexEl.textContent = `Question ${index + 1} / ${questions.length}`;
+
+    const chosen = userAnswers[index];
+
+    let html = `
+      <div class="question-text">${q.text}</div>
+      <div class="question-topic">Thème : ${q.topic}</div>
+      <div class="answers">
+    `;
+
+    q.options.forEach((opt, optIndex) => {
+      const isChosen = chosen === optIndex;
+      const state = answerStates[index];
+      const isCorrect = state !== null && opt.correct;
+      const isIncorrectChosen = state === false && isChosen && !opt.correct;
+      const disabledClass = state !== null ? "disabled" : "";
+      const statusLabel =
+        state === null
+          ? ""
+          : isCorrect && isChosen
+          ? "<div class='answer-status'>Bonne réponse</div>"
+          : isIncorrectChosen
+          ? "<div class='answer-status'>Mauvaise réponse</div>"
+          : "";
+
+      let stateClass = "";
+      if (state !== null) {
+        if (isCorrect) stateClass = "correct";
+        if (isIncorrectChosen) stateClass = "incorrect";
+      }
+
+      html += `
+        <label class="answer-option ${disabledClass} ${stateClass}" data-index="${optIndex}">
+          <input
+            class="answer-input"
+            type="radio"
+            name="answer"
+            value="${optIndex}"
+            ${isChosen ? "checked" : ""}
+            ${state !== null ? "disabled" : ""}
+          />
+          <div class="answer-label">
+            <div>${opt.text}</div>
+            ${statusLabel}
+          </div>
+        </label>
+      `;
+    });
+
+    html += `</div>`;
+
+    const state = answerStates[index];
+    if (state !== null) {
+      const chosenOpt = q.options[chosen];
+      const fbClass = chosenOpt && chosenOpt.correct ? "correct" : "incorrect";
+      const fbTitle = chosenOpt && chosenOpt.correct ? "Explication (réponse correcte)" : "Explication (réponse correcte à connaître)";
+      const explanationText =
+        chosenOpt && chosenOpt.correct
+          ? chosenOpt.explanation
+          : q.options.find(o => o.correct).explanation;
+
+      html += `
+        <div class="feedback ${fbClass}">
+          <div class="feedback-title">${fbTitle}</div>
+          <div>${explanationText}</div>
+        </div>
+      `;
+    } else {
+      html += `
+        <div class="feedback">
+          <div class="feedback-title">Astuce</div>
+          <div>Choisis une réponse : la correction détaillée apparaîtra immédiatement.</div>
+        </div>
+      `;
+    }
+
+    questionArea.innerHTML = html;
+
+    // Ajout des événements sur les réponses
+    document.querySelectorAll(".answer-option").forEach((el) => {
+      el.addEventListener("click", (e) => {
+        const qState = answerStates[currentIndex];
+        if (qState !== null) return; // déjà corrigée, ne plus changer
+
+        const optIndex = parseInt(el.getAttribute("data-index"), 10);
+        handleAnswer(optIndex);
+      });
+    });
+
+    updateProgress();
+    updateScoreInfo();
+  }
+
+  function handleAnswer(optIndex) {
+    const q = questions[currentIndex];
+
+    userAnswers[currentIndex] = optIndex;
+    if (answerStates[currentIndex] === null) {
+      answeredCount++;
+    }
+
+    const isCorrect = q.options[optIndex].correct;
+    answerStates[currentIndex] = isCorrect;
+
+    renderQuestion(currentIndex);
+  }
+
+  function updateProgress() {
+    const answered = answerStates.filter(v => v !== null).length;
+    const percentage = (answered / questions.length) * 100;
+    progressBar.style.width = `${percentage}%`;
+  }
+
+  function updateScoreInfo() {
+    const correctCount = answerStates.filter(v => v === true).length;
+    const answered = answerStates.filter(v => v !== null).length;
+    if (answered === 0) {
+      scoreInfo.textContent = "Aucune question corrigée pour l’instant.";
+    } else {
+      scoreInfo.innerHTML = `
+        Score : <strong>${correctCount}</strong> bonne(s) réponse(s)
+        sur ${answered} question(s) corrigée(s).
+      `;
+    }
+  }
+
+  function showResults() {
+    const correctCount = answerStates.filter(v => v === true).length;
+    const total = questions.length;
+    const answered = answerStates.filter(v => v !== null).length;
+    const percent = Math.round((correctCount / total) * 100);
+
+    let pillClass = "pill-mid";
+    let pillText = "";
+    if (percent >= 80) {
+      pillClass = "pill-good";
+      pillText = "Très bien";
+    } else if (percent >= 50) {
+      pillClass = "pill-mid";
+      pillText = "Peut mieux faire";
+    } else {
+      pillClass = "pill-bad";
+      pillText = "À retravailler";
+    }
+    resultsPill.className = `pill ${pillClass}`;
+    resultsPill.textContent = `${percent}% – ${pillText}`;
+
+    resultsBody.innerHTML = `
+      <p><strong>${correctCount}</strong> bonne(s) réponse(s) sur <strong>${total}</strong>.</p>
+      <p>Questions corrigées : ${answered} / ${total}.</p>
+      <p style="margin-top:6px;">
+        Tu peux fermer cette fenêtre pour revenir sur le QCM, corriger ou relire les explications.
+      </p>
+    `;
+
+    resultsOverlay.style.display = "flex";
+    resultsOverlay.setAttribute("aria-hidden", "false");
+  }
+
+  function resetQuiz() {
+    currentIndex = 0;
+    userAnswers = Array(questions.length).fill(null);
+    answerStates = Array(questions.length).fill(null);
+    answeredCount = 0;
+    resultsOverlay.style.display = "none";
+    resultsOverlay.setAttribute("aria-hidden", "true");
+    renderQuestion(currentIndex);
+  }
+
+  // Boutons
+  prevBtn.addEventListener("click", () => {
+    currentIndex = (currentIndex - 1 + questions.length) % questions.length;
+    renderQuestion(currentIndex);
+  });
+
+  nextBtn.addEventListener("click", () => {
+    currentIndex = (currentIndex + 1) % questions.length;
+    renderQuestion(currentIndex);
+  });
+
+  finishBtn.addEventListener("click", () => {
+    showResults();
+  });
+
+  closeResultsBtn.addEventListener("click", () => {
+    resultsOverlay.style.display = "none";
+    resultsOverlay.setAttribute("aria-hidden", "true");
+  });
+
+  retryBtn.addEventListener("click", () => {
+    resetQuiz();
+  });
+
+  // Fermer le modal en cliquant sur le fond
+  resultsOverlay.addEventListener("click", (e) => {
+    if (e.target === resultsOverlay) {
+      resultsOverlay.style.display = "none";
+      resultsOverlay.setAttribute("aria-hidden", "true");
+    }
+  });
+
+  // Initialisation
+  renderQuestion(currentIndex);
+</script>
+</body>
+</html>

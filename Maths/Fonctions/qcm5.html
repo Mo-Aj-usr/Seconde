@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QCM Fonctions 5 - 2de</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .quiz-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            max-width: 900px;
+            width: 100%;
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .quiz-header {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #fff;
+            width: 6.67%;
+            transition: width 0.3s ease;
+            border-radius: 4px;
+        }
+
+        .question-counter {
+            font-size: 18px;
+            font-weight: 500;
+        }
+
+        .question-container {
+            padding: 40px 30px;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .question-number {
+            background: #4facfe;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 15px;
+            font-size: 16px;
+        }
+
+        .question-title {
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 25px;
+            color: #333;
+            line-height: 1.4;
+        }
+
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .option {
+            padding: 20px 25px;
+            border: 2px solid #e1e5e9;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 16px;
+            background: #f8f9fa;
+            position: relative;
+        }
+
+        .option:hover:not(.feedback) {
+            border-color: #4facfe;
+            background: #f0f8ff;
+            transform: translateY(-2px);
+        }
+
+        .option.selected {
+            border-color: #4facfe;
+            background: #e3f2fd;
+            box-shadow: 0 5px 15px rgba(79, 172, 254, 0.3);
+        }
+
+        .option.correct {
+            border-color: #4caf50 !important;
+            background: linear-gradient(135deg, #e8f5e8, #c8e6c9);
+        }
+
+        .option.incorrect {
+            border-color: #f44336 !important;
+            background: linear-gradient(135deg, #ffebee, #ffcdd2);
+        }
+
+        .feedback {
+            background: #f5f5f5;
+            border: 2px solid #ddd;
+            cursor: default;
+            margin-top: 20px;
+            padding: 25px;
+            border-radius: 12px;
+        }
+
+        .feedback-icon {
+            font-size: 28px;
+            margin-bottom: 15px;
+        }
+
+        .feedback.correct .feedback-icon { color: #4caf50; }
+        .feedback.incorrect .feedback-icon { color: #f44336; }
+
+        .feedback-explanation {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #333;
+            margin-top: 10px;
+        }
+
+        .navigation {
+            padding: 25px 30px;
+            background: #f8f9fa;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid #e1e5e9;
+            gap: 15px;
+        }
+
+        .nav-btn {
+            flex: 1;
+            padding: 14px 20px;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .prev-btn {
+            background: #6c757d;
+            color: white;
+        }
+
+        .prev-btn:disabled {
+            background: #dee2e6;
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+
+        .next-btn, .finish-btn {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            font-weight: 600;
+        }
+
+        .finish-btn {
+            background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+        }
+
+        .nav-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+        @media (max-width: 768px) {
+            .navigation {
+                flex-direction: column;
+                gap: 12px;
+            }
+            
+            .question-title {
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container" id="quizContainer">
+        <div class="quiz-header">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="question-counter" id="questionCounter">
+                Question <span id="currentQuestion">1</span>/15
+            </div>
+        </div>
+
+        <div class="question-container" id="questionContainer"></div>
+
+        <div class="navigation" id="navigation">
+            <button class="nav-btn prev-btn" id="prevBtn">Précédent</button>
+            <button class="nav-btn next-btn" id="nextBtn">Suivant</button>
+            <button class="nav-btn finish-btn" id="finishBtn" style="display: none;">Terminer</button>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            // 1. Définition et ensemble de définition [file:2]
+            {
+                question: "Quelle est la <strong>définition</strong> d'une fonction f : E → F ?",
+                options: [
+                    "À tout x ∈ E associe plusieurs y ∈ F",
+                    "À tout x ∈ E associe au plus un y ∈ F",
+                    "À tout y ∈ F associe un x ∈ E",
+                    "E et F ont le même cardinal"
+                ],
+                correct: 1,
+                explanation: "Une fonction associe à chaque x de E <strong>au plus un</strong> y de F (définition du PDF Chap.4 I.1). E est l'ensemble de définition."
+            },
+
+            // 2. Ensemble de définition [file:2]
+            {
+                question: "Pour f(x) = 3x + 1 définie sur [-4, 5], l'ensemble de définition est :",
+                options: [
+                    "ℝ",
+                    "[-4, 5]",
+                    "] -4, 5 [",
+                    "[0, +∞["
+                ],
+                correct: 1,
+                explanation: "L'ensemble de définition est donné explicitement : [-4, 5] (PDF Chap.4 I.2 exemple)."
+            },
+
+            // 3. Image [file:2]
+            {
+                question: "Si f(x) = 5x - x², alors l'<strong>image</strong> de 1 par f est :",
+                options: [
+                    "1",
+                    "4",
+                    "5",
+                    "6"
+                ],
+                correct: 1,
+                explanation: "f(1) = 5×1 - 1² = 4. On dit que 4 est l'image de 1 par f (PDF Chap.4 I.3 Exemple A)."
+            },
+
+            // 4. Antécédent [file:2]
+            {
+                question: "Pour g(x) = 3x + 1, les antécédents de 7 par g sont :",
+                options: [
+                    "x = 2 uniquement",
+                    "x = -2 uniquement",
+                    "x = 2 ou x = -2",
+                    "Aucun"
+                ],
+                correct: 0,
+                explanation: "g(x) = 7 ⇒ 3x + 1 = 7 ⇒ 3x = 6 ⇒ x = 2 (PDF Chap.4 I.3b calcul des antécédents)."
+            },
+
+            // 5. Courbe représentative [file:2]
+            {
+                question: "La <strong>courbe représentative</strong> d'une fonction f dans un repère est :",
+                options: [
+                    "L'ensemble des points (x, y) avec y = f(x), x ∈ D_f",
+                    "L'axe des abscisses",
+                    "La parabole y = x²",
+                    "Tous les points du plan"
+                ],
+                correct: 0,
+                explanation: "C'est l'ensemble des points d'abscisse x ∈ D_f et d'ordonnée f(x) (PDF Chap.4 II.1)."
+            },
+
+            // 6. Lecture graphique image [file:2]
+            {
+                question: "Pour lire graphiquement l'image de a par f :",
+                options: [
+                    "Tracer verticale depuis a sur Ox jusqu'à la courbe",
+                    "Tracer horizontale depuis a sur Oy jusqu'à la courbe",
+                    "Calculer f(a) algébriquement",
+                    "Chercher les extremums"
+                ],
+                correct: 0,
+                explanation: "Verticale depuis a sur Ox → ordonnée = f(a) (PDF Chap.4 II.3 méthode)."
+            },
+
+            // 7. Antécédents graphiques [file:2]
+            {
+                question: "Pour lire graphiquement les antécédents de k par f :",
+                options: [
+                    "Horizontale depuis k sur Oy jusqu'à la courbe",
+                    "Verticale depuis k sur Ox",
+                    "Tracer la tangente",
+                    "Chercher les asymptotes"
+                ],
+                correct: 0,
+                explanation: "Horizontale depuis k → abscisses des points d'intersection (PDF Chap.4 II.3)."
+            },
+
+            // 8. Résolution graphique équation [file:2]
+            {
+                question: "Résoudre graphiquement f(x) = k revient à :",
+                options: [
+                    "Les abscisses des points de la courbe d'ordonnée k",
+                    "Les ordonnées des points d'abscisse k",
+                    "Les extremums de f",
+                    "Le domaine de définition"
+                ],
+                correct: 0,
+                explanation: "Solutions = abscisses des points de la courbe ayant ordonnée k (PDF Chap.4 III.1)."
+            },
+
+            // 9. Inéquation f(x) > k [file:2]
+            {
+                question: "Résoudre f(x) > k graphiquement :",
+                options: [
+                    "Abscisses où la courbe est au-dessus de y = k",
+                    "Abscisses où la courbe est sous y = k",
+                    "Points d'intersection avec y = k",
+                    "Axe des abscisses"
+                ],
+                correct: 0,
+                explanation: "Abscisses des points de la courbe situés au-dessus de y = k (PDF Chap.4 III.2)."
+            },
+
+            // 10. Tableau de signes [file:2]
+            {
+                question: "Un <strong>tableau de signes</strong> de f indique :",
+                options: [
+                    "Le signe de f(x) sur différents intervalles",
+                    "Les valeurs de f(x)",
+                    "Les dérivées",
+                    "Les images"
+                ],
+                correct: 0,
+                explanation: "Position de la courbe par rapport à l'axe des abscisses (PDF Chap.4 III.3)."
+            },
+
+            // 11. Variations croissante [file:2]
+            {
+                question: "f est <strong>croissante</strong> sur I si ∀a,b ∈ I, a < b ⇒",
+                options: [
+                    "f(a) < f(b)",
+                    "f(a) > f(b)",
+                    "f(a) = f(b)",
+                    "f(a) ≠ f(b)"
+                ],
+                correct: 0,
+                explanation: "Définition stricte : a < b ⇒ f(a) < f(b). La courbe monte (PDF Chap.4 IV.2)."
+            },
+
+            // 12. Décroissante [file:2]
+            {
+                question: "f est <strong>décroissante</strong> sur I si ∀a,b ∈ I, a < b ⇒",
+                options: [
+                    "f(a) > f(b)",
+                    "f(a) < f(b)",
+                    "f(a) = f(b)",
+                    "f(a) ≠ f(b)"
+                ],
+                correct: 0,
+                explanation: "a < b ⇒ f(a) > f(b). La courbe descend (PDF Chap.4 IV.2)."
+            },
+
+            // 13. Maximum local [file:2]
+            {
+                question: "fa est le <strong>maximum</strong> de f sur I si :",
+                options: [
+                    "∀x ∈ I, f(a) ≥ f(x)",
+                    "∀x ∈ I, f(a) ≤ f(x)",
+                    "f(a) = 0",
+                    "f'(a) = 0"
+                ],
+                correct: 0,
+                explanation: "Point le plus haut de la courbe sur I (PDF Chap.4 IV.3)."
+            },
+
+            // 14. Minimum [file:2]
+            {
+                question: "fa est le <strong>minimum</strong> de f sur I si :",
+                options: [
+                    "∀x ∈ I, f(a) ≤ f(x)",
+                    "∀x ∈ I, f(a) ≥ f(x)",
+                    "f(a) > 0",
+                    "f'(a) > 0"
+                ],
+                correct: 0,
+                explanation: "Point le plus bas de la courbe sur I (PDF Chap.4 IV.3)."
+            },
+
+            // 15. Tableau de variations [file:2]
+            {
+                question: "Un <strong>tableau de variations</strong> résume :",
+                options: [
+                    "Les intervalles de monotonicité et extremums",
+                    "Les images et antécédents",
+                    "Le domaine et les asymptotes",
+                    "Les dérivées premières"
+                ],
+                correct: 0,
+                explanation: "Intervalles de croissance/décroissance + max/min (PDF Chap.4 IV.4 Exemple A)."
+            }
+        ];
+
+        let currentQuestion = 0;
+        let answers = new Array(questions.length).fill(null);
+        let feedbackShown = new Array(questions.length).fill(false);
+
+        const elements = {
+            container: document.getElementById('quizContainer'),
+            questionContainer: document.getElementById('questionContainer'),
+            prevBtn: document.getElementById('prevBtn'),
+            nextBtn: document.getElementById('nextBtn'),
+            finishBtn: document.getElementById('finishBtn'),
+            progressFill: document.getElementById('progressFill'),
+            questionCounter: document.getElementById('currentQuestion'),
+            navigation: document.getElementById('navigation')
+        };
+
+        function loadQuestion(index) {
+            const q = questions[index];
+            const userAnswer = answers[index];
+            const hasFeedback = feedbackShown[index];
+            const isAnswered = userAnswer !== null;
+
+            let html = `
+                <div style="display: flex; align-items: flex-start; margin-bottom: 25px;">
+                    <div class="question-number">${index + 1}</div>
+                    <div class="question-title">${q.question}</div>
+                </div>
+                <div class="options-container">
+            `;
+
+            q.options.forEach((option, i) => {
+                let classes = 'option';
+                if (hasFeedback) {
+                    if (i === q.correct) classes += ' correct';
+                    if (userAnswer === i && i !== q.correct) classes += ' incorrect';
+                } else if (isAnswered && userAnswer === i) {
+                    classes += ' selected';
+                }
+                html += `<div class="${classes}" onclick="${hasFeedback ? '' : `selectOption(${index}, ${i})`}">${String.fromCharCode(65 + i)}. ${option}</div>`;
+            });
+
+            html += '</div>';
+
+            if (hasFeedback && isAnswered) {
+                const isCorrect = userAnswer === q.correct;
+                html += `
+                    <div class="feedback ${isCorrect ? 'correct' : 'incorrect'}">
+                        <div class="feedback-icon">${isCorrect ? '✅' : '❌'}</div>
+                        <div class="feedback-explanation"><strong>Explication :</strong> ${q.explanation}</div>
+                    </div>
+                `;
+            }
+
+            elements.questionContainer.innerHTML = html;
+            updateNavigation();
+            updateProgress();
+        }
+
+        function selectOption(questionIndex, optionIndex) {
+            if (feedbackShown[questionIndex]) return;
+
+            answers[questionIndex] = optionIndex;
+            feedbackShown[questionIndex] = true;
+            loadQuestion(questionIndex);
+        }
+
+        function updateProgress() {
+            const answeredCount = answers.filter(a => a !== null).length;
+            const progress = (answeredCount / questions.length) * 100;
+            elements.progressFill.style.width = `${progress}%`;
+            elements.questionCounter.textContent = currentQuestion + 1;
+        }
+
+        function updateNavigation() {
+            elements.prevBtn.disabled = currentQuestion === 0;
+            
+            const answered = answers.filter(a => a !== null).length;
+            elements.nextBtn.style.display = answered === questions.length ? 'none' : 'block';
+            elements.finishBtn.style.display = answered === questions.length ? 'block' : 'none';
+        }
+
+        function nextQuestion() {
+            if (currentQuestion < questions.length - 1) {
+                currentQuestion++;
+                loadQuestion(currentQuestion);
+            }
+        }
+
+        function prevQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                loadQuestion(currentQuestion);
+            }
+        }
+
+        function showSummary() {
+            const score = answers.filter((answer, i) => answer === questions[i].correct).length;
+            elements.container.innerHTML = `
+                <div class="quiz-header">
+                    <div class="progress-bar"><div class="progress-fill" style="width:100%"></div></div>
+                    <div style="font-size:22px;font-weight:600;">Quiz terminé ! Score: ${score}/15</div>
+                </div>
+                <div style="padding:40px;text-align:center;">
+                    <button onclick="location.reload()" style="
+                        padding:18px 40px; background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);
+                        color:white; border:none; border-radius:30px; font-size:18px; font-weight:600;
+                        cursor:pointer; transition:all 0.3s;
+                    " onmouseover="this.style.transform='translateY(-3px)'">
+                        🔄 Refaire le quiz
+                    </button>
+                </div>
+            `;
+        }
+
+        // Event listeners
+        elements.prevBtn.onclick = prevQuestion;
+        elements.nextBtn.onclick = nextQuestion;
+        elements.finishBtn.onclick = showSummary;
+
+        // Initialize
+        loadQuestion(0);
+    </script>
+</body>
+</html>

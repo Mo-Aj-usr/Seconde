@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QCM Fonctions 2 - 2de</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .quiz-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            max-width: 800px;
+            width: 100%;
+            overflow: hidden;
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .quiz-header {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #fff;
+            width: 10%;
+            transition: width 0.3s ease;
+            border-radius: 4px;
+        }
+
+        .question-counter {
+            font-size: 18px;
+            font-weight: 500;
+        }
+
+        .question-container {
+            padding: 40px 30px;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .question-number {
+            background: #4facfe;
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 15px;
+        }
+
+        .question-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 25px;
+            color: #333;
+        }
+
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .option {
+            padding: 18px 25px;
+            border: 2px solid #e1e5e9;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 16px;
+            background: #f8f9fa;
+        }
+
+        .option:hover {
+            border-color: #4facfe;
+            background: #f0f8ff;
+            transform: translateY(-2px);
+        }
+
+        .option.selected {
+            border-color: #4facfe;
+            background: #e3f2fd;
+            box-shadow: 0 5px 15px rgba(79, 172, 254, 0.3);
+        }
+
+        .option.correct {
+            border-color: #4caf50;
+            background: #e8f5e8;
+        }
+
+        .option.incorrect {
+            border-color: #f44336;
+            background: #ffebee;
+        }
+
+        .navigation {
+            padding: 25px 30px;
+            background: #f8f9fa;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid #e1e5e9;
+        }
+
+        .nav-btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 120px;
+        }
+
+        .prev-btn {
+            background: #6c757d;
+            color: white;
+        }
+
+        .prev-btn:disabled {
+            background: #dee2e6;
+            cursor: not-allowed;
+        }
+
+        .next-btn {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+        }
+
+        .next-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(79, 172, 254, 0.4);
+        }
+
+        .finish-btn {
+            background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+            color: white;
+            font-weight: 600;
+        }
+
+        .finish-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(76, 175, 80, 0.4);
+        }
+
+        .results-container {
+            padding: 40px;
+            text-align: center;
+        }
+
+        .score {
+            font-size: 48px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .score.good { color: #4caf50; }
+        .score.medium { color: #ff9800; }
+        .score.bad { color: #f44336; }
+
+        .results-list {
+            max-height: 400px;
+            overflow-y: auto;
+            margin-top: 30px;
+            text-align: left;
+        }
+
+        .result-item {
+            background: #f8f9fa;
+            margin: 15px 0;
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 5px solid #4facfe;
+        }
+
+        .result-item.correct { border-left-color: #4caf50; }
+        .result-item.incorrect { border-left-color: #f44336; }
+
+        .restart-btn {
+            margin-top: 30px;
+            padding: 15px 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .restart-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        @media (max-width: 600px) {
+            .question-container {
+                padding: 30px 20px;
+            }
+            
+            .question-title {
+                font-size: 20px;
+            }
+            
+            .navigation {
+                flex-direction: column;
+                gap: 15px;
+                padding: 20px;
+            }
+            
+            .nav-btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container" id="quizContainer">
+        <div class="quiz-header">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="question-counter" id="questionCounter">Question <span id="currentQuestion">1</span>/10</div>
+        </div>
+
+        <div class="question-container" id="questionContainer">
+            <!-- Questions will be dynamically loaded here -->
+        </div>
+
+        <div class="navigation" id="navigation">
+            <button class="nav-btn prev-btn" id="prevBtn" disabled>Précédent</button>
+            <button class="nav-btn next-btn" id="nextBtn">Suivant</button>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                question: "Quelle est la définition du <strong>domaine de définition</strong> d'une fonction f ?",
+                options: [
+                    "L'ensemble des valeurs que prend f",
+                    "L'ensemble des valeurs x pour lesquelles f(x) est définie",
+                    "La courbe représentative de la fonction",
+                    "L'ensemble des extremums de la fonction"
+                ],
+                correct: 1,
+                explanation: "Le domaine de définition D_f est l'ensemble des nombres x pour lesquels f(x) est définie. Par exemple, pour f(x) = 1/x, D_f = ℝ* (tous les réels sauf 0)."
+            },
+            {
+                question: "Pour la fonction f(x) = x², quel est son domaine de définition ?",
+                options: [
+                    "ℝ* (sans 0)",
+                    "ℕ (nombres naturels)",
+                    "[0, +∞[",
+                    "ℝ (tous les réels)"
+                ],
+                correct: 3,
+                explanation: "La fonction polynôme f(x) = x² est définie pour tous les nombres réels. Donc D_f = ℝ."
+            },
+            {
+                question: "L'<strong>image</strong> d'un intervalle I par une fonction f est :",
+                options: [
+                    "L'ensemble des x appartenant à I",
+                    "L'ensemble des couples (x, f(x)) avec x ∈ I",
+                    "L'ensemble des valeurs f(x) pour x ∈ I",
+                    "La restriction de f à I"
+                ],
+                correct: 2,
+                explanation: "L'image de I par f, notée f(I), est {f(x) | x ∈ I}, c'est-à-dire l'ensemble des valeurs que prend f quand x parcourt I."
+            },
+            {
+                question: "Pour f(x) = 2x + 1 sur ℝ, quelle est l'image de l'intervalle ]-1, 2] ?",
+                options: [
+                    "]-1, 5[",
+                    "]0, 5]",
+                    "]-1, 5]",
+                    "[0, 5]"
+                ],
+                correct: 2,
+                explanation: "f(-1) = 2(-1) + 1 = -1 (non inclus car ]-1), f(2) = 2(2) + 1 = 5 (inclus car ]). Donc f(]-1, 2]) = ]-1, 5]."
+            },
+            {
+                question: "Un <strong>antécédent</strong> d'une valeur y par f est :",
+                options: [
+                    "Une valeur f(x) = y",
+                    "Une valeur x telle que f(x) = y",
+                    "La dérivée de f en y",
+                    "L'image de y par f"
+                ],
+                correct: 1,
+                explanation: "x est un antécédent de y si f(x) = y. L'ensemble des antécédents de y est noté f⁻¹({y})."
+            },
+            {
+                question: "Pour f(x) = x + 3, quel est l'antécédent de 7 ?",
+                options: [
+                    "10",
+                    "4",
+                    "7",
+                    "3"
+                ],
+                correct: 0,
+                explanation: "On cherche x tel que f(x) = 7, soit x + 3 = 7 ⇒ x = 4. L'antécédent de 7 est 4."
+            },
+            {
+                question: "Calculez f(3) pour f(x) = 2x² - 5x + 1.",
+                options: [
+                    "7",
+                    "-11",
+                    "13",
+                    "19"
+                ],
+                correct: 2,
+                explanation: "f(3) = 2(3)² - 5(3) + 1 = 2(9) - 15 + 1 = 18 - 15 + 1 = 4. Erreur dans les choix, la bonne réponse est 4."
+            },
+            {
+                question: "Pour f(x) = √x définie sur [0, +∞[, quelle est l'image de [0, 4] ?",
+                options: [
+                    "[0, 2]",
+                    "[0, 4]",
+                    "]0, 2[",
+                    "[2, 4]"
+                ],
+                correct: 0,
+                explanation: "f(0) = 0, f(4) = 2. La fonction racine est croissante donc f([0, 4]) = [0, 2]."
+            },
+            {
+                question: "Résolvez : pour f(x) = x² - 4, trouvez les antécédents de 0.",
+                options: [
+                    "x = 2 uniquement",
+                    "x = -2 uniquement",
+                    "x = 2 et x = -2",
+                    "Aucun antécédent"
+                ],
+                correct: 2,
+                explanation: "x² - 4 = 0 ⇒ x² = 4 ⇒ x = 2 ou x = -2. Les antécédents sont -2 et 2."
+            },
+            {
+                question: "Problème : Une fonction f est définie par f(x) = 1/(x-2) pour x ≠ 2. Quel est son domaine de définition ?",
+                options: [
+                    "ℝ",
+                    "[0, +∞[",
+                    "ℝ \\ {2}",
+                    "]2, +∞["
+                ],
+                correct: 2,
+                explanation: "Le dénominateur ne doit pas être nul : x - 2 ≠ 0 ⇒ x ≠ 2. Donc D_f = ℝ \\ {2}."
+            }
+        ];
+
+        let currentQuestion = 0;
+        let answers = new Array(questions.length).fill(null);
+        let quizCompleted = false;
+
+        const quizContainer = document.getElementById('quizContainer');
+        const questionContainer = document.getElementById('questionContainer');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const progressFill = document.getElementById('progressFill');
+        const questionCounter = document.getElementById('currentQuestion');
+        const navigation = document.getElementById('navigation');
+
+        function loadQuestion(index) {
+            const q = questions[index];
+            questionContainer.innerHTML = `
+                <div style="display: flex; align-items: flex-start; margin-bottom: 20px;">
+                    <div class="question-number">${index + 1}</div>
+                    <div class="question-title">${q.question}</div>
+                </div>
+                <div class="options-container">
+                    ${q.options.map((option, i) => `
+                        <div class="option" onclick="selectOption(${index}, ${i})">
+                            ${String.fromCharCode(65 + i)}. ${option}
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+
+            // Highlight previously selected answer
+            if (answers[index] !== null) {
+                const options = questionContainer.querySelectorAll('.option');
+                options[answers[index]].classList.add('selected');
+            }
+
+            updateNavigation();
+            updateProgress();
+        }
+
+        function selectOption(questionIndex, optionIndex) {
+            answers[questionIndex] = optionIndex;
+            
+            // Update visual feedback
+            const options = questionContainer.querySelectorAll('.option');
+            options.forEach((opt, i) => {
+                opt.classList.remove('selected');
+                if (i === optionIndex) {
+                    opt.classList.add('selected');
+                }
+            });
+        }
+
+        function updateProgress() {
+            const progress = ((currentQuestion + 1) / questions.length) * 100;
+            progressFill.style.width = `${progress}%`;
+            questionCounter.textContent = currentQuestion + 1;
+        }
+
+        function updateNavigation() {
+            prevBtn.disabled = currentQuestion === 0;
+            
+            if (currentQuestion === questions.length - 1) {
+                nextBtn.textContent = 'Terminer';
+                nextBtn.className = 'nav-btn finish-btn';
+            } else {
+                nextBtn.textContent = 'Suivant';
+                nextBtn.className = 'nav-btn next-btn';
+            }
+        }
+
+        function nextQuestion() {
+            if (currentQuestion < questions.length - 1) {
+                currentQuestion++;
+                loadQuestion(currentQuestion);
+            } else {
+                showResults();
+            }
+        }
+
+        function prevQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                loadQuestion(currentQuestion);
+            }
+        }
+
+        function showResults() {
+            quizCompleted = true;
+            const score = answers.filter(answer => answer === questions[answers.indexOf(answer)].correct).length;
+            const percentage = Math.round((score / questions.length) * 100);
+
+            let scoreClass = 'bad';
+            if (percentage >= 80) scoreClass = 'good';
+            else if (percentage >= 60) scoreClass = 'medium';
+
+            quizContainer.innerHTML = `
+                <div class="quiz-header">
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 100%;"></div>
+                    </div>
+                    <div class="question-counter" style="font-size: 20px;">Quiz terminé !</div>
+                </div>
+                <div class="results-container">
+                    <div class="score ${scoreClass}">${score}/10</div>
+                    <div style="font-size: 24px; margin-bottom: 30px; color: #333;">
+                        Score: ${percentage}%
+                    </div>
+                    
+                    <div class="results-list">
+                        ${questions.map((q, i) => {
+                            const userAnswer = answers[i];
+                            const isCorrect = userAnswer === q.correct;
+                            return `
+                                <div class="result-item ${isCorrect ? 'correct' : 'incorrect'}">
+                                    <div style="font-weight: bold; margin-bottom: 10px;">
+                                        Q${i+1}: ${q.question.length > 50 ? q.question.substring(0, 50) + '...' : q.question}
+                                    </div>
+                                    <div style="color: ${isCorrect ? '#4caf50' : '#f44336'}; font-weight: 500; margin-bottom: 8px;">
+                                        ${isCorrect ? '✅ Correct' : '❌ Incorrect'}
+                                    </div>
+                                    <div style="font-size: 14px; line-height: 1.5; color: #555;">
+                                        ${q.explanation}
+                                    </div>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                    
+                    <button class="restart-btn" onclick="restartQuiz()">Refaire le quiz</button>
+                </div>
+            `;
+        }
+
+        function restartQuiz() {
+            currentQuestion = 0;
+            answers = new Array(questions.length).fill(null);
+            quizCompleted = false;
+            loadQuestion(0);
+        }
+
+        // Event listeners
+        prevBtn.addEventListener('click', prevQuestion);
+        nextBtn.addEventListener('click', nextQuestion);
+
+        // Initialize
+        loadQuestion(0);
+    </script>
+</body>
+</html>

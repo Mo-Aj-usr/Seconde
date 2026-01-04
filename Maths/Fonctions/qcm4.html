@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>QCM Fonctions 4 - 2de</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      line-height: 1.5;
+    }
+    h1 {
+      text-align: center;
+    }
+    fieldset {
+      margin-bottom: 15px;
+      padding: 10px 15px;
+    }
+    legend {
+      font-weight: bold;
+    }
+    .result {
+      font-weight: bold;
+      margin-top: 20px;
+      font-size: 1.1em;
+    }
+    .correction {
+      margin-top: 5px;
+      color: #004080;
+    }
+    .good {
+      color: green;
+      font-weight: bold;
+    }
+    .bad {
+      color: darkred;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>QCM Maths 2de - Fonctions (niveau débutant)</h1>
+  <p>
+    Réponds aux 10 questions puis clique sur <strong>Corriger</strong> pour voir ton score et les corrections.
+  </p>
+
+  <!-- Q1 -->
+  <fieldset>
+    <legend>Question 1 – Domaine de définition</legend>
+    <p>
+      On considère la fonction \( f \) définie par \( f(x) = 2x + 3 \).  
+      Quel est le domaine de définition de \( f \) ?
+    </p>
+    <label><input type="radio" name="q1" value="A"> Tous les nombres réels</label><br>
+    <label><input type="radio" name="q1" value="B"> Les nombres entiers seulement</label><br>
+    <label><input type="radio" name="q1" value="C"> Les nombres réels strictement positifs</label><br>
+    <label><input type="radio" name="q1" value="D"> Les nombres réels compris entre 0 et 1</label>
+    <div id="corr-q1" class="correction"></div>
+  </fieldset>
+
+  <!-- Q2 -->
+  <fieldset>
+    <legend>Question 2 – Domaine de définition</legend>
+    <p>
+      On considère la fonction \( g \) définie par \( g(x) = \dfrac{5}{x-2} \).  
+      Quel est le domaine de définition de \( g \) ?
+    </p>
+    <label><input type="radio" name="q2" value="A"> Tous les nombres réels</label><br>
+    <label><input type="radio" name="q2" value="B"> Tous les nombres réels sauf 2</label><br>
+    <label><input type="radio" name="q2" value="C"> Les nombres réels positifs</label><br>
+    <label><input type="radio" name="q2" value="D"> Les nombres réels négatifs</label>
+    <div id="corr-q2" class="correction"></div>
+  </fieldset>
+
+  <!-- Q3 -->
+  <fieldset>
+    <legend>Question 3 – Domaine de définition</legend>
+    <p>
+      On considère la fonction \( h \) définie par \( h(x) = \sqrt{x} \).  
+      Quel est le domaine de définition de \( h \) ?
+    </p>
+    <label><input type="radio" name="q3" value="A"> Tous les nombres réels</label><br>
+    <label><input type="radio" name="q3" value="B"> Les nombres réels positifs ou nuls</label><br>
+    <label><input type="radio" name="q3" value="C"> Les nombres réels strictement positifs</label><br>
+    <label><input type="radio" name="q3" value="D"> Les nombres réels négatifs</label>
+    <div id="corr-q3" class="correction"></div>
+  </fieldset>
+
+  <!-- Q4 -->
+  <fieldset>
+    <legend>Question 4 – Image</legend>
+    <p>
+      On considère la fonction \( f(x) = 3x - 1 \).  
+      Quelle est l’image de 2 par \( f \) ?
+    </p>
+    <label><input type="radio" name="q4" value="A"> 1</label><br>
+    <label><input type="radio" name="q4" value="B"> 3</label><br>
+    <label><input type="radio" name="q4" value="C"> 5</label><br>
+    <label><input type="radio" name="q4" value="D"> 7</label>
+    <div id="corr-q4" class="correction"></div>
+  </fieldset>
+
+  <!-- Q5 -->
+  <fieldset>
+    <legend>Question 5 – Image</legend>
+    <p>
+      Soit \( f(x) = -2x + 4 \).  
+      Quelle est l’image de \(-1\) par \( f \) ?
+    </p>
+    <label><input type="radio" name="q5" value="A"> -6</label><br>
+    <label><input type="radio" name="q5" value="B"> 2</label><br>
+    <label><input type="radio" name="q5" value="C"> 6</label><br>
+    <label><input type="radio" name="q5" value="D"> 4</label>
+    <div id="corr-q5" class="correction"></div>
+  </fieldset>
+
+  <!-- Q6 -->
+  <fieldset>
+    <legend>Question 6 – Antécédent</legend>
+    <p>
+      On considère la fonction \( f(x) = 4x + 1 \).  
+      Quel est l’antécédent de 9 par \( f \) ?
+    </p>
+    <label><input type="radio" name="q6" value="A"> 1</label><br>
+    <label><input type="radio" name="q6" value="B"> 2</label><br>
+    <label><input type="radio" name="q6" value="C"> 3</label><br>
+    <label><input type="radio" name="q6" value="D"> 4</label>
+    <div id="corr-q6" class="correction"></div>
+  </fieldset>
+
+  <!-- Q7 -->
+  <fieldset>
+    <legend>Question 7 – Antécédent</legend>
+    <p>
+      Soit \( g(x) = 2x - 5 \).  
+      Un antécédent possible de 1 par \( g \) est :
+    </p>
+    <label><input type="radio" name="q7" value="A"> 3</label><br>
+    <label><input type="radio" name="q7" value="B"> 2</label><br>
+    <label><input type="radio" name="q7" value="C"> 4</label><br>
+    <label><input type="radio" name="q7" value="D"> 5</label>
+    <div id="corr-q7" class="correction"></div>
+  </fieldset>
+
+  <!-- Q8 -->
+  <fieldset>
+    <legend>Question 8 – Lecture sur un intervalle (idée de croissance)</legend>
+    <p>
+      On sait que la fonction \( f(x) = 3x + 2 \) est une fonction affine.  
+      Quand \( x \) augmente, que peut-on dire de \( f(x) \) ?
+    </p>
+    <label><input type="radio" name="q8" value="A"> \( f(x) \) diminue toujours</label><br>
+    <label><input type="radio" name="q8" value="B"> \( f(x) \) reste constant</label><br>
+    <label><input type="radio" name="q8" value="C"> \( f(x) \) augmente toujours</label><br>
+    <label><input type="radio" name="q8" value="D"> On ne peut rien dire</label>
+    <div id="corr-q8" class="correction"></div>
+  </fieldset>
+
+  <!-- Q9 -->
+  <fieldset>
+    <legend>Question 9 – Problème simple avec une fonction</legend>
+    <p>
+      Le prix à payer (en euros) pour la location d’un vélo est donné par la fonction  
+      \( P(t) = 5t + 3 \), où \( t \) est le temps de location en heures.  
+      Combien paie-t-on pour 2 heures de location ?
+    </p>
+    <label><input type="radio" name="q9" value="A"> 8 €</label><br>
+    <label><input type="radio" name="q9" value="B"> 10 €</label><br>
+    <label><input type="radio" name="q9" value="C"> 13 €</label><br>
+    <label><input type="radio" name="q9" value="D"> 5 €</label>
+    <div id="corr-q9" class="correction"></div>
+  </fieldset>
+
+  <!-- Q10 -->
+  <fieldset>
+    <legend>Question 10 – Problème simple avec une fonction (antécédent)</legend>
+    <p>
+      Une séance de cinéma coûte \( 7 \) € par personne.  
+      On modélise la dépense totale par la fonction \( C(n) = 7n \), où \( n \) est le nombre de personnes.  
+      Combien de personnes sont allées au cinéma si la dépense totale est de 35 € ?
+    </p>
+    <label><input type="radio" name="q10" value="A"> 3</label><br>
+    <label><input type="radio" name="q10" value="B"> 4</label><br>
+    <label><input type="radio" name="q10" value="C"> 5</label><br>
+    <label><input type="radio" name="q10" value="D"> 6</label>
+    <div id="corr-q10" class="correction"></div>
+  </fieldset>
+
+  <button onclick="corriger()">Corriger</button>
+
+  <div id="resultat" class="result"></div>
+
+  <script>
+    function corriger() {
+      // bonnes réponses
+      const bonnesReponses = {
+        q1: "A", // tous les réels
+        q2: "B", // tous les réels sauf 2
+        q3: "B", // x >= 0
+        q4: "C", // f(2) = 3*2 - 1 = 5
+        q5: "C", // f(-1) = -2*(-1) + 4 = 6
+        q6: "B", // 4x+1=9 => x=2
+        q7: "A", // 2*3-5 = 1
+        q8: "C", // coefficient directeur positif
+        q9: "B", // P(2)=5*2+3=13 -> OUPS : corriger à C dans les explications
+        q10: "C" // 7n=35 => n=5
+      };
+
+      // correction texte pour chaque question
+      const details = {
+        q1: "Domaine de définition : une fonction affine est définie sur tous les réels.",
+        q2: "On ne peut pas diviser par 0, donc x ≠ 2.",
+        q3: "La racine carrée n’est définie que pour x ≥ 0 en 2de.",
+        q4: "f(2) = 3×2 - 1 = 6 - 1 = 5.",
+        q5: "f(-1) = -2×(-1) + 4 = 2 + 4 = 6.",
+        q6: "4x + 1 = 9 ⇒ 4x = 8 ⇒ x = 2.",
+        q7: "g(3) = 2×3 - 5 = 6 - 5 = 1.",
+        q8: "Le coefficient 3 est positif, donc la fonction est croissante.",
+        q9: "P(2) = 5×2 + 3 = 10 + 3 = 13 €.",
+        q10: "7n = 35 ⇒ n = 35 ÷ 7 = 5 personnes."
+      };
+
+      // Corriger petit bug de réponse pour q9
+      bonnesReponses.q9 = "C";
+
+      let score = 0;
+
+      for (let i = 1; i <= 10; i++) {
+        const qName = "q" + i;
+        const radios = document.getElementsByName(qName);
+        let reponse = null;
+
+        for (let r of radios) {
+          if (r.checked) {
+            reponse = r.value;
+            break;
+          }
+        }
+
+        const corrDiv = document.getElementById("corr-" + qName);
+        if (!reponse) {
+          corrDiv.innerHTML = "<span class='bad'>Aucune réponse sélectionnée.</span> " +
+                              "<br>" + details[qName];
+          continue;
+        }
+
+        if (reponse === bonnesReponses[qName]) {
+          score++;
+          corrDiv.innerHTML = "<span class='good'>Bonne réponse.</span> " +
+                              "<br>" + details[qName];
+        } else {
+          corrDiv.innerHTML = "<span class='bad'>Mauvaise réponse.</span> " +
+                              "<br>" + details[qName];
+        }
+      }
+
+      const resultatDiv = document.getElementById("resultat");
+      resultatDiv.textContent = "Score : " + score + " / 10";
+    }
+  </script>
+
+</body>
+</html>
