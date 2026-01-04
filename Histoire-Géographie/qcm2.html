@@ -1,856 +1,874 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <title>QCM - Méditerranée médiévale</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="UTF-8">
+  <title>QCM - 20 événements majeurs décembre 2025</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
     :root {
-      --primary: #1d4ed8;
-      --primary-light: #dbeafe;
-      --danger: #b91c1c;
-      --success: #15803d;
-      --bg: #f3f4f6;
-      --text: #111827;
-      --radius: 12px;
+      --primary: #2563eb;
+      --success: #059669;
+      --danger: #dc2626;
+      --warning: #d97706;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text: #1e293b;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
     }
 
     * {
       box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
 
     body {
-      margin: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-        Roboto, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       background: var(--bg);
       color: var(--text);
-      line-height: 1.5;
-      display: flex;
-      justify-content: center;
-      padding: 16px;
+      line-height: 1.6;
+      padding: 1rem;
+      min-height: 100vh;
     }
 
-    .quiz-wrapper {
-      width: 100%;
-      max-width: 800px;
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
     }
 
-    .quiz-card {
-      background: #ffffff;
-      border-radius: var(--radius);
-      padding: 20px 20px 24px;
-      box-shadow: 0 18px 45px rgba(15, 23, 42, 0.12);
+    .header {
+      text-align: center;
+      margin-bottom: 2rem;
+      background: var(--card-bg);
+      padding: 2rem;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
     }
 
     h1 {
-      font-size: 1.4rem;
-      margin: 0 0 4px;
+      font-size: 1.8rem;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(135deg, var(--primary), #1d4ed8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
 
     .subtitle {
-      font-size: 0.9rem;
-      color: #6b7280;
-      margin-bottom: 16px;
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
     }
 
-    .meta {
+    .stats {
       display: flex;
+      justify-content: center;
+      gap: 2rem;
       flex-wrap: wrap;
-      gap: 8px;
-      font-size: 0.82rem;
-      color: #6b7280;
-      margin-bottom: 12px;
+      margin-top: 1rem;
     }
 
-    .chip {
-      padding: 4px 10px;
-      border-radius: 999px;
-      background: #eef2ff;
-      color: #4338ca;
-      display: inline-flex;
+    .stat {
+      text-align: center;
+    }
+
+    .stat-number {
+      font-size: 2rem;
+      font-weight: bold;
+      color: var(--primary);
+    }
+
+    .quiz-card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 2rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+      border: 1px solid var(--border);
+    }
+
+    .progress {
+      display: flex;
+      justify-content: space-between;
       align-items: center;
-      gap: 6px;
-    }
-
-    .chip small {
-      font-size: 0.8rem;
-    }
-
-    .progress-container {
-      margin: 12px 0 16px;
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 2px solid var(--border);
     }
 
     .progress-bar {
-      width: 100%;
+      flex: 1;
       height: 8px;
-      border-radius: 999px;
-      background: #e5e7eb;
+      background: var(--border);
+      border-radius: 4px;
+      margin: 0 1rem;
       overflow: hidden;
     }
 
-    .progress-bar-inner {
+    .progress-fill {
       height: 100%;
-      width: 0%;
-      background: linear-gradient(90deg, #4f46e5, #0ea5e9);
-      transition: width 0.25s ease;
+      background: linear-gradient(90deg, var(--primary), var(--success));
+      transition: width 0.3s ease;
+      border-radius: 4px;
     }
 
-    .progress-text {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.78rem;
-      color: #6b7280;
-      margin-top: 4px;
-    }
-
-    .question-header {
-      margin-top: 8px;
-      margin-bottom: 12px;
+    .question {
+      margin-bottom: 1.5rem;
     }
 
     .question-number {
-      font-size: 0.85rem;
+      font-size: 0.9rem;
+      color: var(--text-muted);
       text-transform: uppercase;
-      color: #6b7280;
-      letter-spacing: 0.08em;
-      margin-bottom: 4px;
+      letter-spacing: 1px;
+      margin-bottom: 0.5rem;
     }
 
-    .question-text {
-      font-size: 1rem;
+    .question-title {
+      font-size: 1.3rem;
       font-weight: 600;
-      margin-bottom: 4px;
+      margin-bottom: 0.5rem;
+      line-height: 1.4;
     }
 
     .question-context {
-      font-size: 0.86rem;
-      color: #6b7280;
+      color: var(--text-muted);
+      font-style: italic;
+      margin-bottom: 1.5rem;
+      padding: 1rem;
+      background: #f1f5f9;
+      border-radius: 8px;
+      border-left: 4px solid var(--primary);
     }
 
-    .choices {
+    .options {
       display: grid;
-      gap: 8px;
-      margin-top: 14px;
+      gap: 1rem;
     }
 
-    .choice {
-      border-radius: 10px;
-      border: 1px solid #e5e7eb;
-      background: #f9fafb;
-      padding: 10px 12px;
+    .option {
+      padding: 1.25rem;
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      background: white;
       cursor: pointer;
-      display: flex;
-      gap: 10px;
-      align-items: flex-start;
-      transition: background 0.2s ease, border-color 0.2s ease,
-        transform 0.05s ease;
-      text-align: left;
+      transition: all 0.2s ease;
+      position: relative;
+      overflow: hidden;
     }
 
-    .choice:hover {
+    .option:hover:not(.selected):not(.answered) {
+      border-color: var(--primary);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(37, 99, 235, 0.15);
+    }
+
+    .option.selected {
+      border-color: var(--primary);
       background: #eff6ff;
-      border-color: #bfdbfe;
-      transform: translateY(-1px);
     }
 
-    .choice.disabled {
-      cursor: default;
-      opacity: 0.9;
-      transform: none;
-    }
-
-    .choice-indicator {
-      width: 22px;
-      height: 22px;
-      min-width: 22px;
-      border-radius: 999px;
-      border: 2px solid #cbd5f5;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.8rem;
-      font-weight: 600;
-      color: #6b7280;
-      background: #eef2ff;
-    }
-
-    .choice-text {
-      font-size: 0.9rem;
-    }
-
-    .choice.correct {
-      border-color: #bbf7d0;
+    .option.correct {
+      border-color: var(--success);
       background: #ecfdf5;
     }
 
-    .choice.correct .choice-indicator {
-      border-color: #4ade80;
-      background: #22c55e;
-      color: #ffffff;
+    .option.correct::after {
+      content: '✓';
+      position: absolute;
+      right: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--success);
+      font-size: 1.5rem;
+      font-weight: bold;
     }
 
-    .choice.incorrect {
-      border-color: #fecaca;
+    .option.incorrect {
+      border-color: var(--danger);
       background: #fef2f2;
     }
 
-    .choice.incorrect .choice-indicator {
-      border-color: #fca5a5;
-      background: #ef4444;
-      color: #ffffff;
+    .option.answered {
+      cursor: default;
+      opacity: 0.7;
+    }
+
+    .option-letter {
+      display: inline-flex;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: white;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      margin-right: 1rem;
+      flex-shrink: 0;
+    }
+
+    .option-content {
+      flex: 1;
     }
 
     .feedback {
-      margin-top: 10px;
-      font-size: 0.88rem;
-      min-height: 1.2em;
+      margin-top: 1.5rem;
+      padding: 1.25rem;
+      border-radius: 12px;
+      font-weight: 500;
+      display: none;
     }
 
-    .feedback.correct {
+    .feedback.success {
+      background: #d1fae5;
       color: var(--success);
+      border: 1px solid #a7f3d0;
+      display: block;
     }
 
-    .feedback.incorrect {
+    .feedback.error {
+      background: #fee2e2;
       color: var(--danger);
+      border: 1px solid #fca5a5;
+      display: block;
     }
 
-    .nav {
+    .navigation {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-top: 18px;
-      gap: 8px;
-      flex-wrap: wrap;
+      margin-top: 2rem;
+      padding-top: 2rem;
+      border-top: 2px solid var(--border);
     }
 
-    .nav-left,
-    .nav-right {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    button {
+    .btn {
+      padding: 0.75rem 1.5rem;
       border: none;
-      border-radius: 999px;
-      padding: 8px 16px;
-      font-size: 0.9rem;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: #e5e7eb;
-      color: #111827;
-      transition: background 0.2s ease, transform 0.05s ease,
-        box-shadow 0.1s ease;
-    }
-
-    button span.icon {
+      border-radius: 12px;
       font-size: 1rem;
-    }
-
-    button:hover:not(:disabled) {
-      background: #d1d5db;
-      transform: translateY(-1px);
-      box-shadow: 0 10px 20px rgba(148, 163, 184, 0.3);
-    }
-
-    button:disabled {
-      cursor: not-allowed;
-      opacity: 0.6;
-      box-shadow: none;
-      transform: none;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
     }
 
     .btn-primary {
-      background: linear-gradient(135deg, #4f46e5, #2563eb);
-      color: #ffffff;
-      box-shadow: 0 12px 25px rgba(37, 99, 235, 0.35);
+      background: linear-gradient(135deg, var(--primary), #1d4ed8);
+      color: white;
+      box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
     }
 
     .btn-primary:hover:not(:disabled) {
-      background: linear-gradient(135deg, #4338ca, #1d4ed8);
+      transform: translateY(-1px);
+      box-shadow: 0 8px 25px rgba(37, 99, 235, 0.4);
     }
 
-    .btn-outline {
-      background: transparent;
-      border: 1px solid #d1d5db;
+    .btn-secondary {
+      background: #f1f5f9;
+      color: var(--text);
+      border: 2px solid var(--border);
     }
 
-    .status-pill {
-      padding: 4px 8px;
-      border-radius: 999px;
-      background: #f3f4f6;
-      font-size: 0.78rem;
-      color: #4b5563;
+    .btn-secondary:hover:not(:disabled) {
+      background: #e2e8f0;
     }
 
-    .result-panel {
-      margin-top: 18px;
-      padding-top: 14px;
-      border-top: 1px solid #e5e7eb;
-      font-size: 0.9rem;
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
     }
 
-    .result-score {
-      font-weight: 600;
-      margin-bottom: 4px;
+    .results {
+      display: none;
+      text-align: center;
+      margin-top: 2rem;
     }
 
-    .result-detail {
-      font-size: 0.86rem;
-      color: #6b7280;
+    .results.show {
+      display: block;
     }
 
-    .pill-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      margin-top: 8px;
+    .score {
+      font-size: 3rem;
+      font-weight: bold;
+      background: linear-gradient(135deg, var(--success), #10b981);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 1rem;
     }
 
-    .pill {
-      padding: 3px 9px;
-      border-radius: 999px;
-      font-size: 0.76rem;
-      border: 1px solid #e5e7eb;
-      background: #f9fafb;
-      color: #4b5563;
+    .score-text {
+      font-size: 1.2rem;
+      color: var(--text-muted);
+      margin-bottom: 2rem;
     }
 
-    @media (max-width: 600px) {
-      .quiz-card {
-        padding: 16px 14px 18px;
+    .category-breakdown {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    .category {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 12px;
+      text-align: center;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    }
+
+    .category-score {
+      font-size: 2rem;
+      font-weight: bold;
+    }
+
+    .restart-btn {
+      margin-top: 2rem;
+      max-width: 300px;
+      width: 100%;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 0 1rem;
       }
+      
+      .header {
+        padding: 1.5rem;
+      }
+      
       h1 {
-        font-size: 1.2rem;
+        font-size: 1.5rem;
       }
-      .nav {
+      
+      .quiz-card {
+        padding: 1.5rem;
+      }
+      
+      .navigation {
         flex-direction: column;
-        align-items: stretch;
+        gap: 1rem;
       }
-      .nav-left,
-      .nav-right {
-        justify-content: space-between;
+      
+      .btn {
+        justify-content: center;
       }
     }
   </style>
 </head>
 <body>
-  <main class="quiz-wrapper" aria-label="QCM Méditerranée médiévale">
-    <section class="quiz-card">
-      <header>
-        <h1>Méditerranée médiévale : échanges et conflits</h1>
-        <p class="subtitle">
-          QCM de 15 questions – Niveau Seconde – Chapitre 2 : Un espace d’échanges et de conflits.
-        </p>
-        <div class="meta">
-          <div class="chip">
-            <span>💡</span>
-            <small>Réponse immédiate et score en direct</small>
-          </div>
-          <div class="chip">
-            <span>📱</span>
-            <small>Interface adaptée aux mobiles</small>
-          </div>
+  <div class="container">
+    <header class="header">
+      <h1>🌍 Décembre 2025</h1>
+      <p class="subtitle">QCM - 20 événements majeurs mondiaux</p>
+      <div class="stats">
+        <div class="stat">
+          <div class="stat-number">20</div>
+          <div>Questions</div>
         </div>
-      </header>
+        <div class="stat">
+          <div class="stat-number">4</div>
+          <div>Domaines</div>
+        </div>
+        <div class="stat">
+          <div class="stat-number">✅</div>
+          <div>Score en direct</div>
+        </div>
+      </div>
+    </header>
 
-      <div class="progress-container" aria-hidden="true">
+    <div class="quiz-card">
+      <div class="progress">
+        <span id="progressText">Question 1 / 20</span>
         <div class="progress-bar">
-          <div class="progress-bar-inner" id="progressBar"></div>
+          <div class="progress-fill" id="progressFill"></div>
         </div>
-        <div class="progress-text">
-          <span id="progressLabel">Question 1 / 15</span>
-          <span id="scoreLabel">Score : 0 / 15</span>
+        <span id="scoreText">0 / 20</span>
+      </div>
+
+      <div class="question">
+        <div class="question-number" id="questionNumber"></div>
+        <div class="question-title" id="questionTitle"></div>
+        <div class="question-context" id="questionContext"></div>
+        <div class="options" id="options"></div>
+        <div class="feedback" id="feedback"></div>
+      </div>
+
+      <div class="navigation">
+        <button class="btn btn-secondary" id="prevBtn">← Précédent</button>
+        <div>
+          <button class="btn btn-secondary" id="nextBtn">Suivant →</button>
+          <button class="btn btn-primary" id="showResultsBtn" style="display: none;">Voir les résultats</button>
         </div>
       </div>
 
-      <article>
-        <div class="question-header">
-          <div class="question-number" id="questionNumber"></div>
-          <div class="question-text" id="questionText"></div>
-          <div class="question-context" id="questionContext"></div>
-        </div>
-
-        <div class="choices" id="choicesContainer" role="listbox" aria-label="Réponses possibles"></div>
-
-        <p class="feedback" id="feedback" aria-live="polite"></p>
-      </article>
-
-      <div class="nav">
-        <div class="nav-left">
-          <button type="button" id="prevBtn" class="btn-outline">
-            <span class="icon">←</span>
-            Question précédente
-          </button>
-          <button type="button" id="nextBtn" class="btn-outline">
-            Question suivante
-            <span class="icon">→</span>
-          </button>
-        </div>
-        <div class="nav-right">
-          <button type="button" id="restartBtn">
-            Recommencer
-          </button>
-          <button type="button" id="submitBtn" class="btn-primary">
-            Voir le résultat final
-          </button>
-        </div>
+      <div class="results" id="results">
+        <div class="score" id="finalScore"></div>
+        <div class="score-text" id="scoreMessage"></div>
+        <div class="category-breakdown" id="categoryBreakdown"></div>
+        <button class="btn btn-primary restart-btn" id="restartBtn">🔄 Recommencer le QCM</button>
       </div>
-
-      <section class="result-panel" aria-live="polite">
-        <div class="result-score" id="resultScore"></div>
-        <div class="result-detail" id="resultDetail"></div>
-        <div class="pill-list" id="resultTags"></div>
-      </section>
-    </section>
-  </main>
+    </div>
+  </div>
 
   <script>
     const questions = [
       {
-        question:
-          "Entre le VIIᵉ et le XIIIᵉ siècle, la Méditerranée est avant tout…",
-        context:
-          "On cherche ici à caractériser la fonction de la Méditerranée dans le monde médiéval.",
-        choices: [
-          "Une frontière étanche entre trois mondes hostiles",
-          "Un carrefour d’échanges et de contacts entre trois civilisations",
-          "Un espace marginal, dominé par l’Atlantique",
-          "Une mer contrôlée exclusivement par la Chrétienté latine",
+        title: "Quel pays connaît un coup d’État militaire en décembre 2025 ?",
+        context: "🔴 Conflits, sécurité, géopolitique",
+        options: [
+          "Guinée-Bissau",
+          "Mali", 
+          "Burkina Faso",
+          "Niger"
         ],
-        correctIndex: 1,
-        feedback:
-          "La Méditerranée est un **carrefour** où se rencontrent monde latin, byzantin et musulman, mêlant échanges et conflits.",
+        correct: 0,
+        feedback: "La junte militaire de Guinée-Bissau adopte une charte de transition d'un an et suspend la Constitution.",
+        category: "geopolitics"
       },
       {
-        question:
-          "Quelle affirmation résume le mieux les divisions internes du monde musulman médiéval ?",
-        context:
-          "On s’intéresse ici à la différence entre unité religieuse et réalités politiques.",
-        choices: [
-          "Unité politique parfaite autour d’un seul calife",
-          "Unité religieuse relative, mais fractures politiques et dynastiques",
-          "Division religieuse totale entre plusieurs religions",
-          "Absence de conflits internes avant le XIIIᵉ siècle",
+        title: "Où le mouvement M23 prend-il la ville d'Uvira en décembre 2025 ?",
+        context: "🔴 Conflits, sécurité, géopolitique",
+        options: [
+          "RDC (Sud-Kivu)",
+          "Rwanda",
+          "Ouganda",
+          "Burundi"
         ],
-        correctIndex: 1,
-        feedback:
-          "Le monde musulman partage l’islam, mais se divise entre dynasties (Omeyyades, Abbassides, Fatimides) et courants (sunnites, chiites).",
+        correct: 0,
+        feedback: "Escalade majeure du conflit entre RDC et Rwanda avec la prise d'Uvira.",
+        category: "geopolitics"
       },
       {
-        question:
-          "Quel événement consacre la rupture entre Église catholique et Église orthodoxe ?",
-        context: "Il s’agit d’un repère religieux majeur pour la Chrétienté.",
-        choices: [
-          "La crise iconoclaste (726‑843)",
-          "La première croisade (1095)",
-          "Le schisme de 1054",
-          "La chute de Constantinople (1453)",
+        title: "Au Yémen, quel groupe s'empare du gouvernorat d'al-Mahrah ?",
+        context: "🔴 Conflits, sécurité, géopolitique",
+        options: [
+          "Conseil de transition du Sud",
+          "Houthis",
+          "Gouvernement reconnu",
+          "Al-Qaïda"
         ],
-        correctIndex: 2,
-        feedback:
-          "Le schisme de 1054 marque l’excommunication mutuelle entre Rome et Constantinople et divise durablement la Chrétienté.",
+        correct: 0,
+        feedback: "Les forces séparatistes sudistes affaiblissent le gouvernement yéménite.",
+        category: "geopolitics"
       },
       {
-        question:
-          "Quel mouvement hérétique illustre les tensions internes de l’Occident chrétien au XIIᵉ siècle ?",
-        context: "On parle ici d’un mouvement surtout présent dans le Languedoc.",
-        choices: [
-          "Les iconodules",
-          "Les cathares (ou albigeois)",
-          "Les sunnites",
-          "Les chiites",
+        title: "Où un général russe est-il assassiné dans un attentat à la voiture piégée ?",
+        context: "🔴 Conflits, sécurité, géopolitique",
+        options: [
+          "Moscou",
+          "Kiev",
+          "Donetsk",
+          "Saint-Pétersbourg"
         ],
-        correctIndex: 1,
-        feedback:
-          "Les cathares contestent l’Église catholique et sont réprimés par la croisade albigeoise et l’Inquisition.",
+        correct: 0,
+        feedback: "Les autorités russes soupçonnent l'implication des services ukrainiens.",
+        category: "geopolitics"
       },
       {
-        question:
-          "Quel espace est fortement touché par la croisade albigeoise (1209‑1229) ?",
-        context:
-          "On cherche à localiser un des grands foyers de tensions religieuses internes.",
-        choices: [
-          "La Sicile normande",
-          "Le Languedoc, dans le sud de la France",
-          "La péninsule Ibérique",
-          "L’Italie du Nord",
+        title: "Où trois Gardiens de la révolution iraniens sont-ils tués dans une embuscade ?",
+        context: "🔴 Conflits, sécurité, géopolitique",
+        options: [
+          "Sistan-et-Baloutchistan",
+          "Téhéran",
+          "Kermanshah",
+          "Ahvaz"
         ],
-        correctIndex: 1,
-        feedback:
-          "Le Languedoc est ravagé par la croisade albigeoise, visant à éradiquer l’hérésie cathare.",
+        correct: 0,
+        feedback: "Attaque dans la province instable du sud-est iranien.",
+        category: "geopolitics"
       },
       {
-        question:
-          "Quel événement déclenche l’appel à la première croisade par Urbain II en 1095 ?",
-        context: "La question porte sur les tensions autour de Jérusalem.",
-        choices: [
-          "La prise de Constantinople par les croisés",
-          "La destruction du Saint‑Sépulcre et la victoire seldjoukide à Manzikert",
-          "La fin du schisme de 1054",
-          "La conquête de la Sicile par les Normands",
+        title: "En Bulgarie, quel Premier ministre démissionne après des manifestations ?",
+        context: "🏛️ Politique et élections",
+        options: [
+          "Rosen Zhelyazkov",
+          "Boyko Borissov",
+          "Kiril Petkov",
+          "Stefan Yanev"
         ],
-        correctIndex: 1,
-        feedback:
-          "La destruction du Saint‑Sépulcre et les défaites byzantines encouragent Urbain II à appeler à la croisade pour libérer les Lieux saints.",
+        correct: 0,
+        feedback: "Manifestations massives contre corruption et politique budgétaire.",
+        category: "politics"
       },
       {
-        question:
-          "Quel est le principal résultat de la première croisade (1095‑1099) ?",
-        context: "Il s’agit d’un repère politique et religieux en Orient.",
-        choices: [
-          "La prise de Jérusalem et la création des États latins d’Orient",
-          "La reconquête de l’Égypte sur les Fatimides",
-          "La prise de Constantinople par les croisés",
-          "L’union des Églises catholique et orthodoxe",
+        title: "Quel parti conserve la majorité aux élections de Saint-Lucie ?",
+        context: "🏛️ Politique et élections",
+        options: [
+          "Saint Lucia Labour Party",
+          "United Workers Party",
+          "Star Alliance",
+          "People's Progressive Party"
         ],
-        correctIndex: 0,
-        feedback:
-          "La première croisade aboutit à la prise de Jérusalem et à la fondation des États latins d’Orient (royaume de Jérusalem, comté d’Antioche…).",
+        correct: 0,
+        feedback: "Philip J. Pierre maintient une large majorité parlementaire.",
+        category: "politics"
       },
       {
-        question:
-          "Quel rôle joue Saladin dans l’histoire des croisades ?",
-        context:
-          "On s’intéresse ici à une grande figure du monde musulman médiéval.",
-        choices: [
-          "Il prêche la deuxième croisade",
-          "Il conduit la quatrième croisade contre Constantinople",
-          "Il reprend Jérusalem en 1187 tout en négociant des pèlerinages chrétiens",
-          "Il fonde la Maison de la Sagesse à Bagdad",
+        title: "Qui redevient Premier ministre de République tchèque en décembre 2025 ?",
+        context: "🏛️ Politique et élections",
+        options: [
+          "Andrej Babiš",
+          "Petr Fiala",
+          "Milos Zeman",
+          "Václav Klaus"
         ],
-        correctIndex: 2,
-        feedback:
-          "Saladin, sultan ayyoubide, bat les croisés à Hattin et reprend Jérusalem, tout en maintenant l’accès des pèlerins chrétiens.",
+        correct: 0,
+        feedback: "Second mandat non consécutif après alliances parlementaires controversées.",
+        category: "politics"
       },
       {
-        question:
-          "Pourquoi la quatrième croisade (1202‑1204) est‑elle un tournant dramatique pour la Méditerranée chrétienne ?",
-        context: "Il s’agit d’une dérive de croisade souvent soulignée par les historiens.",
-        choices: [
-          "Elle échoue à prendre Jérusalem",
-          "Elle détruit définitivement les États latins d’Orient",
-          "Elle se détourne vers Constantinople et pille la capitale byzantine",
-          "Elle marque la fin des croisades",
+        title: "Quel pays connaît une crise post-électorale avec accusations de fraude ?",
+        context: "🏛️ Politique et élections",
+        options: [
+          "Honduras",
+          "Guatemala",
+          "Salvador",
+          "Nicaragua"
         ],
-        correctIndex: 2,
-        feedback:
-          "Détournée par Venise, la quatrième croisade aboutit au sac de Constantinople, aggravant le fossé entre catholiques et orthodoxes.",
+        correct: 0,
+        feedback: "Manifestations et appels à l'annulation du scrutin.",
+        category: "politics"
       },
       {
-        question:
-          "Quel rôle joue Venise dans les échanges méditerranéens du Moyen Âge ?",
-        context: "On s’intéresse à une puissance commerciale majeure.",
-        choices: [
-          "Une petite cité sans influence maritime",
-          "Une république marchande contrôlant des routes et des comptoirs",
-          "Un empire territorial centré sur l’agriculture",
-          "Une simple dépendance de l’Empire byzantin",
+        title: "Au Myanmar, qui organise des élections sous contrôle militaire ?",
+        context: "🏛️ Politique et élections",
+        options: [
+          "Général Min Aung Hlaing",
+          "Aung San Suu Kyi",
+          "Win Myint",
+          "Htin Kyaw"
         ],
-        correctIndex: 1,
-        feedback:
-          "Venise est une république marchande puissante, profitant des croisades pour obtenir des comptoirs et structurer les échanges.",
+        correct: 0,
+        feedback: "Élections largement dénoncées comme non libres.",
+        category: "politics"
       },
       {
-        question:
-          "Pourquoi al‑Andalus est‑elle souvent présentée comme un « laboratoire culturel » ?",
-        context:
-          "On parle ici d’un espace où se croisent plusieurs traditions intellectuelles.",
-        choices: [
-          "Parce qu’elle est fermée aux influences extérieures",
-          "Parce que juifs, chrétiens et musulmans y traduisent et débattent des œuvres antiques",
-          "Parce qu’elle est uniquement chrétienne",
-          "Parce qu’elle ne commerce pas avec l’Afrique et l’Orient",
+        title: "Quel montant le FMI décaisse-t-il pour le Pakistan ?",
+        context: "💰 Économie et décisions internationales",
+        options: [
+          "1,2 milliard $",
+          "500 millions $",
+          "2 milliards $",
+          "800 millions $"
         ],
-        correctIndex: 1,
-        feedback:
-          "En al‑Andalus, des savants de différentes religions traduisent Aristote et d’autres œuvres, ce qui diffuse ces savoirs en Europe.",
+        correct: 0,
+        feedback: "Dans le cadre d'un programme total de 3,3 milliards de dollars.",
+        category: "economy"
       },
       {
-        question:
-          "Quelle caractéristique majeure de la Sicile normande sous Roger II (XIIᵉ siècle) met en lumière la notion de métissage culturel ?",
-        context: "On s’intéresse à un royaume où coexistent plusieurs religions.",
-        choices: [
-          "L’expulsion systématique des minorités religieuses",
-          "L’architecture arabo‑normande mêlant influences arabes, byzantines et latines",
-          "La destruction des monuments musulmans",
-          "L’interdiction du commerce avec le monde musulman",
+        title: "Quel pays rejoint l'initiative européenne « Security Action for Europe » ?",
+        context: "💰 Économie et décisions internationales",
+        options: [
+          "Canada",
+          "Norvège",
+          "Suisse",
+          "Japon"
         ],
-        correctIndex: 1,
-        feedback:
-          "La Sicile normande se caractérise par une architecture arabo‑normande et une coexistence de musulmans, catholiques et orthodoxes.",
+        correct: 0,
+        feedback: "Renforcement de la coopération industrielle de défense avec l'UE.",
+        category: "economy"
       },
       {
-        question:
-          "Que désigne l’expression « gens du Livre » dans le monde musulman médiéval ?",
-        context: "On se place ici dans le vocabulaire religieux et juridique de l’islam.",
-        choices: [
-          "Uniquement les musulmans",
-          "Les adeptes du polythéisme",
-          "Les juifs, les chrétiens et les musulmans partageant des textes révélés",
-          "Les seuls chrétiens d’Orient",
+        title: "Quelle compagnie aérienne indienne subit une réduction de 5% de ses vols ?",
+        context: "💰 Économie et décisions internationales",
+        options: [
+          "IndiGo",
+          "Air India",
+          "SpiceJet",
+          "Vistara"
         ],
-        correctIndex: 2,
-        feedback:
-          "Les « gens du Livre » regroupent juifs, chrétiens et musulmans, ce qui justifie un statut particulier (dhimmi) pour les minorités.",
+        correct: 0,
+        feedback: "Après une grave crise de planification causant des milliers d'annulations.",
+        category: "economy"
       },
       {
-        question:
-          "Quel type de produits circule sur les routes commerciales méditerranéennes médiévales ?",
-        context: "On vise ici la variété des échanges économiques.",
-        choices: [
-          "Uniquement des produits agricoles européens",
-          "Principalement des esclaves nord‑européens",
-          "Épices, soieries, métaux, esclaves, textiles et produits agricoles",
-          "Uniquement de l’or africain",
+        title: "Quelle institution américaine tient une réunion monétaire cruciale en décembre ?",
+        context: "💰 Économie et décisions internationales",
+        options: [
+          "Réserve fédérale",
+          "Trésor américain",
+          "SEC",
+          "Fannie Mae"
         ],
-        correctIndex: 2,
-        feedback:
-          "Les routes relient Europe, Afrique et Asie, et véhiculent des épices, soieries, or, esclaves, métaux, textiles et produits agricoles.",
+        correct: 0,
+        feedback: "Attente d'une baisse des taux directeurs très suivie par les marchés.",
+        category: "economy"
       },
       {
-        question:
-          "Quel est l’un des principaux effets des échanges culturels entre monde musulman, byzantin et latin ?",
-        context: "On pense ici aux conséquences intellectuelles à long terme.",
-        choices: [
-          "La disparition des textes de l’Antiquité",
-          "La diffusion en Occident d’Aristote, des mathématiques arabes et de la médecine antique",
-          "La fermeture des universités européennes",
-          "La fin des conflits religieux",
+        title: "Quel nouvel aéroport majeur est inauguré près de Mumbai ?",
+        context: "💰 Économie et décisions internationales",
+        options: [
+          "Navi Mumbai",
+          "Pune",
+          "Goa",
+          "Ahmedabad"
         ],
-        correctIndex: 1,
-        feedback:
-          "Les traductions (Tolède, Palerme) permettent la redécouverte d’Aristote, de l’algèbre et de la médecine antique, alimentant la scolastique.",
+        correct: 0,
+        feedback: "Pour désengorger l'aéroport Chhatrapati-Shivaji de Mumbai.",
+        category: "economy"
       },
+      {
+        title: "Quelle date célèbre la Journée internationale de lutte contre la corruption ?",
+        context: "📅 Grandes dates internationales",
+        options: [
+          "9 décembre",
+          "10 décembre",
+          "15 décembre",
+          "1er décembre"
+        ],
+        correct: 0,
+        feedback: "Journée reconnue par l'ONU avec campagnes mondiales.",
+        category: "calendar"
+      },
+      {
+        title: "Quand débute Hanoucca 2025 ?",
+        context: "📅 Grandes dates internationales",
+        options: [
+          "15 décembre",
+          "8 décembre",
+          "25 décembre",
+          "1er décembre"
+        ],
+        correct: 0,
+        feedback: "Fête juive des Lumières pendant huit jours.",
+        category: "calendar"
+      },
+      {
+        title: "Quelle journée internationale célèbre les droits des migrants ?",
+        context: "📅 Grandes dates internationales",
+        options: [
+          "18 décembre",
+          "20 juin",
+          "5 juin",
+          "12 août"
+        ],
+        correct: 0,
+        feedback: "Dans un contexte de déplacements forcés record.",
+        category: "calendar"
+      },
+      {
+        title: "Quel jour marque le solstice d'hiver 2025 (hémisphère Nord) ?",
+        context: "📅 Grandes dates internationales",
+        options: [
+          "21 décembre",
+          "22 décembre",
+          "20 décembre",
+          "23 décembre"
+        ],
+        correct: 0,
+        feedback: "Jour le plus court de l'année avec célébrations culturelles.",
+        category: "calendar"
+      },
+      {
+        title: "Où se tient la Coupe d'Afrique des Nations 2025 ?",
+        context: "📅 Grandes dates internationales",
+        options: [
+          "Maroc",
+          "Côte d'Ivoire",
+          "Égypte",
+          "Cameroun"
+        ],
+        correct: 0,
+        feedback: "Début en décembre 2025, suivi jusqu'en janvier 2026.",
+        category: "calendar"
+      }
     ];
 
-    let currentQuestionIndex = 0;
+    let currentQuestion = 0;
     let score = 0;
-    const userAnswers = new Array(questions.length).fill(null);
+    let answers = new Array(questions.length).fill(null);
+    let quizCompleted = false;
 
-    const questionNumberEl = document.getElementById("questionNumber");
-    const questionTextEl = document.getElementById("questionText");
-    const questionContextEl = document.getElementById("questionContext");
-    const choicesContainerEl = document.getElementById("choicesContainer");
-    const feedbackEl = document.getElementById("feedback");
-    const progressBarEl = document.getElementById("progressBar");
-    const progressLabelEl = document.getElementById("progressLabel");
-    const scoreLabelEl = document.getElementById("scoreLabel");
-    const resultScoreEl = document.getElementById("resultScore");
-    const resultDetailEl = document.getElementById("resultDetail");
-    const resultTagsEl = document.getElementById("resultTags");
+    const elements = {
+      questionNumber: document.getElementById('questionNumber'),
+      questionTitle: document.getElementById('questionTitle'),
+      questionContext: document.getElementById('questionContext'),
+      options: document.getElementById('options'),
+      feedback: document.getElementById('feedback'),
+      progressText: document.getElementById('progressText'),
+      progressFill: document.getElementById('progressFill'),
+      scoreText: document.getElementById('scoreText'),
+      prevBtn: document.getElementById('prevBtn'),
+      nextBtn: document.getElementById('nextBtn'),
+      showResultsBtn: document.getElementById('showResultsBtn'),
+      results: document.getElementById('results'),
+      finalScore: document.getElementById('finalScore'),
+      scoreMessage: document.getElementById('scoreMessage'),
+      categoryBreakdown: document.getElementById('categoryBreakdown'),
+      restartBtn: document.getElementById('restartBtn')
+    };
 
-    const prevBtn = document.getElementById("prevBtn");
-    const nextBtn = document.getElementById("nextBtn");
-    const submitBtn = document.getElementById("submitBtn");
-    const restartBtn = document.getElementById("restartBtn");
-
-    function updateProgressUI() {
-      const total = questions.length;
-      const current = currentQuestionIndex + 1;
-      const percent = (current / total) * 100;
-      progressBarEl.style.width = percent + "%";
-      progressLabelEl.textContent = `Question ${current} / ${total}`;
-      scoreLabelEl.textContent = `Score : ${score} / ${total}`;
+    function init() {
+      renderQuestion();
+      updateProgress();
     }
 
     function renderQuestion() {
-      const q = questions[currentQuestionIndex];
-      questionNumberEl.textContent = `Question ${currentQuestionIndex + 1}`;
-      questionTextEl.textContent = q.question;
-      questionContextEl.textContent = q.context;
-      feedbackEl.textContent = "";
-      feedbackEl.className = "feedback";
-
-      choicesContainerEl.innerHTML = "";
-
-      q.choices.forEach((choiceText, index) => {
-        const choiceBtn = document.createElement("button");
-        choiceBtn.type = "button";
-        choiceBtn.className = "choice";
-        choiceBtn.setAttribute("role", "option");
-        choiceBtn.setAttribute("data-index", index);
-
-        const indicator = document.createElement("span");
-        indicator.className = "choice-indicator";
-        indicator.textContent = String.fromCharCode(65 + index);
-
-        const textSpan = document.createElement("span");
-        textSpan.className = "choice-text";
-        textSpan.textContent = choiceText;
-
-        choiceBtn.appendChild(indicator);
-        choiceBtn.appendChild(textSpan);
-
-        choiceBtn.addEventListener("click", () => handleChoiceClick(index));
-
-        choicesContainerEl.appendChild(choiceBtn);
+      const q = questions[currentQuestion];
+      
+      elements.questionNumber.textContent = `Q${currentQuestion + 1}`;
+      elements.questionTitle.textContent = q.title;
+      elements.questionContext.textContent = q.context;
+      
+      elements.options.innerHTML = '';
+      q.options.forEach((option, index) => {
+        const div = document.createElement('div');
+        div.className = 'option';
+        div.innerHTML = `
+          <div class="option-letter">${String.fromCharCode(65 + index)}</div>
+          <div class="option-content">${option}</div>
+        `;
+        div.addEventListener('click', () => selectOption(index));
+        elements.options.appendChild(div);
       });
 
-      // Si l'élève a déjà répondu à cette question, réafficher l’état
-      if (userAnswers[currentQuestionIndex] !== null) {
-        highlightAnswer(userAnswers[currentQuestionIndex], false);
+      elements.feedback.className = 'feedback';
+      elements.feedback.style.display = 'none';
+
+      const answered = answers[currentQuestion] !== null;
+      if (answered) {
+        showAnswerState(answers[currentQuestion]);
       }
 
-      prevBtn.disabled = currentQuestionIndex === 0;
-      nextBtn.disabled = currentQuestionIndex === questions.length - 1;
-
-      updateProgressUI();
+      updateButtons();
     }
 
-    function handleChoiceClick(selectedIndex) {
-      const q = questions[currentQuestionIndex];
+    function selectOption(index) {
+      if (quizCompleted || answers[currentQuestion] !== null) return;
 
-      const previousAnswer = userAnswers[currentQuestionIndex];
-      const isFirstTime = previousAnswer === null;
-
-      userAnswers[currentQuestionIndex] = selectedIndex;
-
-      if (isFirstTime) {
-        if (selectedIndex === q.correctIndex) {
-          score++;
-        }
-      } else {
-        // Si l’élève change sa réponse, ajuster le score
-        if (previousAnswer === q.correctIndex && selectedIndex !== q.correctIndex) {
-          score--;
-        } else if (
-          previousAnswer !== q.correctIndex &&
-          selectedIndex === q.correctIndex
-        ) {
-          score++;
-        }
+      answers[currentQuestion] = index;
+      
+      if (index === questions[currentQuestion].correct) {
+        score++;
       }
-
-      highlightAnswer(selectedIndex, true);
-      updateProgressUI();
+      
+      showAnswerState(index);
+      updateProgress();
+      updateButtons();
     }
 
-    function highlightAnswer(selectedIndex, showFeedback) {
-      const q = questions[currentQuestionIndex];
-      const choiceButtons = Array.from(
-        choicesContainerEl.querySelectorAll(".choice")
-      );
-
-      choiceButtons.forEach((btn) => {
-        btn.classList.remove("correct", "incorrect");
-        btn.classList.remove("disabled");
-      });
-
-      choiceButtons[selectedIndex].classList.add(
-        selectedIndex === q.correctIndex ? "correct" : "incorrect"
-      );
-
-      if (selectedIndex !== q.correctIndex) {
-        choiceButtons[q.correctIndex].classList.add("correct");
-      }
-
-      choiceButtons.forEach((btn) => {
-        btn.classList.add("disabled");
-      });
-
-      if (showFeedback) {
-        if (selectedIndex === q.correctIndex) {
-          feedbackEl.textContent = "Bonne réponse ! " + q.feedback;
-          feedbackEl.className = "feedback correct";
-        } else {
-          feedbackEl.textContent = "Réponse incorrecte. " + q.feedback;
-          feedbackEl.className = "feedback incorrect";
+    function showAnswerState(selectedIndex) {
+      const q = questions[currentQuestion];
+      const options = elements.options.children;
+      
+      for (let i = 0; i < options.length; i++) {
+        options[i].classList.remove('selected', 'correct', 'incorrect');
+        
+        if (i === selectedIndex) {
+          options[i].classList.add('selected');
+          if (i === q.correct) {
+            options[i].classList.add('correct');
+            showFeedback('success', `✅ Bonne réponse ! ${q.feedback}`);
+          } else {
+            options[i].classList.add('incorrect');
+            showFeedback('error', `❌ Faux. ${q.feedback}`);
+            options[q.correct].classList.add('correct');
+          }
         }
-      } else {
-        feedbackEl.textContent = q.feedback || "";
-        feedbackEl.className =
-          selectedIndex === q.correctIndex
-            ? "feedback correct"
-            : "feedback incorrect";
+      }
+    }
+
+    function showFeedback(type, text) {
+      elements.feedback.textContent = text;
+      elements.feedback.className = `feedback ${type}`;
+      elements.feedback.style.display = 'block';
+    }
+
+    function updateProgress() {
+      const progress = ((currentQuestion + 1) / questions.length) * 100;
+      elements.progressFill.style.width = `${progress}%`;
+      elements.progressText.textContent = `Question ${currentQuestion + 1} / ${questions.length}`;
+      elements.scoreText.textContent = `${score} / ${questions.length}`;
+    }
+
+    function updateButtons() {
+      const answered = answers[currentQuestion] !== null;
+      const isFirst = currentQuestion === 0;
+      const isLast = currentQuestion === questions.length - 1;
+      
+      elements.prevBtn.disabled = isFirst && !quizCompleted;
+      elements.nextBtn.disabled = !answered || isLast;
+      elements.showResultsBtn.style.display = quizCompleted ? 'none' : 
+        (isLast && answered) ? 'inline-flex' : 'none';
+    }
+
+    function nextQuestion() {
+      if (currentQuestion < questions.length - 1) {
+        currentQuestion++;
+        renderQuestion();
+      }
+    }
+
+    function prevQuestion() {
+      if (currentQuestion > 0) {
+        currentQuestion--;
+        renderQuestion();
       }
     }
 
     function showResults() {
-      const total = questions.length;
-      const percent = Math.round((score / total) * 100);
-
-      resultScoreEl.textContent = `Résultat : ${score} / ${total} (${percent} %)`;
-
-      let message = "";
-      if (percent >= 85) {
-        message =
-          "Très bonne maîtrise du chapitre : les grandes dynamiques de la Méditerranée médiévale sont bien comprises.";
-      } else if (percent >= 60) {
-        message =
-          "Maîtrise correcte : quelques points à revoir (chronologie des croisades, vocabulaire comme « gens du Livre » ou « États latins d’Orient »).";
-      } else {
-        message =
-          "Résultat fragile : il est conseillé de relire le cours (cartes, frises) et le glossaire pour consolider les repères.";
-      }
-
-      resultDetailEl.textContent = message;
-
-      const nbChronologie = [6, 7, 8].filter(
-        (i) => userAnswers[i] === questions[i].correctIndex
-      ).length;
-      const nbCivilisations = [0, 1, 2, 3, 4, 12].filter(
-        (i) => userAnswers[i] === questions[i].correctIndex
-      ).length;
-      const nbEchanges = [9, 10, 11, 13, 14].filter(
-        (i) => userAnswers[i] === questions[i].correctIndex
-      ).length;
-
-      resultTagsEl.innerHTML = "";
-
-      const mkTag = (label) => {
-        const span = document.createElement("span");
-        span.className = "pill";
-        span.textContent = label;
-        return span;
-      };
-
-      resultTagsEl.appendChild(
-        mkTag(`Repères croisés : ${nbChronologie} / 3`)
-      );
-      resultTagsEl.appendChild(
-        mkTag(`Civilisations & conflits : ${nbCivilisations} / 6`)
-      );
-      resultTagsEl.appendChild(
-        mkTag(`Échanges & circulations : ${nbEchanges} / 5`)
-      );
+      quizCompleted = true;
+      elements.results.classList.add('show');
+      
+      const percentage = Math.round((score / questions.length) * 100);
+      elements.finalScore.textContent = `${score}/${questions.length} (${percentage}%)`;
+      
+      let message = '';
+      if (percentage >= 90) message = '🇫🇷 Excellent ! Maîtrise parfaite de l\'actualité.';
+      else if (percentage >= 75) message = '👍 Très bonne connaissance des événements majeurs.';
+      else if (percentage >= 60) message = '📚 Bonne base, quelques révisions utiles.';
+      else message = '🔄 Occasion d\'approfondir l\'actualité internationale.';
+      
+      elements.scoreMessage.textContent = message;
+      
+      // Category breakdown
+      const categories = {};
+      questions.forEach((q, i) => {
+        categories[q.category] = categories[q.category] || { correct: 0, total: 0 };
+        categories[q.category].total++;
+        if (answers[i] === q.correct) categories[q.category].correct++;
+      });
+      
+      elements.categoryBreakdown.innerHTML = Object.entries(categories).map(([cat, data]) => {
+        const catNames = {
+          geopolitics: 'Géopolitique',
+          politics: 'Politique',
+          economy: 'Économie',
+          calendar: 'Calendrier'
+        };
+        return `
+          <div class="category">
+            <div>${catNames[cat]}</div>
+            <div class="category-score">${data.correct}/${data.total}</div>
+          </div>
+        `;
+      }).join('');
     }
 
-    function goToPrevious() {
-      if (currentQuestionIndex > 0) {
-        currentQuestionIndex--;
-        renderQuestion();
-      }
-    }
-
-    function goToNext() {
-      if (currentQuestionIndex < questions.length - 1) {
-        currentQuestionIndex++;
-        renderQuestion();
-      }
-    }
-
-    function restartQuiz() {
-      currentQuestionIndex = 0;
+    function restart() {
+      currentQuestion = 0;
       score = 0;
-      for (let i = 0; i < userAnswers.length; i++) {
-        userAnswers[i] = null;
-      }
-      resultScoreEl.textContent = "";
-      resultDetailEl.textContent = "";
-      resultTagsEl.innerHTML = "";
+      answers = new Array(questions.length).fill(null);
+      quizCompleted = false;
+      elements.results.classList.remove('show');
       renderQuestion();
     }
 
-    prevBtn.addEventListener("click", goToPrevious);
-    nextBtn.addEventListener("click", goToNext);
-    submitBtn.addEventListener("click", showResults);
-    restartBtn.addEventListener("click", restartQuiz);
+    // Event listeners
+    elements.prevBtn.addEventListener('click', prevQuestion);
+    elements.nextBtn.addEventListener('click', nextQuestion);
+    elements.showResultsBtn.addEventListener('click', showResults);
+    elements.restartBtn.addEventListener('click', restart);
 
-    renderQuestion();
+    init();
   </script>
 </body>
 </html>

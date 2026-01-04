@@ -1,222 +1,178 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QCM Histoire Seconde : La Méditerranée Médiévale</title>
-    <style>
-        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; background-color: #f4f4f4; }
-        h1 { text-align: center; color: #333; }
-        .question { margin-bottom: 20px; padding: 15px; background-color: white; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        .question h3 { margin-top: 0; }
-        label { display: block; margin-bottom: 5px; cursor: pointer; }
-        input[type="radio"] { margin-right: 10px; }
-        #submit { display: block; margin: 20px auto; padding: 10px 20px; background-color: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer; }
-        #submit:hover { background-color: #45a049; }
-        #results { margin-top: 30px; padding: 20px; background-color: #fff; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); display: none; }
-        .correct { color: green; }
-        .incorrect { color: red; }
-        .explanation { font-style: italic; margin-top: 5px; }
-    </style>
+<meta charset="UTF-8">
+<title>QCM – Événements de décembre 2025</title>
+<style>
+    body {
+        font-family: "Segoe UI", Arial, sans-serif;
+        background: #f4f6f8;
+        margin: 0;
+        padding: 20px;
+    }
+    .container {
+        max-width: 900px;
+        margin: auto;
+        background: white;
+        padding: 25px;
+        border-radius: 10px;
+        box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    }
+    h1 {
+        text-align: center;
+        color: #2c3e50;
+    }
+    .question {
+        margin-bottom: 20px;
+        padding: 15px;
+        border-left: 5px solid #3498db;
+        background: #ecf5ff;
+        border-radius: 6px;
+    }
+    .question h3 {
+        margin-top: 0;
+    }
+    label {
+        display: block;
+        margin: 6px 0;
+        cursor: pointer;
+    }
+    button {
+        display: block;
+        margin: 30px auto;
+        padding: 12px 25px;
+        font-size: 16px;
+        background: #3498db;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+    }
+    button:hover {
+        background: #2980b9;
+    }
+    .result {
+        margin-top: 30px;
+        padding: 20px;
+        background: #fdfdfd;
+        border-radius: 8px;
+        border: 2px solid #2ecc71;
+    }
+    .correct { color: green; font-weight: bold; }
+    .incorrect { color: red; font-weight: bold; }
+</style>
 </head>
+
 <body>
-    <h1>QCM : La Méditerranée Médiévale - Espace d'Échanges et de Conflits</h1>
-    <p>Ce QCM de 15 questions est basé sur le chapitre d'histoire de Seconde, conforme au programme officiel (thème : Grandes étapes de la formation du monde moderne). Sélectionnez une réponse par question. Les corrections détaillées seront affichées à la fin après validation.</p>
+<div class="container">
+<h1>QCM – Événements internationaux<br>Décembre 2025</h1>
 
-    <form id="quizForm">
-        <div class="question">
-            <h3>Question 1 : Quelle est la période couverte par le chapitre sur la Méditerranée médiévale ?</h3>
-            <label><input type="radio" name="q1" value="A"> A. Du VIIᵉ au XIIIᵉ siècle</label>
-            <label><input type="radio" name="q1" value="B"> B. Du IVᵉ au Xᵉ siècle</label>
-            <label><input type="radio" name="q1" value="C"> C. Du XIVᵉ au XVIᵉ siècle</label>
-            <label><input type="radio" name="q1" value="D"> D. Du Iᵉ au VIᵉ siècle</label>
-        </div>
+<form id="quiz">
 
-        <div class="question">
-            <h3>Question 2 : Quelles sont les trois grandes civilisations en contact autour de la Méditerranée ?</h3>
-            <label><input type="radio" name="q2" value="A"> A. Chrétienté latine, monde byzantin, monde musulman</label>
-            <label><input type="radio" name="q2" value="B"> B. Empire romain, Grèce antique, Perse</label>
-            <label><input type="radio" name="q2" value="C"> C. Vikings, Mongols, Ottomans</label>
-            <label><input type="radio" name="q2" value="D"> D. Mayas, Incas, Aztèques</label>
-        </div>
+<script>
+const questions = [
+ {q:"Quel pays a connu un coup d’État militaire en décembre 2025 ?",
+  a:["Mali","Guinée-Bissau","Niger","Burkina Faso"], c:1,
+  e:"La Guinée-Bissau a été dirigée par une junte ayant suspendu la Constitution."},
 
-        <div class="question">
-            <h3>Question 3 : Quel est le sens de l'expression "gens du Livre" ?</h3>
-            <label><input type="radio" name="q3" value="A"> A. Adeptes des monothéismes abrahamiques partageant des textes sacrés</label>
-            <label><input type="radio" name="q3" value="B"> B. Marchands de livres anciens</label>
-            <label><input type="radio" name="q3" value="C"> C. Guerriers des croisades</label>
-            <label><input type="radio" name="q3" value="D"> D. Savants byzantins</label>
-        </div>
+ {q:"Quelle ville de RDC a été prise par le mouvement M23 ?",
+  a:["Goma","Bukavu","Uvira","Kisangani"], c:2,
+  e:"Uvira, au Sud-Kivu, a été prise par le M23, aggravant les tensions régionales."},
 
-        <div class="question">
-            <h3>Question 4 : Quelle dynastie califale musulmane est centrée sur Damas de 661 à 750 ?</h3>
-            <label><input type="radio" name="q4" value="A"> A. Omeyyades</label>
-            <label><input type="radio" name="q4" value="B"> B. Abbassides</label>
-            <label><input type="radio" name="q4" value="C"> C. Fatimides</label>
-            <label><input type="radio" name="q4" value="D"> D. Ayyoubides</label>
-        </div>
+ {q:"Quel acteur s’est emparé du gouvernorat d’al-Mahrah au Yémen ?",
+  a:["Les Houthis","Al-Qaïda","Conseil de transition du Sud","Arabie saoudite"], c:2,
+  e:"Le Conseil de transition du Sud a renforcé son contrôle territorial."},
 
-        <div class="question">
-            <h3>Question 5 : Quelle est la principale division religieuse dans l'islam ?</h3>
-            <label><input type="radio" name="q5" value="A"> A. Sunnites et chiites</label>
-            <label><input type="radio" name="q5" value="B"> B. Catholiques et orthodoxes</label>
-            <label><input type="radio" name="q5" value="C"> C. Iconoclastes et iconodules</label>
-            <label><input type="radio" name="q5" value="D"> D. Cathares et albigeois</label>
-        </div>
+ {q:"Où a eu lieu l’assassinat d’un général russe par voiture piégée ?",
+  a:["Kiev","Moscou","Rostov","Donetsk"], c:1,
+  e:"L’attentat a eu lieu à Moscou, suscitant de fortes tensions diplomatiques."},
 
-        <div class="question">
-            <h3>Question 6 : Quel événement marque la rupture entre l'Église catholique et orthodoxe ?</h3>
-            <label><input type="radio" name="q6" value="A"> A. Schisme de 1054</label>
-            <label><input type="radio" name="q6" value="B"> B. Crise iconoclaste</label>
-            <label><input type="radio" name="q6" value="C"> C. Croisade albigeoise</label>
-            <label><input type="radio" name="q6" value="D"> D. Bataille de Manzikert</label>
-        </div>
+ {q:"Dans quelle province iranienne des Gardiens de la révolution ont-ils été tués ?",
+  a:["Khuzestan","Fars","Sistan-et-Baloutchistan","Kurdistan"], c:2,
+  e:"Cette province est marquée par une insécurité chronique."},
 
-        <div class="question">
-            <h3>Question 7 : Quelle est la période de la crise iconoclaste dans l'Empire byzantin ?</h3>
-            <label><input type="radio" name="q7" value="A"> A. 726-843</label>
-            <label><input type="radio" name="q7" value="B"> B. 1095-1270</label>
-            <label><input type="radio" name="q7" value="C"> C. 1209-1229</label>
-            <label><input type="radio" name="q7" value="D"> D. 661-750</label>
-        </div>
+ {q:"Quel Premier ministre a démissionné en Bulgarie ?",
+  a:["Boyko Borissov","Kiril Petkov","Rosen Zhelyazkov","Rumen Radev"], c:2,
+  e:"Il a quitté ses fonctions après des manifestations anticorruption."},
 
-        <div class="question">
-            <h3>Question 8 : Quel mouvement hérétique est réprimé par la croisade albigeoise ?</h3>
-            <label><input type="radio" name="q8" value="A"> A. Cathares</label>
-            <label><input type="radio" name="q8" value="B"> B. Sunnites</label>
-            <label><input type="radio" name="q8" value="C"> C. Iconoclastes</label>
-            <label><input type="radio" name="q8" value="D"> D. Fatimides</label>
-        </div>
+ {q:"Quel parti a gagné les élections à Saint-Lucie ?",
+  a:["United Workers Party","Saint Lucia Labour Party","Green Party","National Alliance"], c:1,
+  e:"Le parti de Philip J. Pierre conserve une large majorité."},
 
-        <div class="question">
-            <h3>Question 9 : Qui lance l'appel à la première croisade en 1095 ?</h3>
-            <label><input type="radio" name="q9" value="A"> A. Pape Urbain II</label>
-            <label><input type="radio" name="q9" value="B"> B. Saladin</label>
-            <label><input type="radio" name="q9" value="C"> C. Bernard de Clairvaux</label>
-            <label><input type="radio" name="q9" value="D"> D. Roger II</label>
-        </div>
+ {q:"Quel dirigeant est redevenu Premier ministre tchèque ?",
+  a:["Petr Fiala","Andrej Babiš","Miloš Zeman","Vaclav Klaus"], c:1,
+  e:"Andrej Babiš entame un second mandat non consécutif."},
 
-        <div class="question">
-            <h3>Question 10 : Quel sultan reprend Jérusalem en 1187 ?</h3>
-            <label><input type="radio" name="q10" value="A"> A. Saladin</label>
-            <label><input type="radio" name="q10" value="B"> B. Al-Hakim</label>
-            <label><input type="radio" name="q10" value="C"> C. Averroès</label>
-            <label><input type="radio" name="q10" value="D"> D. Maïmonide</label>
-        </div>
+ {q:"Dans quel pays les élections ont-elles été fortement contestées ?",
+  a:["Pérou","Honduras","Colombie","Salvador"], c:1,
+  e:"Des accusations de fraude ont entraîné de fortes tensions politiques."},
 
-        <div class="question">
-            <h3>Question 11 : Quelle croisade est détournée contre Constantinople en 1204 ?</h3>
-            <label><input type="radio" name="q11" value="A"> A. Quatrième</label>
-            <label><input type="radio" name="q11" value="B"> B. Première</label>
-            <label><input type="radio" name="q11" value="C"> C. Deuxième</label>
-            <label><input type="radio" name="q11" value="D"> D. Huitième</label>
-        </div>
+ {q:"Quel organisme a accordé 1,2 milliard $ au Pakistan ?",
+  a:["Banque mondiale","FMI","OPEP","Banque asiatique"], c:1,
+  e:"Le FMI soutient le Pakistan face à ses difficultés financières."},
 
-        <div class="question">
-            <h3>Question 12 : Quelle république marchande domine le commerce méditerranéen grâce aux croisades ?</h3>
-            <label><input type="radio" name="q12" value="A"> A. Venise</label>
-            <label><input type="radio" name="q12" value="B"> B. Gênes</label>
-            <label><input type="radio" name="q12" value="C"> C. Pise</label>
-            <label><input type="radio" name="q12" value="D"> D. Constantinople</label>
-        </div>
+ {q:"Quel pays a rejoint « Security Action for Europe » ?",
+  a:["Norvège","Canada","Australie","Japon"], c:1,
+  e:"Le Canada renforce sa coopération sécuritaire avec l’UE."},
 
-        <div class="question">
-            <h3>Question 13 : Quel est le nom de l'Espagne musulmane favorisant les échanges culturels ?</h3>
-            <label><input type="radio" name="q13" value="A"> A. Al-Andalus</label>
-            <label><input type="radio" name="q13" value="B"> B. Sicile normande</label>
-            <label><input type="radio" name="q13" value="C"> C. États latins d’Orient</label>
-            <label><input type="radio" name="q13" value="D"> D. Route de la Soie</label>
-        </div>
+ {q:"Quelle compagnie indienne a réduit ses vols de 5 % ?",
+  a:["Air India","Vistara","IndiGo","SpiceJet"], c:2,
+  e:"IndiGo a subi une crise organisationnelle majeure."},
 
-        <div class="question">
-            <h3>Question 14 : Qui est le philosophe musulman commentateur d'Aristote ?</h3>
-            <label><input type="radio" name="q14" value="A"> A. Averroès</label>
-            <label><input type="radio" name="q14" value="B"> B. Maïmonide</label>
-            <label><input type="radio" name="q14" value="C"> C. Saladin</label>
-            <label><input type="radio" name="q14" value="D"> D. Bernard de Clairvaux</label>
-        </div>
+ {q:"Quel événement monétaire a marqué décembre 2025 ?",
+  a:["Création d’un euro numérique","Baisse des taux FED","Fin du dollar","Dévaluation du yuan"], c:1,
+  e:"La Réserve fédérale américaine était attendue sur ses taux."},
 
-        <div class="question">
-            <h3>Question 15 : Quel style architectural symbolise le métissage en Sicile normande ?</h3>
-            <label><input type="radio" name="q15" value="A"> A. Arabo-normand</label>
-            <label><input type="radio" name="q15" value="B"> B. Gothique</label>
-            <label><input type="radio" name="q15" value="C"> C. Roman</label>
-            <label><input type="radio" name="q15" value="D"> D. Byzantin pur</label>
-        </div>
+ {q:"Quelle infrastructure a été inaugurée près de Mumbai ?",
+  a:["Un port","Une autoroute","Un aéroport","Une zone franche"], c:2,
+  e:"L’aéroport de Navi Mumbai vise à désengorger la métropole."},
 
-        <button type="button" id="submit">Valider le QCM</button>
-    </form>
+ {q:"Quel événement sportif continental a débuté ?",
+  a:["Coupe du monde","Coupe d’Asie","CAN 2025","Jeux Olympiques"], c:2,
+  e:"La Coupe d’Afrique des Nations 2025 débute au Maroc."}
+];
 
-    <div id="results">
-        <h2>Résultats</h2>
-        <p id="score"></p>
-        <div id="corrections"></div>
-    </div>
+const quiz = document.getElementById("quiz");
+questions.forEach((q, i) => {
+    quiz.innerHTML += `
+    <div class="question">
+        <h3>${i+1}. ${q.q}</h3>
+        ${q.a.map((opt,j)=>`
+        <label>
+            <input type="radio" name="q${i}" value="${j}">
+            ${opt}
+        </label>`).join("")}
+    </div>`;
+});
+</script>
 
-    <script>
-        const correctAnswers = {
-            q1: 'A',
-            q2: 'A',
-            q3: 'A',
-            q4: 'A',
-            q5: 'A',
-            q6: 'A',
-            q7: 'A',
-            q8: 'A',
-            q9: 'A',
-            q10: 'A',
-            q11: 'A',
-            q12: 'A',
-            q13: 'A',
-            q14: 'A',
-            q15: 'A'
-        };
+<button type="button" onclick="corriger()">Valider le QCM</button>
+</form>
 
-        const explanations = {
-            q1: "La période couverte est du VIIᵉ au XIIIᵉ siècle, centrée sur le monde médiéval.",
-            q2: "Les trois civilisations sont la Chrétienté latine, le monde byzantin et le monde musulman, issues des monothéismes.",
-            q3: "Les 'gens du Livre' désigne juifs, chrétiens et musulmans partageant Torah, Bible et Coran, avec statut protégé en islam.",
-            q4: "Les Omeyyades règnent de 661 à 750 à Damas, étendant l'empire musulman.",
-            q5: "La division est entre sunnites (majoritaires) et chiites (loyalistes à Ali).",
-            q6: "Le schisme de 1054 sépare catholiques (Rome) et orthodoxes (Constantinople).",
-            q7: "La crise iconoclaste (726-843) oppose iconoclastes et iconodules dans Byzance.",
-            q8: "Les cathares, hérétiques dualistes, sont réprimés par la croisade albigeoise (1209-1229).",
-            q9: "Urbain II lance l'appel à Clermont en 1095 pour la première croisade.",
-            q10: "Saladin reprend Jérusalem en 1187 après Hattin.",
-            q11: "La quatrième croisade (1204) est détournée par Venise contre Constantinople.",
-            q12: "Venise domine le commerce, obtenant comptoirs grâce aux croisades.",
-            q13: "Al-Andalus est l'Espagne musulmane, centre d'échanges à Tolède.",
-            q14: "Averroès (1126-1198) commente Aristote, influençant l'Occident.",
-            q15: "L'arabo-normand mêle influences en Sicile, comme la chapelle palatine de Palerme."
-        };
+<div id="resultat"></div>
 
-        document.getElementById('submit').addEventListener('click', function() {
-            const form = document.getElementById('quizForm');
-            const results = document.getElementById('results');
-            const scoreElement = document.getElementById('score');
-            const corrections = document.getElementById('corrections');
-            let score = 0;
-            corrections.innerHTML = '';
+<script>
+function corriger() {
+    let score = 0;
+    let html = "<div class='result'><h2>Résultats et corrections</h2>";
 
-            for (let i = 1; i <= 15; i++) {
-                const question = `q${i}`;
-                const selected = form.querySelector(`input[name="${question}"]:checked`);
-                const div = document.createElement('div');
-                div.innerHTML = `<h3>Question ${i}</h3>`;
-                if (selected && selected.value === correctAnswers[question]) {
-                    score++;
-                    div.innerHTML += `<p class="correct">Correct ! Réponse : ${correctAnswers[question]}</p>`;
-                } else {
-                    div.innerHTML += `<p class="incorrect">Incorrect. Réponse correcte : ${correctAnswers[question]}</p>`;
-                }
-                div.innerHTML += `<p class="explanation">${explanations[question]}</p>`;
-                corrections.appendChild(div);
-            }
+    questions.forEach((q,i)=>{
+        const r = document.querySelector(`input[name="q${i}"]:checked`);
+        if (r && parseInt(r.value) === q.c) {
+            score++;
+            html += `<p class="correct">✔ Question ${i+1} : Bonne réponse</p>`;
+        } else {
+            html += `<p class="incorrect">✘ Question ${i+1} : Mauvaise réponse<br>
+            Réponse correcte : <strong>${q.a[q.c]}</strong><br>
+            ${q.e}</p>`;
+        }
+    });
 
-            scoreElement.textContent = `Score : ${score}/15`;
-            results.style.display = 'block';
-            window.scrollTo(0, document.body.scrollHeight);
-        });
-    </script>
+    html += `<h3>Score final : ${score} / 15</h3></div>`;
+    document.getElementById("resultat").innerHTML = html;
+}
+</script>
+
+</div>
 </body>
 </html>

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>QCM – Actualité française (décembre 2025)</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #f2f4f7;
+        padding: 20px;
+    }
+    .container {
+        max-width: 850px;
+        margin: auto;
+        background: white;
+        padding: 25px;
+        border-radius: 10px;
+        box-shadow: 0 0 12px rgba(0,0,0,0.1);
+    }
+    h1 {
+        text-align: center;
+        color: #1a237e;
+    }
+    .question {
+        margin-bottom: 18px;
+        padding: 15px;
+        background: #e8eaf6;
+        border-left: 5px solid #3f51b5;
+        border-radius: 6px;
+    }
+    label {
+        display: block;
+        margin: 6px 0;
+        cursor: pointer;
+    }
+    button {
+        margin: 25px auto;
+        display: block;
+        padding: 12px 25px;
+        font-size: 16px;
+        background: #3f51b5;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+    }
+    button:hover {
+        background: #303f9f;
+    }
+    .result {
+        margin-top: 30px;
+        padding: 20px;
+        border-radius: 8px;
+        background: #fafafa;
+        border: 2px solid #4caf50;
+    }
+    .correct { color: green; font-weight: bold; }
+    .incorrect { color: red; font-weight: bold; }
+</style>
+</head>
+
+<body>
+<div class="container">
+<h1>QCM – Actualité française<br>Décembre 2025</h1>
+
+<form id="quiz"></form>
+
+<button onclick="corriger()" type="button">Valider</button>
+
+<div id="resultat"></div>
+</div>
+
+<script>
+const questions = [
+ {
+  q: "Quel texte a provoqué de fortes tensions sociales en France en décembre 2025 ?",
+  a: ["La réforme des retraites", "La loi immigration", "Le budget 2026", "La réforme du bac"],
+  c: 2,
+  e: "Le projet de loi de finances 2026 a suscité manifestations et débats parlementaires."
+ },
+ {
+  q: "Quel mouvement social a marqué le mois de décembre 2025 ?",
+  a: ["Une grève générale des enseignants", "Une grève des transports", "Une grève des agriculteurs", "Une grève des soignants"],
+  c: 1,
+  e: "Les transports publics ont été fortement perturbés à l’approche des fêtes."
+ },
+ {
+  q: "Quelle institution a censuré partiellement une loi gouvernementale en décembre 2025 ?",
+  a: ["Le Sénat", "Le Conseil constitutionnel", "La Cour de cassation", "La Cour des comptes"],
+  c: 1,
+  e: "Le Conseil constitutionnel a invalidé plusieurs articles jugés contraires à la Constitution."
+ },
+ {
+  q: "Quel sujet a dominé le débat politique français sur la scène internationale ?",
+  a: ["La guerre en Ukraine", "Le conflit au Proche-Orient", "Le climat", "L’élargissement de l’UE"],
+  c: 1,
+  e: "La position diplomatique française sur le Proche-Orient a suscité de vifs débats."
+ },
+ {
+  q: "Quel événement climatique a touché plusieurs régions françaises ?",
+  a: ["Une canicule hivernale", "Des tempêtes et inondations", "Une sécheresse extrême", "Des incendies majeurs"],
+  c: 1,
+  e: "De fortes tempêtes ont causé des dégâts matériels importants."
+ },
+ {
+  q: "Quelle mesure économique a été annoncée pour lutter contre l’inflation ?",
+  a: ["Gel total des prix", "Baisse de la TVA sur certains produits", "Suppression des aides sociales", "Hausse du SMIC de 20 %"],
+  c: 1,
+  e: "Le gouvernement a annoncé une baisse ciblée de la TVA."
+ },
+ {
+  q: "Quel thème a dominé les débats sur l’école ?",
+  a: ["La réforme de Parcoursup", "Le port de l’uniforme", "La suppression du bac", "L’enseignement à distance"],
+  c: 1,
+  e: "L’uniforme scolaire a été expérimenté dans plusieurs établissements."
+ },
+ {
+  q: "Quel événement culturel majeur a eu lieu en décembre 2025 ?",
+  a: ["La réouverture de Notre-Dame de Paris", "L’Exposition universelle", "Le Festival de Cannes", "Les JO de Paris"],
+  c: 0,
+  e: "La réouverture de Notre-Dame a marqué un moment symbolique fort."
+ },
+ {
+  q: "Quelle institution a publié un rapport critique sur les finances publiques ?",
+  a: ["INSEE", "OCDE", "Cour des comptes", "Banque de France"],
+  c: 2,
+  e: "La Cour des comptes a alerté sur la dette et les déficits."
+ },
+ {
+  q: "Quel sujet sociétal a suscité de vifs débats médiatiques ?",
+  a: ["La fin du pass sanitaire", "La légalisation du cannabis", "La fin de vie", "Le droit de vote à 16 ans"],
+  c: 2,
+  e: "La question de la fin de vie a été au cœur des discussions."
+ }
+];
+
+const quiz = document.getElementById("quiz");
+
+questions.forEach((q, i) => {
+ quiz.innerHTML += `
+ <div class="question">
+   <h3>${i+1}. ${q.q}</h3>
+   ${q.a.map((opt,j)=>`
+     <label>
+       <input type="radio" name="q${i}" value="${j}">
+       ${opt}
+     </label>
+   `).join("")}
+ </div>`;
+});
+
+function corriger() {
+ let score = 0;
+ let res = "<div class='result'><h2>Correction</h2>";
+
+ questions.forEach((q,i)=>{
+   const r = document.querySelector(`input[name="q${i}"]:checked`);
+   if (r && Number(r.value) === q.c) {
+     score++;
+     res += `<p class="correct">✔ Question ${i+1} : Bonne réponse</p>`;
+   } else {
+     res += `<p class="incorrect">✘ Question ${i+1}<br>
+     Réponse correcte : <strong>${q.a[q.c]}</strong><br>
+     ${q.e}</p>`;
+   }
+ });
+
+ res += `<h3>Score : ${score} / 10</h3></div>`;
+ document.getElementById("resultat").innerHTML = res;
+}
+</script>
+
+</body>
+</html>

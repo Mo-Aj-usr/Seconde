@@ -1,268 +1,214 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<title>QCM – Méditerranée médiévale (Seconde)</title>
-<style>
-body{
-  font-family: "Segoe UI", Arial, sans-serif;
-  background:#f2f4f7;
-  margin:0;
-}
-.container{
-  max-width:900px;
-  margin:30px auto;
-  background:#fff;
-  padding:25px;
-  border-radius:10px;
-  box-shadow:0 4px 12px rgba(0,0,0,0.1);
-}
-h1{
-  text-align:center;
-  color:#2c3e50;
-}
-.progress{
-  font-weight:bold;
-  margin-bottom:15px;
-}
-.question{
-  font-size:1.1em;
-  margin-bottom:15px;
-}
-.answers label{
-  display:block;
-  padding:10px;
-  margin-bottom:8px;
-  border:1px solid #ccc;
-  border-radius:6px;
-  cursor:pointer;
-}
-.answers label:hover{
-  background:#ecf0f1;
-}
-button{
-  background:#8e44ad;
-  color:white;
-  border:none;
-  padding:12px 20px;
-  border-radius:6px;
-  font-size:1em;
-  cursor:pointer;
-}
-button:hover{
-  background:#6c3483;
-}
-.correction{
-  background:#f8f9fa;
-  border-left:4px solid #8e44ad;
-  padding:15px;
-  margin-bottom:15px;
-}
-.good{color:green;font-weight:bold;}
-.bad{color:red;font-weight:bold;}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QCM : Événements majeurs de décembre 2025</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; background-color: #f4f4f9; }
+        h1 { text-align: center; color: #2c3e50; }
+        .intro { text-align: center; margin-bottom: 30px; font-size: 1.1em; }
+        .question { margin-bottom: 25px; padding: 20px; background-color: white; border-radius: 10px; box-shadow: 0 3px 8px rgba(0,0,0,0.1); }
+        .question h3 { margin-top: 0; color: #34495e; }
+        label { display: block; margin-bottom: 8px; cursor: pointer; padding: 5px; border-radius: 5px; transition: background 0.2s; }
+        label:hover { background-color: #ecf0f1; }
+        input[type="radio"] { margin-right: 12px; }
+        #submit { display: block; margin: 30px auto; padding: 12px 30px; background-color: #27ae60; color: white; border: none; border-radius: 6px; font-size: 1.1em; cursor: pointer; }
+        #submit:hover { background-color: #219150; }
+        #results { margin-top: 40px; padding: 25px; background-color: #fff; border-radius: 10px; box-shadow: 0 3px 8px rgba(0,0,0,0.1); display: none; }
+        .correct { color: #27ae60; font-weight: bold; }
+        .incorrect { color: #e74c3c; font-weight: bold; }
+        .explanation { font-style: italic; margin-top: 8px; background-color: #f8f9fa; padding: 10px; border-left: 4px solid #3498db; }
+        #score { font-size: 1.4em; font-weight: bold; text-align: center; margin-bottom: 20px; color: #2c3e50; }
+    </style>
 </head>
-
 <body>
-<div class="container">
-<h1>QCM – La Méditerranée médiévale<br>Histoire – Seconde</h1>
+    <h1>QCM : Les 20 événements majeurs de décembre 2025</h1>
+    <p class="intro">Testez vos connaissances sur les principaux faits géopolitiques, politiques, économiques et calendaires du mois de décembre 2025. 15 questions à choix multiple. Corrections détaillées en fin de test.</p>
 
-<div id="quiz"></div>
-<button id="nextBtn">Question suivante</button>
-<div id="result"></div>
-</div>
+    <form id="quizForm">
+        <div class="question">
+            <h3>1. Dans quel pays a eu lieu un coup d’État en décembre 2025 avec suspension de la Constitution ?</h3>
+            <label><input type="radio" name="q1" value="A"> A. Guinée-Bissau</label>
+            <label><input type="radio" name="q1" value="B"> B. Myanmar</label>
+            <label><input type="radio" name="q1" value="C"> C. Honduras</label>
+            <label><input type="radio" name="q1" value="D"> D. Bulgarie</label>
+        </div>
 
-<script>
-const quizData = [
-{
-q:"Pourquoi la Méditerranée est-elle un espace central au Moyen Âge ?",
-a:[
-"Elle sépare totalement les civilisations",
-"Elle est un espace vide et peu peuplé",
-"Elle est un carrefour d’échanges et de conflits",
-"Elle est contrôlée par une seule puissance"
-],
-c:2,
-e:"La Méditerranée est un carrefour reliant l’Europe, l’Afrique et l’Asie, marqué à la fois par des échanges et des conflits."
-},
-{
-q:"Quelles sont les trois grandes civilisations présentes en Méditerranée médiévale ?",
-a:[
-"Chrétienté, monde viking, monde perse",
-"Chrétienté latine, monde byzantin, monde musulman",
-"Empire romain, Empire ottoman, monde chrétien",
-"Europe, Afrique, Asie"
-],
-c:1,
-e:"La Méditerranée médiévale est dominée par la Chrétienté latine, le monde byzantin et le monde musulman."
-},
-{
-q:"Que signifie l’expression « gens du Livre » ?",
-a:[
-"Les peuples commerçants",
-"Les savants médiévaux",
-"Les religions partageant un livre sacré",
-"Les marchands juifs"
-],
-c:2,
-e:"Juifs, chrétiens et musulmans sont dits « gens du Livre » car ils partagent une tradition monothéiste fondée sur des textes sacrés."
-},
-{
-q:"Quelle division religieuse traverse le monde musulman ?",
-a:[
-"Catholiques / orthodoxes",
-"Sunnites / chiites",
-"Iconoclastes / iconodules",
-"Cathares / catholiques"
-],
-c:1,
-e:"La division entre sunnites et chiites naît d’un désaccord sur la succession du Prophète."
-},
-{
-q:"Quelle dynastie musulmane installe sa capitale à Bagdad ?",
-a:["Omeyyades","Fatimides","Abbassides","Seldjoukides"],
-c:2,
-e:"Les Abbassides (750-1258) font de Bagdad un grand centre politique et culturel."
-},
-{
-q:"Quel événement marque la rupture entre catholiques et orthodoxes ?",
-a:[
-"La première croisade",
-"Le schisme de 1054",
-"La chute de Rome",
-"La quatrième croisade"
-],
-c:1,
-e:"Le schisme de 1054 sépare durablement l’Église catholique et l’Église orthodoxe."
-},
-{
-q:"Qu’est-ce que la crise iconoclaste à Byzance ?",
-a:[
-"Un conflit entre musulmans et chrétiens",
-"Un refus du commerce",
-"Un rejet du culte des images",
-"Une invasion viking"
-],
-c:2,
-e:"Les iconoclastes refusent le culte des icônes, jugées idolâtres, ce qui divise l’Empire byzantin."
-},
-{
-q:"Qui lance l’appel à la première croisade en 1095 ?",
-a:[
-"Bernard de Clairvaux",
-"Saladin",
-"Urbain II",
-"Innocent III"
-],
-c:2,
-e:"Le pape Urbain II appelle à la croisade lors du concile de Clermont."
-},
-{
-q:"Quel est le résultat de la première croisade (1099) ?",
-a:[
-"La chute de Constantinople",
-"La prise de Jérusalem",
-"La défaite des croisés",
-"La fin des échanges"
-],
-c:1,
-e:"La première croisade aboutit à la prise de Jérusalem et à la création des États latins d’Orient."
-},
-{
-q:"Quel dirigeant musulman reprend Jérusalem en 1187 ?",
-a:["Nur ad-Din","Saladin","Averroès","Al-Hakim"],
-c:1,
-e:"Saladin reprend Jérusalem après la bataille de Hattin, tout en autorisant les pèlerinages."
-},
-{
-q:"Pourquoi la quatrième croisade est-elle un tournant majeur ?",
-a:[
-"Elle libère Jérusalem",
-"Elle attaque Constantinople",
-"Elle unit les chrétiens",
-"Elle met fin aux croisades"
-],
-c:1,
-e:"En 1204, Constantinople est pillée par les croisés, ce qui affaiblit durablement Byzance."
-},
-{
-q:"Quelle ville devient une grande puissance commerciale grâce aux croisades ?",
-a:["Rome","Paris","Venise","Londres"],
-c:2,
-e:"Venise profite des croisades pour dominer le commerce méditerranéen."
-},
-{
-q:"Quel espace est un foyer majeur d’échanges culturels entre religions ?",
-a:["Scandinavie","Al-Andalus","Angleterre","Germanie"],
-c:1,
-e:"Al-Andalus est un centre de traduction et de coexistence culturelle."
-},
-{
-q:"Qui est Averroès ?",
-a:[
-"Un pape",
-"Un chef de croisade",
-"Un philosophe musulman",
-"Un empereur byzantin"
-],
-c:2,
-e:"Averroès est un philosophe musulman andalou qui transmet Aristote à l’Occident."
-},
-{
-q:"Que montre l’exemple de la Sicile normande ?",
-a:[
-"Une Méditerranée fermée",
-"Un rejet des échanges",
-"Un métissage culturel",
-"Une domination exclusive chrétienne"
-],
-c:2,
-e:"La Sicile normande illustre la coexistence et le métissage entre cultures musulmane, byzantine et latine."
-}
-];
+        <div class="question">
+            <h3>2. Quelle ville du Sud-Kivu a été prise par le mouvement M23 en décembre 2025 ?</h3>
+            <label><input type="radio" name="q2" value="A"> A. Uvira</label>
+            <label><input type="radio" name="q2" value="B"> B. Goma</label>
+            <label><input type="radio" name="q2" value="C"> C. Bukavu</label>
+            <label><input type="radio" name="q2" value="D"> D. Kinshasa</label>
+        </div>
 
-let index=0, score=0, answers=[];
-const quiz=document.getElementById("quiz");
-const btn=document.getElementById("nextBtn");
-const result=document.getElementById("result");
+        <div class="question">
+            <h3>3. Quel gouvernorat yéménite a été pris par le Conseil de transition du Sud ?</h3>
+            <label><input type="radio" name="q3" value="A"> A. Al-Mahrah</label>
+            <label><input type="radio" name="q3" value="B"> B. Aden</label>
+            <label><input type="radio" name="q3" value="C"> C. Sanaa</label>
+            <label><input type="radio" name="q3" value="D"> D. Hodeïda</label>
+        </div>
 
-function loadQ(){
-  const q=quizData[index];
-  quiz.innerHTML=`
-    <div class="progress">Question ${index+1} / ${quizData.length}</div>
-    <div class="question">${q.q}</div>
-    <div class="answers">
-      ${q.a.map((x,i)=>`
-        <label><input type="radio" name="a" value="${i}"> ${x}</label>
-      `).join("")}
-    </div>`;
-}
-btn.onclick=()=>{
-  const sel=document.querySelector("input[name='a']:checked");
-  if(!sel) return alert("Choisissez une réponse.");
-  const v=+sel.value;
-  answers.push(v);
-  if(v===quizData[index].c) score++;
-  index++;
-  index<quizData.length?loadQ():showResult();
-}
-function showResult(){
-  quiz.style.display="none";
-  btn.style.display="none";
-  result.innerHTML=`<h2>Score : ${score} / ${quizData.length}</h2>`;
-  quizData.forEach((q,i)=>{
-    result.innerHTML+=`
-      <div class="correction">
-      <strong>Question ${i+1}</strong><br>${q.q}<br>
-      <span class="${answers[i]===q.c?'good':'bad'}">
-      Votre réponse : ${q.a[answers[i]]}
-      </span><br>
-      ✔ Réponse correcte : ${q.a[q.c]}<br>
-      <em>${q.e}</em>
-      </div>`;
-  });
-}
-loadQ();
-</script>
+        <div class="question">
+            <h3>4. En Bulgarie, quel Premier ministre a démissionné en décembre 2025 ?</h3>
+            <label><input type="radio" name="q4" value="A"> A. Rosen Zhelyazkov</label>
+            <label><input type="radio" name="q4" value="B"> B. Andrej Babiš</label>
+            <label><input type="radio" name="q4" value="C"> C. Philip J. Pierre</label>
+            <label><input type="radio" name="q4" value="D"> D. Min Aung Hlaing</label>
+        </div>
+
+        <div class="question">
+            <h3>5. Quel parti a conservé une large majorité aux élections générales à Saint-Lucie ?</h3>
+            <label><input type="radio" name="q5" value="A"> A. Saint Lucia Labour Party</label>
+            <label><input type="radio" name="q5" value="B"> B. Vetëvendosje</label>
+            <label><input type="radio" name="q5" value="C"> C. ANO</label>
+            <label><input type="radio" name="q5" value="D"> D. Parti militaire</label>
+        </div>
+
+        <div class="question">
+            <h3>6. Qui a été nommé Premier ministre en République tchèque pour un second mandat ?</h3>
+            <label><input type="radio" name="q6" value="A"> A. Andrej Babiš</label>
+            <label><input type="radio" name="q6" value="B"> B. Rosen Zhelyazkov</label>
+            <label><input type="radio" name="q6" value="C"> C. Philip J. Pierre</label>
+            <label><input type="radio" name="q6" value="D"> D. Min Aung Hlaing</label>
+        </div>
+
+        <div class="question">
+            <h3>7. Quel pays a organisé des élections sous contrôle militaire en décembre 2025 ?</h3>
+            <label><input type="radio" name="q7" value="A"> A. Myanmar</label>
+            <label><input type="radio" name="q7" value="B"> B. Honduras</label>
+            <label><input type="radio" name="q7" value="C"> C. Guinée-Bissau</label>
+            <label><input type="radio" name="q7" value="D"> D. Iran</label>
+        </div>
+
+        <div class="question">
+            <h3>8. Quel montant le FMI a-t-il décaissé pour le Pakistan en décembre 2025 ?</h3>
+            <label><input type="radio" name="q8" value="A"> A. 1,2 milliard de dollars</label>
+            <label><input type="radio" name="q8" value="B"> B. 3,3 milliards de dollars</label>
+            <label><input type="radio" name="q8" value="C"> C. 5 milliards de dollars</label>
+            <label><input type="radio" name="q8" value="D"> D. 500 millions de dollars</label>
+        </div>
+
+        <div class="question">
+            <h3>9. Quel pays a rejoint l’initiative européenne « Security Action for Europe » en décembre 2025 ?</h3>
+            <label><input type="radio" name="q9" value="A"> A. Canada</label>
+            <label><input type="radio" name="q9" value="B"> B. Inde</label>
+            <label><input type="radio" name="q9" value="C"> C. Pakistan</label>
+            <label><input type="radio" name="q9" value="D"> D. États-Unis</label>
+        </div>
+
+        <div class="question">
+            <h3>10. Quel nouvel aéroport international a été inauguré en Inde en décembre 2025 ?</h3>
+            <label><input type="radio" name="q10" value="A"> A. Navi Mumbai</label>
+            <label><input type="radio" name="q10" value="B"> B. New Delhi Extension</label>
+            <label><input type="radio" name="q10" value="C"> C. Bangalore International</label>
+            <label><input type="radio" name="q10" value="D"> D. Hyderabad Hub</label>
+        </div>
+
+        <div class="question">
+            <h3>11. Quelle journée internationale est célébrée le 9 décembre ?</h3>
+            <label><input type="radio" name="q11" value="A"> A. Journée internationale de lutte contre la corruption</label>
+            <label><input type="radio" name="q11" value="B"> B. Journée internationale des migrants</label>
+            <label><input type="radio" name="q11" value="C"> C. Journée des droits humains</label>
+            <label><input type="radio" name="q11" value="D"> D. Solstice d’hiver</label>
+        </div>
+
+        <div class="question">
+            <h3>12. Du 15 au 22 décembre 2025, quelle fête juive est célébrée ?</h3>
+            <label><input type="radio" name="q12" value="A"> A. Hanoucca</label>
+            <label><input type="radio" name="q12" value="B"> B. Pâques juive</label>
+            <label><input type="radio" name="q12" value="C"> C. Yom Kippour</label>
+            <label><input type="radio" name="q12" value="D"> D. Pourim</label>
+        </div>
+
+        <div class="question">
+            <h3>13. Quelle journée internationale est observée le 18 décembre ?</h3>
+            <label><input type="radio" name="q13" value="A"> A. Journée internationale des migrants</label>
+            <label><input type="radio" name="q13" value="B"> B. Journée contre la corruption</label>
+            <label><input type="radio" name="q13" value="C"> C. Journée des droits humains</label>
+            <label><input type="radio" name="q13" value="D"> D. Journée mondiale du climat</label>
+        </div>
+
+        <div class="question">
+            <h3>14. Quel événement sportif majeur débute en décembre 2025 au Maroc ?</h3>
+            <label><input type="radio" name="q14" value="A"> A. Coupe d’Afrique des Nations 2025</label>
+            <label><input type="radio" name="q14" value="B"> B. Jeux Olympiques d’hiver</label>
+            <label><input type="radio" name="q14" value="C"> C. Coupe du Monde de football</label>
+            <label><input type="radio" name="q14" value="D"> D. Championnat d’Europe</label>
+        </div>
+
+        <div class="question">
+            <h3>15. Quelle compagnie aérienne indienne a dû réduire ses vols de 5 % en décembre 2025 ?</h3>
+            <label><input type="radio" name="q15" value="A"> A. IndiGo</label>
+            <label><input type="radio" name="q15" value="B"> B. Air India</label>
+            <label><input type="radio" name="q15" value="C"> C. SpiceJet</label>
+            <label><input type="radio" name="q15" value="D"> D. Vistara</label>
+        </div>
+
+        <button type="button" id="submit">Valider le QCM</button>
+    </form>
+
+    <div id="results">
+        <h2>Résultats du QCM</h2>
+        <p id="score"></p>
+        <div id="corrections"></div>
+    </div>
+
+    <script>
+        const correctAnswers = {
+            q1: 'A', q2: 'A', q3: 'A', q4: 'A', q5: 'A',
+            q6: 'A', q7: 'A', q8: 'A', q9: 'A', q10: 'A',
+            q11: 'A', q12: 'A', q13: 'A', q14: 'A', q15: 'A'
+        };
+
+        const explanations = {
+            q1: "La junte militaire en Guinée-Bissau a suspendu la Constitution et adopté une charte de transition d’un an.",
+            q2: "La prise d’Uvira par le M23 marque une escalade du conflit en RDC.",
+            q3: "Les forces séparatistes sudistes yéménites se sont emparées du gouvernorat d’al-Mahrah.",
+            q4: "Rosen Zhelyazkov a démissionné après des manifestations massives contre la corruption en Bulgarie.",
+            q5: "Le Saint Lucia Labour Party, dirigé par Philip J. Pierre, a conservé une large majorité.",
+            q6: "Andrej Babiš a été nommé pour un second mandat non consécutif en République tchèque.",
+            q7: "La junte birmane a organisé des élections dénoncées comme non libres.",
+            q8: "Le FMI a approuvé un versement de 1,2 milliard de dollars dans un programme de 3,3 milliards.",
+            q9: "Le Canada a intégré l’initiative « Security Action for Europe » de l’UE.",
+            q10: "L’aéroport international de Navi Mumbai a été inauguré pour désengorger Mumbai.",
+            q11: "Le 9 décembre est la Journée internationale de lutte contre la corruption (ONU).",
+            q12: "Hanoucca 2025 débute le 15 décembre et dure huit jours.",
+            q13: "Le 18 décembre est consacré à la Journée internationale des migrants.",
+            q14: "La Coupe d’Afrique des Nations 2025 commence en décembre au Maroc.",
+            q15: "IndiGo a été contrainte par l’autorité aéronautique indienne de réduire ses vols de 5 %."
+        };
+
+        document.getElementById('submit').addEventListener('click', function() {
+            const form = document.getElementById('quizForm');
+            const results = document.getElementById('results');
+            const scoreElement = document.getElementById('score');
+            const corrections = document.getElementById('corrections');
+            let score = 0;
+            corrections.innerHTML = '';
+
+            for (let i = 1; i <= 15; i++) {
+                const question = `q${i}`;
+                const selected = form.querySelector(`input[name="${question}"]:checked`);
+                const div = document.createElement('div');
+                div.style.marginBottom = '20px';
+                div.innerHTML = `<h3>Question ${i}</h3>`;
+                if (selected && selected.value === correctAnswers[question]) {
+                    score++;
+                    div.innerHTML += `<p class="correct">✓ Correct !</p>`;
+                } else {
+                    div.innerHTML += `<p class="incorrect">✗ Incorrect – Bonne réponse : ${correctAnswers[question]}</p>`;
+                }
+                div.innerHTML += `<div class="explanation">${explanations[question]}</div>`;
+                corrections.appendChild(div);
+            }
+
+            scoreElement.textContent = `Votre score : ${score} / 15`;
+            results.style.display = 'block';
+            window.scrollTo(0, document.body.scrollHeight);
+        });
+    </script>
 </body>
 </html>
