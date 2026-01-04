@@ -2,84 +2,76 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
+    <title>Histoire-Géographie – Seconde</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Seconde - Histoire-Géographie</title>
+
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
+            background: #f1f2f6;
             margin: 0;
-            padding: 20px;
+            padding: 30px;
         }
         h1 {
             text-align: center;
-            color: #333;
+            color: #0984e3;
         }
-        nav {
-            margin: 20px 0;
-        }
-        nav a {
-            text-decoration: none;
-            color: #4CAF50;
-            margin: 0 15px;
-            font-weight: bold;
-        }
-        nav a:hover {
-            color: #333;
-        }
-        .content {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-around;
-        }
-        .section {
-            background-color: #fff;
+        .chapter {
+            background: white;
             padding: 20px;
-            margin: 10px;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            width: 45%;
+            margin: 15px auto;
+            max-width: 600px;
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: transform 0.2s;
         }
-        .section h2 {
-            color: #4CAF50;
+        .chapter:hover {
+            transform: scale(1.02);
+        }
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+        .back {
+            text-align: center;
+            margin-top: 30px;
         }
     </style>
 </head>
+
 <body>
 
-    <h1>Bienvenue sur le site Histoire-Géographie - Seconde</h1>
+    <h1>🌍 Histoire-Géographie – Seconde</h1>
 
-    <nav>
-        <a href="Actus/">Actualités</a>
-        <a href="Développement-Inégalité/">Développement et Inégalités</a>
-        <a href="Méditerranée-médiévale/">Méditerranée Médiévale</a>
-    </nav>
-
-    <div class="content">
-        <div class="section">
-            <h2>Actualités</h2>
-            <ul>
-                <li><a href="Actus/qcm1.html">QCM 1</a></li>
-                <li><a href="Actus/qcm2.html">QCM 2</a></li>
-                <li><a href="Actus/qcm3.html">QCM 3</a></li>
-            </ul>
+    <!-- Section pour Actualités -->
+    <a href="Actus/index.html">
+        <div class="chapter">
+            <h2>📰 Actualités</h2>
+            <p>Actualités récentes et QCM</p>
         </div>
+    </a>
 
-        <div class="section">
-            <h2>Développement et Inégalités</h2>
-            <ul>
-                <li><a href="Développement-Inégalité/Géo_02_Developpement_inegal_01.pdf" target="_blank">Fichier PDF : Développement et Inégalités</a></li>
-            </ul>
+    <!-- Section pour Développement et Inégalités -->
+    <a href="Développement-Inégalité/index.html">
+        <div class="chapter">
+            <h2>🌍 Développement et Inégalités</h2>
+            <p>Cours sur les inégalités mondiales, fichiers PDF à consulter</p>
         </div>
+    </a>
 
-        <div class="section">
-            <h2>Méditerranée Médiévale</h2>
-            <ul>
-                <li><a href="Méditerranée-médiévale/Hist_Mediterranee_medievale_01.pdf" target="_blank">Fichier PDF : Méditerranée Médiévale</a></li>
-            </ul>
+    <!-- Section pour Méditerranée Médiévale -->
+    <a href="Méditerranée-médiévale/index.html">
+        <div class="chapter">
+            <h2>🏛️ Méditerranée Médiévale</h2>
+            <p>Cours et ressources PDF sur l'Histoire de la Méditerranée</p>
         </div>
+    </a>
+
+    <!-- Retour à l'accueil -->
+    <div class="back">
+        <a href="../../index.html">← Retour à l’accueil</a>
     </div>
 
 </body>
 </html>
-
