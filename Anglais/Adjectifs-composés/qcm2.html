@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>QCM English – Compound Adjectives (Set 2)</title>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f7fb;
+        padding: 20px;
+    }
+    h1 {
+        text-align: center;
+        color: #1f2937;
+    }
+    .question {
+        background: #ffffff;
+        padding: 15px;
+        margin-bottom: 15px;
+        border-radius: 8px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    label {
+        display: block;
+        margin: 6px 0;
+        cursor: pointer;
+    }
+    button {
+        display: block;
+        margin: 30px auto;
+        padding: 12px 25px;
+        font-size: 16px;
+        background-color: #16a34a;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+    }
+    button:hover {
+        background-color: #15803d;
+    }
+    #results {
+        display: none;
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        margin-top: 30px;
+    }
+    .good { color: green; }
+    .bad { color: red; }
+</style>
+</head>
+
+<body>
+
+<h1>Compound Adjectives – QCM 2</h1>
+
+<div id="quiz"></div>
+
+<button onclick="correct()">Submit</button>
+
+<div id="results"></div>
+
+<script>
+const questions = [
+{
+q: "Choose the correct sentence:",
+choices: [
+"He bought a second hand car.",
+"He bought a second-hand car.",
+"He bought a secondhanded car.",
+"He bought a hand-second car."
+],
+answer: 1,
+explication: "Second-hand is a compound adjective used before a noun, so it needs a hyphen."
+},
+{
+q: "Which compound adjective correctly completes the sentence? She is very ___.",
+choices: ["hard working", "working-hard", "hard-working", "hardworked"],
+answer: 2,
+explication: "Hard-working is an adjective formed with an adverb + present participle."
+},
+{
+q: "Which sentence is grammatically correct?",
+choices: [
+"The hotel was five-stars.",
+"The hotel was five-star.",
+"The hotel was five stars.",
+"The hotel was five-stared."
+],
+answer: 2,
+explication: "When the expression comes after the verb, no hyphen is used: five stars."
+},
+{
+q: "Choose the correct compound adjective:",
+choices: ["full time job", "full-time job", "time-full job", "fulltimed job"],
+answer: 1,
+explication: "Full-time is a compound adjective and is hyphenated before a noun."
+},
+{
+q: "Well-dressed describes someone who:",
+choices: [
+"Wears expensive clothes",
+"Wears clean clothes",
+"Wears fashionable clothes",
+"Is badly dressed"
+],
+answer: 2,
+explication: "Well-dressed means dressed in a stylish or elegant way."
+},
+{
+q: "Which option is correct?",
+choices: [
+"This is a low cost flight.",
+"This is a low-cost flight.",
+"This is a cost-low flight.",
+"This flight costs low."
+],
+answer: 1,
+explication: "Low-cost is a compound adjective placed before a noun."
+},
+{
+q: "Choose the correct sentence:",
+choices: [
+"The instructions are easy to follow.",
+"The instructions are easy-to-follow.",
+"The instructions are easy-following.",
+"The instructions are easily-follow."
+],
+answer: 0,
+explication: "When the adjective comes after the verb, no hyphen is required."
+},
+{
+q: "What does narrow-minded mean?",
+choices: [
+"Very intelligent",
+"Not open to new ideas",
+"Curious",
+"Friendly"
+],
+answer: 1,
+explication: "Narrow-minded describes someone who is not open to different opinions."
+},
+{
+q: "Which compound adjective is correct?",
+choices: ["brand new", "brand-new", "new-brand", "brandly new"],
+answer: 1,
+explication: "Brand-new is hyphenated when used as an adjective before a noun."
+},
+{
+q: "Choose the correct option:",
+choices: [
+"It was a badly organized event.",
+"It was a bad-organized event.",
+"It was a badly-organized event.",
+"It was bad organizing."
+],
+answer: 2,
+explication: "Badly-organized is a compound adjective: adverb + past participle."
+},
+{
+q: "Which sentence is correct?",
+choices: [
+"He lives in a three floors house.",
+"He lives in a three-floor house.",
+"He lives in a three-floors house.",
+"He lives in a three-flooring house."
+],
+answer: 1,
+explication: "Numbers in compound adjectives use the singular form: three-floor house."
+},
+{
+q: "Which adjective is correctly formed?",
+choices: ["fast growing", "growing-fast", "fast-growing", "fastgrowth"],
+answer: 2,
+explication: "Fast-growing is a compound adjective with a hyphen."
+},
+{
+q: "A cold-blooded animal is:",
+choices: [
+"An aggressive animal",
+"An animal that lives in cold places",
+"An animal whose body temperature depends on the environment",
+"An animal with no blood"
+],
+answer: 2,
+explication: "Cold-blooded animals do not regulate their body temperature internally."
+},
+{
+q: "Choose the correct sentence:",
+choices: [
+"This is a high level exam.",
+"This is a high-level exam.",
+"This exam is high-level.",
+"This exam is high leveled."
+],
+answer: 1,
+explication: "High-level is a compound adjective and must be hyphenated before a noun."
+},
+{
+q: "Which rule is correct?",
+choices: [
+"Compound adjectives always use plural forms.",
+"Compound adjectives often use a hyphen before a noun.",
+"Compound adjectives never include adverbs.",
+"Compound adjectives cannot describe people."
+],
+answer: 1,
+explication: "In English, compound adjectives placed before nouns are often hyphenated."
+}
+];
+
+const quizDiv = document.getElementById("quiz");
+
+questions.forEach((q, i) => {
+    let html = `<div class="question">
+        <h3>Question ${i+1}: ${q.q}</h3>`;
+    q.choices.forEach((c, j) => {
+        html += `
+        <label>
+            <input type="radio" name="q${i}" value="${j}">
+            ${c}
+        </label>`;
+    });
+    html += `</div>`;
+    quizDiv.innerHTML += html;
+});
+
+function correct() {
+    let score = 0;
+    let output = `<h2>Score: `;
+
+    let details = `<h3>Detailed correction</h3>`;
+
+    questions.forEach((q, i) => {
+        const userAnswer = document.querySelector(`input[name="q${i}"]:checked`);
+        const userText = userAnswer ? q.choices[userAnswer.value] : "No answer";
+        const correctText = q.choices[q.answer];
+
+        if (userAnswer && parseInt(userAnswer.value) === q.answer) {
+            score++;
+            details += `<p class="good">
+                ✔ <strong>Q${i+1}</strong><br>
+                <em>${q.q}</em><br>
+                Your answer: ${userText}<br>
+                Explanation: ${q.explication}
+            </p>`;
+        } else {
+            details += `<p class="bad">
+                ✘ <strong>Q${i+1}</strong><br>
+                <em>${q.q}</em><br>
+                Your answer: ${userText}<br>
+                Correct answer: <strong>${correctText}</strong><br>
+                Explanation: ${q.explication}
+            </p>`;
+        }
+    });
+
+    output += `${score} / ${questions.length}</h2>` + details;
+    document.getElementById("results").innerHTML = output;
+    document.getElementById("results").style.display = "block";
+}
+</script>
+
+</body>
+</html>
