@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QCM Géographie Seconde : Développement et Inégalités dans le Monde Contemporain</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; background-color: #f4f4f4; }
+        h1 { text-align: center; color: #333; }
+        .question { margin-bottom: 20px; padding: 15px; background-color: white; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .question h3 { margin-top: 0; }
+        label { display: block; margin-bottom: 5px; cursor: pointer; }
+        input[type="radio"] { margin-right: 10px; }
+        #submit { display: block; margin: 20px auto; padding: 10px 20px; background-color: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        #submit:hover { background-color: #45a049; }
+        #results { margin-top: 30px; padding: 20px; background-color: #fff; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); display: none; }
+        .correct { color: green; }
+        .incorrect { color: red; }
+        .explanation { font-style: italic; margin-top: 5px; }
+    </style>
+</head>
+<body>
+    <h1>QCM : Développement et Inégalités dans le Monde Contemporain</h1>
+    <p>Ce QCM de 15 questions est basé sur le cours de géographie de Seconde, conforme au programme officiel (thème : Environnement, développement, mobilité - défis d'un monde en transition). Sélectionnez une réponse par question. Les corrections détaillées seront affichées à la fin après validation.</p>
+
+    <form id="quizForm">
+        <div class="question">
+            <h3>Question 1 : Qu'est-ce que l'IDH ?</h3>
+            <label><input type="radio" name="q1" value="A"> A. Indice de Développement Humain</label>
+            <label><input type="radio" name="q1" value="B"> B. Produit Intérieur Brut</label>
+            <label><input type="radio" name="q1" value="C"> C. Indice de Pauvreté Multidimensionnelle</label>
+            <label><input type="radio" name="q1" value="D"> D. Objectifs de Développement Durable</label>
+        </div>
+
+        <div class="question">
+            <h3>Question 2 : Quelles sont les trois dimensions combinées dans l'IDH ?</h3>
+            <label><input type="radio" name="q2" value="A"> A. Niveau de vie, santé, éducation</label>
+            <label><input type="radio" name="q2" value="B"> B. Croissance économique, urbanisation, littoralisation</label>
+            <label><input type="radio" name="q2" value="C"> C. Pauvreté absolue, relative, multidimensionnelle</label>
+            <label><input type="radio" name="q2" value="D"> D. Nord-Sud, BRICS, PMA</label>
+        </div>
+
+        <div class="question">
+            <h3>Question 3 : Quel est le seuil de l'extrême pauvreté selon le document ?</h3>
+            <label><input type="radio" name="q3" value="A"> A. Moins de 1,90 $ par jour</label>
+            <label><input type="radio" name="q3" value="B"> B. Moins de 1 200 € par mois</label>
+            <label><input type="radio" name="q3" value="C"> C. Moins de 600 $ par habitant</label>
+            <label><input type="radio" name="q3" value="D"> D. Moins de 80 000 $ par an</label>
+        </div>
+
+        <div class="question">
+            <h3>Question 4 : Quel groupe de pays émergents est mentionné dans le cours ?</h3>
+            <label><input type="radio" name="q4" value="A"> A. BRICS (Brésil, Russie, Inde, Chine, Afrique du Sud)</label>
+            <label><input type="radio" name="q4" value="B"> B. PMA (Pays les Moins Avancés)</label>
+            <label><input type="radio" name="q4" value="C"> C. Pays du Nord</label>
+            <label><input type="radio" name="q4" value="D"> D. ODD (Objectifs de Développement Durable)</label>
+        </div>
+
+        <div class="question">
+            <h3>Question 5 : Quel est l'IDH approximatif de la France selon le glossaire ?</h3>
+            <label><input type="radio" name="q5" value="A"> A. ≈0,91</label>
+            <label><input type="radio" name="q5" value="B"> B. ≈0,43</label>
+            <label><input type="radio" name="q5" value="C"> C. ≈0,69</label>
+            <label><input type="radio" name="q5" value="D"> D. ≈0,40</label>
+        </div>
+
+        <div class="question">
+            <h3>Question 6 : Qu'est-ce que la pauvreté relative ?</h3>
+            <label><input type="radio" name="q6" value="A"> A. Pauvreté comparée au niveau de vie moyen dans les pays riches</label>
+            <label><input type="radio" name="q6" value="B"> B. Incapacité à satisfaire les besoins vitaux</label>
+            <label><input type="radio" name="q6" value="C"> C. Mesure de plusieurs privations comme l'IPM</label>
+            <label><input type="radio" name="q6" value="D"> D. Écarts entre régions</label>
+        </div>
+
+        <div class="question">
+            <h3>Question 7 : Les PMA représentent environ combien de la population mondiale ?</h3>
+            <label><input type="radio" name="q7" value="A"> A. 12 %</label>
+            <label><input type="radio" name="q7" value="B"> B. 75 %</label>
+            <label><input type="radio" name="q7" value="C"> C. 40 %</label>
+            <label><input type="radio" name="q7" value="D"> D. 18 %</label>
+        </div>
+
+        <div class="question">
+            <h3>Question 8 : Quel phénomène décrit la concentration de la population dans les grandes villes ?</h3>
+            <label><input type="radio" name="q8" value="A"> A. Métropolisation</label>
+            <label><input type="radio" name="q8" value="B"> B. Mondialisation</label>
+            <label><input type="radio" name="q8" value="C"> C. Transition</label>
+            <label><input type="radio" name="q8" value="D"> D. Vulnérabilité</label>
+        </div>
+
+        <div class="question">
+            <h3>Question 9 : Combien d'Objectifs de Développement Durable (ODD) ont été adoptés en 2015 ?</h3>
+            <label><input type="radio" name="q9" value="A"> A. 17</label>
+            <label><input type="radio" name="q9" value="B"> B. 10</label>
+            <label><input type="radio" name="q9" value="C"> C. 25</label>
+            <label><input type="radio" name="q9" value="D"> D. 5</label>
+        </div>
+
+        <div class="question">
+            <h3>Question 10 : Quel est le PIB par habitant approximatif de la Norvège selon le glossaire ?</h3>
+            <label><input type="radio" name="q10" value="A"> A. ≈80 000 $</label>
+            <label><input type="radio" name="q10" value="B"> B. ≈600 $</label>
+            <label><input type="radio" name="q10" value="C"> C. ≈25 000 milliards $</label>
+            <label><input type="radio" name="q10" value="D"> D. ≈1,90 $</label>
+        </div>
+
+        <div class="question">
+            <h3>Question 11 : Quel est l'exemple d'espérance de vie au Tchad ?</h3>
+            <label><input type="radio" name="q11" value="A"> A. Autour de 55 ans</label>
+            <label><input type="radio" name="q11" value="B"> B. 82 ans</label>
+            <label><input type="radio" name="q11" value="C"> C. 84 ans</label>
+            <label><input type="radio" name="q11" value="D"> D. 60 ans</label>
+        </div>
+
+        <div class="question">
+            <h3>Question 12 : Quelle part de la population mondiale vit dans des bidonvilles ?</h3>
+            <label><input type="radio" name="q12" value="A"> A. Près de 1 milliard de personnes</label>
+            <label><input type="radio" name="q12" value="B"> B. 37 millions</label>
+            <label><input type="radio" name="q12" value="C"> C. 700 millions</label>
+            <label><input type="radio" name="q12" value="D"> D. 2 milliards</label>
+        </div>
+
+        <div class="question">
+            <h3>Question 13 : Quel est le principe des ODD ?</h3>
+            <label><input type="radio" name="q13" value="A"> A. Penser global, agir local</label>
+            <label><input type="radio" name="q13" value="B"> B. Nord-Sud uniquement</label>
+            <label><input type="radio" name="q13" value="C"> C. Croissance économique seule</label>
+            <label><input type="radio" name="q13" value="D"> D. Urbanisation forcée</label>
+        </div>
+
+        <div class="question">
+            <h3>Question 14 : Quel pourcentage des richesses mondiales concentrent les pays du Nord ?</h3>
+            <label><input type="radio" name="q14" value="A"> A. Environ 75 %</label>
+            <label><input type="radio" name="q14" value="B"> B. 40 %</label>
+            <label><input type="radio" name="q14" value="C"> C. 18 %</label>
+            <label><input type="radio" name="q14" value="D"> D. 1 %</label>
+        </div>
+
+        <div class="question">
+            <h3>Question 15 : Quel est l'exemple d'IDH pour le Mali ?</h3>
+            <label><input type="radio" name="q15" value="A"> A. ≈0,43</label>
+            <label><input type="radio" name="q15" value="B"> B. ≈0,91</label>
+            <label><input type="radio" name="q15" value="C"> C. ≈0,92</label>
+            <label><input type="radio" name="q15" value="D"> D. ≈0,69</label>
+        </div>
+
+        <button type="button" id="submit">Valider le QCM</button>
+    </form>
+
+    <div id="results">
+        <h2>Résultats</h2>
+        <p id="score"></p>
+        <div id="corrections"></div>
+    </div>
+
+    <script>
+        const correctAnswers = {
+            q1: 'A',
+            q2: 'A',
+            q3: 'A',
+            q4: 'A',
+            q5: 'A',
+            q6: 'A',
+            q7: 'A',
+            q8: 'A',
+            q9: 'A',
+            q10: 'A',
+            q11: 'A',
+            q12: 'A',
+            q13: 'A',
+            q14: 'A',
+            q15: 'A'
+        };
+
+        const explanations = {
+            q1: "L'IDH est l'Indice de Développement Humain, créé par le PNUD en 1990, combinant niveau de vie, santé et éducation (IDH entre 0 et 1).",
+            q2: "Les trois dimensions sont : niveau de vie (revenu par habitant), santé (espérance de vie), éducation (durée de scolarisation).",
+            q3: "L'extrême pauvreté est définie par un revenu inférieur à 1,90 $ par jour.",
+            q4: "Les BRICS sont des pays émergents : Brésil, Russie, Inde, Chine, Afrique du Sud, avec croissance rapide mais inégalités internes.",
+            q5: "La France a un IDH ≈0,91, classé très élevé.",
+            q6: "La pauvreté relative est comparée au niveau de vie moyen, par exemple en France autour de 1 200 € par mois.",
+            q7: "Les PMA représentent environ 12 % de la population mondiale mais moins de 1 % du PIB.",
+            q8: "La métropolisation est la concentration dans les grandes villes, comme Tokyo avec 37 millions d'habitants.",
+            q9: "Les ODD sont 17 objectifs adoptés en 2015 pour 2030, visant pauvreté, inégalités, environnement.",
+            q10: "PIB/habitant ≈80 000 $ en Norvège contre 600 $ au Niger.",
+            q11: "L'espérance de vie est autour de 55 ans au Tchad, contre 82 ans en France.",
+            q12: "Près de 1 milliard de personnes vivent dans des bidonvilles, lieux d'exclusion socio-économique.",
+            q13: "Les ODD reposent sur 'penser global, agir local' avec coopération États, ONG.",
+            q14: "Les pays du Nord concentrent environ 75 % des richesses mondiales.",
+            q15: "Le Mali a un IDH ≈0,43, classé faible développement."
+        };
+
+        document.getElementById('submit').addEventListener('click', function() {
+            const form = document.getElementById('quizForm');
+            const results = document.getElementById('results');
+            const scoreElement = document.getElementById('score');
+            const corrections = document.getElementById('corrections');
+            let score = 0;
+            corrections.innerHTML = '';
+
+            for (let i = 1; i <= 15; i++) {
+                const question = `q${i}`;
+                const selected = form.querySelector(`input[name="${question}"]:checked`);
+                const div = document.createElement('div');
+                div.innerHTML = `<h3>Question ${i}</h3>`;
+                if (selected && selected.value === correctAnswers[question]) {
+                    score++;
+                    div.innerHTML += `<p class="correct">Correct ! Réponse : ${correctAnswers[question]}</p>`;
+                } else {
+                    div.innerHTML += `<p class="incorrect">Incorrect. Réponse correcte : ${correctAnswers[question]}</p>`;
+                }
+                div.innerHTML += `<p class="explanation">${explanations[question]}</p>`;
+                corrections.appendChild(div);
+            }
+
+            scoreElement.textContent = `Score : ${score}/15`;
+            results.style.display = 'block';
+            window.scrollTo(0, document.body.scrollHeight);
+        });
+    </script>
+</body>
+</html>

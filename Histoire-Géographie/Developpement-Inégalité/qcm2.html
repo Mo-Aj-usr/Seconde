@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>QCM – Développement et inégalités (Seconde)</title>
+<style>
+body {
+  font-family: "Segoe UI", Arial, sans-serif;
+  background: #f4f6f9;
+  margin: 0;
+  padding: 0;
+}
+.container {
+  max-width: 900px;
+  margin: auto;
+  background: #fff;
+  padding: 25px;
+  margin-top: 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+h1 {
+  text-align: center;
+  color: #2c3e50;
+}
+.progress {
+  margin-bottom: 20px;
+  font-weight: bold;
+  color: #555;
+}
+.question {
+  font-size: 1.1em;
+  margin-bottom: 15px;
+}
+.answers label {
+  display: block;
+  padding: 10px;
+  margin-bottom: 8px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+.answers label:hover {
+  background: #ecf0f1;
+}
+button {
+  background: #2980b9;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 6px;
+  font-size: 1em;
+  cursor: pointer;
+}
+button:hover {
+  background: #1f6391;
+}
+.result {
+  margin-top: 30px;
+}
+.correction {
+  background: #f9fafb;
+  border-left: 4px solid #2980b9;
+  padding: 15px;
+  margin-bottom: 15px;
+}
+.good {
+  color: green;
+  font-weight: bold;
+}
+.bad {
+  color: red;
+  font-weight: bold;
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+<h1>QCM – Développement et inégalités<br>Géographie – Seconde</h1>
+
+<div id="quiz"></div>
+<button id="nextBtn">Question suivante</button>
+
+<div id="result" class="result"></div>
+</div>
+
+<script>
+const quizData = [
+{
+q: "Qu’est-ce que le développement selon le programme de géographie ?",
+a: [
+"Une simple augmentation du PIB",
+"L’amélioration durable des conditions de vie",
+"La croissance démographique",
+"L’industrialisation rapide"
+],
+c: 1,
+e: "Le développement est un processus global qui améliore durablement les conditions de vie (santé, éducation, niveau de vie), et ne se limite pas à la croissance économique."
+},
+{
+q: "Quel indicateur est le plus utilisé pour mesurer le développement aujourd’hui ?",
+a: ["Le PIB", "L’IDH", "Le taux de natalité", "La population totale"],
+c: 1,
+e: "L’IDH, créé par le PNUD, combine revenu, santé et éducation, ce qui en fait un indicateur plus complet que le PIB."
+},
+{
+q: "Quelle valeur d’IDH correspond à un pays très développé ?",
+a: ["Inférieure à 0,5", "Entre 0,6 et 0,7", "Supérieure à 0,8", "Égale à 1"],
+c: 2,
+e: "Un IDH supérieur à 0,8 correspond à un niveau de développement élevé (France, Japon, Norvège)."
+},
+{
+q: "La pauvreté absolue correspond à :",
+a: [
+"Un faible niveau d’éducation",
+"Un revenu inférieur à 1,90 $ par jour",
+"Une pauvreté relative au niveau moyen",
+"Un manque de loisirs"
+],
+c: 1,
+e: "La pauvreté absolue empêche de satisfaire les besoins vitaux, définie par l’ONU à moins de 1,90 $ par jour."
+},
+{
+q: "Quel groupe rassemble de grands pays émergents ?",
+a: ["PMA", "OCDE", "BRICS", "G7"],
+c: 2,
+e: "Les BRICS (Brésil, Russie, Inde, Chine, Afrique du Sud) sont des pays émergents à forte croissance."
+},
+{
+q: "Pourquoi les pays émergents restent-ils inégalitaires ?",
+a: [
+"Ils sont tous pauvres",
+"La croissance est répartie inégalement",
+"Ils refusent la mondialisation",
+"Ils ont une faible population"
+],
+c: 1,
+e: "La croissance rapide profite davantage à certaines régions et catégories sociales."
+},
+{
+q: "Quelle est la principale caractéristique des PMA ?",
+a: [
+"Une croissance rapide",
+"Un IDH très faible",
+"Un fort vieillissement",
+"Une forte urbanisation"
+],
+c: 1,
+e: "Les PMA cumulent faibles revenus, faible espérance de vie et accès limité aux services essentiels."
+},
+{
+q: "Que désigne l’opposition Nord / Sud ?",
+a: [
+"Une opposition climatique",
+"Une opposition démographique",
+"Une opposition de niveau de développement",
+"Une opposition politique"
+],
+c: 2,
+e: "Elle distingue globalement les pays riches développés et les pays pauvres ou en développement."
+},
+{
+q: "Quel phénomène touche fortement le Japon ?",
+a: [
+"Une forte natalité",
+"Un vieillissement de la population",
+"Une pauvreté extrême",
+"Une urbanisation anarchique"
+],
+c: 1,
+e: "Le Japon est l’un des pays les plus vieillissants du monde, ce qui pose des défis économiques et sociaux."
+},
+{
+q: "L’urbanisation correspond à :",
+a: [
+"La baisse de la population",
+"La croissance des villes",
+"Le développement industriel",
+"La mondialisation"
+],
+c: 1,
+e: "Aujourd’hui, plus de 55 % de la population mondiale vit en ville."
+},
+{
+q: "Que sont les bidonvilles ?",
+a: [
+"Des quartiers riches",
+"Des centres d’affaires",
+"Des habitats précaires",
+"Des zones industrielles"
+],
+c: 2,
+e: "Les bidonvilles sont des habitats précaires souvent liés à une urbanisation rapide et mal maîtrisée."
+},
+{
+q: "Quel pays est souvent étudié pour ses fortes inégalités internes ?",
+a: ["Norvège", "Brésil", "Suisse", "Canada"],
+c: 1,
+e: "Le Brésil est un pays émergent marqué par de très fortes inégalités sociales et territoriales."
+},
+{
+q: "Les Objectifs de Développement Durable (ODD) ont été adoptés en :",
+a: ["2000", "2010", "2015", "2020"],
+c: 2,
+e: "Les ODD ont été adoptés par l’ONU en 2015 pour être atteints d’ici 2030."
+},
+{
+q: "Quel est l’objectif principal du développement durable ?",
+a: [
+"Croissance maximale",
+"Réduction des échanges",
+"Concilier économie, social et environnement",
+"Supprimer les États"
+],
+c: 2,
+e: "Le développement durable vise un équilibre entre progrès économique, justice sociale et protection de l’environnement."
+},
+{
+q: "En France, les inégalités sont surtout visibles :",
+a: [
+"Entre hommes et femmes uniquement",
+"Entre territoires",
+"Uniquement entre régions rurales",
+"Uniquement à l’étranger"
+],
+c: 1,
+e: "Les inégalités socio-spatiales sont marquées entre régions, métropoles, Outre-mer et territoires ruraux."
+}
+];
+
+let index = 0;
+let score = 0;
+let answers = [];
+
+const quiz = document.getElementById("quiz");
+const btn = document.getElementById("nextBtn");
+const result = document.getElementById("result");
+
+function loadQuestion() {
+  const q = quizData[index];
+  quiz.innerHTML = `
+    <div class="progress">Question ${index + 1} / ${quizData.length}</div>
+    <div class="question">${q.q}</div>
+    <div class="answers">
+      ${q.a.map((choice,i)=>`
+        <label>
+          <input type="radio" name="answer" value="${i}">
+          ${choice}
+        </label>`).join("")}
+    </div>`;
+}
+
+btn.onclick = () => {
+  const selected = document.querySelector("input[name='answer']:checked");
+  if(!selected) return alert("Veuillez sélectionner une réponse.");
+  const val = Number(selected.value);
+  answers.push(val);
+  if(val === quizData[index].c) score++;
+  index++;
+  if(index < quizData.length) loadQuestion();
+  else showResult();
+};
+
+function showResult() {
+  quiz.style.display = "none";
+  btn.style.display = "none";
+  result.innerHTML = `<h2>Score : ${score} / ${quizData.length}</h2>`;
+  quizData.forEach((q,i)=>{
+    result.innerHTML += `
+      <div class="correction">
+        <strong>Question ${i+1}</strong><br>
+        ${q.q}<br>
+        <span class="${answers[i]===q.c?'good':'bad'}">
+        Votre réponse : ${q.a[answers[i]]}
+        </span><br>
+        ✔ Réponse correcte : ${q.a[q.c]}<br>
+        <em>${q.e}</em>
+      </div>`;
+  });
+}
+
+loadQuestion();
+</script>
+</body>
+</html>
