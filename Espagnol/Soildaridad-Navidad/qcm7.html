@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>QCM Espagnol - Vocabulaire A2</title>
+  <style>
+    :root {
+      --primary: #4361ee;      /* bleu vif */
+      --primary-dark: #3f37c9;
+      --correct: #4cc9f0;      /* cyan clair */
+      --wrong: #f72585;
+      --bg: #f8f9fa;
+      --card: #ffffff;
+      --text: #212529;
+      --gray: #6c757d;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 16px;
+      line-height: 1.5;
+    }
+
+    .container {
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      margin: 20px 0 32px;
+    }
+
+    h1 {
+      font-size: 1.8rem;
+      color: var(--primary);
+      margin-bottom: 8px;
+    }
+
+    .progress {
+      height: 10px;
+      background-color: #e9ecef;
+      border-radius: 5px;
+      overflow: hidden;
+      margin: 16px 0;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background-color: var(--primary);
+      transition: width 0.4s ease;
+    }
+
+    .quiz-card {
+      background: var(--card);
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      margin-bottom: 24px;
+    }
+
+    .question {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .option {
+      display: flex;
+      align-items: center;
+      padding: 14px 16px;
+      border: 2px solid #dee2e6;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+      user-select: none;
+    }
+
+    .option:hover {
+      background-color: #f1f3f5;
+      border-color: var(--primary);
+    }
+
+    .option input {
+      margin-right: 12px;
+    }
+
+    .option.selected {
+      border-color: var(--primary);
+      background-color: #edf2ff;
+      font-weight: 500;
+    }
+
+    .option.correct {
+      border-color: var(--correct);
+      background-color: #e3f9ff;
+    }
+
+    .option.wrong {
+      border-color: var(--wrong);
+      background-color: #ffeef2;
+    }
+
+    .navigation {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 24px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      padding: 12px 24px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+      min-width: 120px;
+    }
+
+    .btn-prev {
+      background-color: var(--gray);
+      color: white;
+    }
+
+    .btn-next, .btn-finish {
+      background-color: var(--primary);
+      color: white;
+    }
+
+    .btn-prev:hover { background-color: #5a6268; }
+    .btn-next:hover, .btn-finish:hover { background-color: var(--primary-dark); }
+
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .result {
+      text-align: center;
+      padding: 32px 16px;
+      background: var(--card);
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .score {
+      font-size: 3rem;
+      font-weight: bold;
+      color: var(--primary);
+      margin: 16px 0;
+    }
+
+    @media (max-width: 480px) {
+      .quiz-card { padding: 18px; }
+      h1 { font-size: 1.6rem; }
+      button { padding: 10px 20px; min-width: 100px; }
+      .navigation { flex-direction: column; }
+      .navigation button { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>QCM Espagnol - Vocabulaire A2</h1>
+      <div class="progress">
+        <div class="progress-bar" id="progressBar"></div>
+      </div>
+    </header>
+
+    <div id="quiz" class="quiz-card">
+      <div class="question" id="questionText"></div>
+      <div class="options" id="optionsContainer"></div>
+    </div>
+
+    <div class="navigation">
+      <button class="btn-prev" id="prevBtn">Précédent</button>
+      <button class="btn-next" id="nextBtn">Suivant</button>
+      <button class="btn-finish" id="finishBtn">Terminer</button>
+    </div>
+
+    <div id="result" class="result" style="display:none;">
+      <h2>Votre score</h2>
+      <div class="score" id="scoreText"></div>
+      <p id="scoreDetails"></p>
+      <button onclick="location.reload()">Recommencer</button>
+    </div>
+  </div>
+
+  <script>
+    const quizData = [
+      // QCM 1
+      { q: "1. Le (article masculin singulier)", opts: ["El", "La", "Los", "Las"], ans: 0 },
+      { q: "2. Je", opts: ["Tú", "Yo", "Él", "Nosotros"], ans: 1 },
+      { q: "3. Avoir", opts: ["Ser", "Estar", "Tener", "Ir"], ans: 2 },
+      { q: "4. Aller", opts: ["Venir", "Ir", "Hacer", "Poder"], ans: 1 },
+      { q: "5. Être (permanent)", opts: ["Estar", "Ser", "Tener", "Haber"], ans: 1 },
+      { q: "6. Maison", opts: ["Casa", "Coche", "Ciudad", "Calle"], ans: 0 },
+      { q: "7. Grand", opts: ["Pequeño", "Grande", "Bueno", "Malo"], ans: 1 },
+      { q: "8. Bonjour", opts: ["Adiós", "Hola", "Gracias", "Por favor"], ans: 1 },
+      { q: "9. Merci", opts: ["De nada", "Gracias", "Lo siento", "Sí"], ans: 1 },
+      { q: "10. Oui", opts: ["No", "Sí", "Quizás", "Nunca"], ans: 1 },
+      { q: "11. Famille", opts: ["Amigo", "Familia", "Trabajo", "Escuela"], ans: 1 },
+      { q: "12. Eau", opts: ["Agua", "Comida", "Leche", "Pan"], ans: 0 },
+      { q: "13. Manger", opts: ["Beber", "Comer", "Dormir", "Vivir"], ans: 1 },
+      { q: "14. Jour", opts: ["Noche", "Día", "Semana", "Año"], ans: 1 },
+      { q: "15. Ami", opts: ["Amigo / Amiga", "Hermano", "Padre", "Enemigo"], ans: 0 },
+
+      // QCM 2
+      { q: "1. Un (masculin)", opts: ["Una", "Un", "Uno", "Una"], ans: 1 },
+      { q: "2. Mère", opts: ["Padre", "Madre", "Hijo", "Hermana"], ans: 1 },
+      { q: "3. Rouge", opts: ["Azul", "Rojo", "Verde", "Negro"], ans: 1 },
+      { q: "4. Ville", opts: ["País", "Ciudad", "Casa", "Campo"], ans: 1 },
+      { q: "5. Travail", opts: ["Trabajo", "Escuela", "Vacaciones", "Fiesta"], ans: 0 },
+      { q: "6. Dix", opts: ["Cinco", "Diez", "Veinte", "Cien"], ans: 1 },
+      { q: "7. Livre", opts: ["Libro", "Periódico", "Televisión", "Radio"], ans: 0 },
+      { q: "8. Voiture", opts: ["Coche", "Bicicleta", "Tren", "Avión"], ans: 0 },
+      { q: "9. Noir", opts: ["Blanco", "Negro", "Amarillo", "Gris"], ans: 1 },
+      { q: "10. École", opts: ["Escuela", "Hospital", "Tienda", "Banco"], ans: 0 },
+      { q: "11. Temps (météo ou durée)", opts: ["Tiempo", "Hora", "Día", "Momento"], ans: 0 },
+      { q: "12. Argent", opts: ["Dinero", "Comida", "Agua", "Ropa"], ans: 0 },
+      { q: "13. Frère", opts: ["Hermano", "Primo", "Tío", "Abuelo"], ans: 0 },
+      { q: "14. Habiter", opts: ["Trabajar", "Vivir", "Estudiar", "Comprar"], ans: 1 },
+      { q: "15. Beaucoup", opts: ["Poco", "Mucho", "Nada", "Todo"], ans: 1 }
+    ];
+
+    let currentQuestion = 0;
+    let answers = new Array(quizData.length).fill(null);
+    const totalQuestions = quizData.length;
+
+    const questionText = document.getElementById("questionText");
+    const optionsContainer = document.getElementById("optionsContainer");
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
+    const finishBtn = document.getElementById("finishBtn");
+    const progressBar = document.getElementById("progressBar");
+    const quizDiv = document.getElementById("quiz");
+    const resultDiv = document.getElementById("result");
+    const scoreText = document.getElementById("scoreText");
+    const scoreDetails = document.getElementById("scoreDetails");
+
+    function loadQuestion() {
+      const q = quizData[currentQuestion];
+      questionText.textContent = q.q;
+      optionsContainer.innerHTML = "";
+
+      q.opts.forEach((option, index) => {
+        const div = document.createElement("div");
+        div.classList.add("option");
+        if (answers[currentQuestion] === index) div.classList.add("selected");
+
+        div.innerHTML = `
+          <input type="radio" name="q${currentQuestion}" id="opt${currentQuestion}-${index}" 
+                 ${answers[currentQuestion] === index ? "checked" : ""}>
+          <label for="opt${currentQuestion}-${index}">${option}</label>
+        `;
+
+        div.addEventListener("click", () => {
+          answers[currentQuestion] = index;
+          loadQuestion(); // refresh to show selected style
+        });
+
+        optionsContainer.appendChild(div);
+      });
+
+      // Mise à jour navigation
+      prevBtn.disabled = currentQuestion === 0;
+      nextBtn.disabled = currentQuestion === totalQuestions - 1;
+      finishBtn.disabled = false; // toujours activable
+
+      // Progression
+      const progress = ((currentQuestion + 1) / totalQuestions) * 100;
+      progressBar.style.width = `${progress}%`;
+    }
+
+    function showResult() {
+      let score = 0;
+      const corrections = [];
+
+      quizData.forEach((q, i) => {
+        if (answers[i] === q.ans) score++;
+        else corrections.push(`${q.q.split('.')[0]}. ${q.opts[q.ans]}`);
+      });
+
+      quizDiv.style.display = "none";
+      document.querySelector(".navigation").style.display = "none";
+      resultDiv.style.display = "block";
+
+      scoreText.textContent = `${score} / ${totalQuestions}`;
+      scoreDetails.innerHTML = score === totalQuestions 
+        ? "Parfait ! Bravo ! 🎉" 
+        : `Bon travail ! Voici les bonnes réponses pour les questions manquées :<br>${corrections.join("<br>")}`;
+    }
+
+    prevBtn.addEventListener("click", () => {
+      if (currentQuestion > 0) {
+        currentQuestion--;
+        loadQuestion();
+      }
+    });
+
+    nextBtn.addEventListener("click", () => {
+      if (currentQuestion < totalQuestions - 1) {
+        currentQuestion++;
+        loadQuestion();
+      }
+    });
+
+    finishBtn.addEventListener("click", showResult);
+
+    // Démarrage
+    loadQuestion();
+  </script>
+</body>
+</html>

@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Espagnol Seconde LV2 - Solidaridad & Navidad</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container { max-width: 900px; margin: 0 auto; }
+        .quiz-tabs { display: flex; gap: 10px; margin-bottom: 30px; flex-wrap: wrap; }
+        .tab-btn {
+            flex: 1; min-width: 140px;
+            padding: 15px 20px;
+            border: none;
+            border-radius: 15px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: white;
+        }
+        .tab-solidaridad { background: linear-gradient(45deg, #ff6b6b, #ee5a24); }
+        .tab-navidad { background: linear-gradient(45deg, #feca57, #ff9ff3); }
+        .tab-btn.active { transform: scale(1.05); box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
+        .quiz-container { display: none; background: white; border-radius: 25px; padding: 30px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); }
+        .quiz-container.active { display: block; animation: slideIn 0.5s ease; }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        .question { margin-bottom: 25px; }
+        .question h3 {
+            background: linear-gradient(45deg, #4ecdc4, #44a08d);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            font-size: 20px;
+        }
+        .options { display: grid; gap: 12px; }
+        .option {
+            padding: 18px 25px;
+            border: 3px solid #e0e0e0;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 16px;
+            background: white;
+        }
+        .option:hover { border-color: #667eea; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .option.correct { background: linear-gradient(45deg, #56ab2f, #a8e6cf) !important; border-color: #56ab2f !important; }
+        .option.incorrect { background: linear-gradient(45deg, #ff4757, #ff6b81) !important; border-color: #ff4757 !important; }
+        .feedback {
+            margin-top: 15px; padding: 15px;
+            border-radius: 10px; font-weight: bold;
+            display: none;
+        }
+        .feedback.correct { background: #d4edda; color: #155724; border: 2px solid #c3e6cb; }
+        .feedback.incorrect { background: #f8d7da; color: #721c24; border: 2px solid #f5c6cb; }
+        .progress {
+            background: #f1f2f6;
+            height: 10px; border-radius: 10px;
+            margin-bottom: 20px; overflow: hidden;
+        }
+        .progress-bar {
+            height: 100%; background: linear-gradient(90deg, #ff6b6b, #feca57);
+            width: 0%; transition: width 0.5s ease;
+            border-radius: 10px;
+        }
+        .btn-next {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white; border: none;
+            padding: 15px 40px; border-radius: 25px;
+            font-size: 18px; font-weight: bold;
+            cursor: pointer; margin-top: 20px;
+            transition: all 0.3s ease;
+        }
+        .btn-next:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
+        .btn-next:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+        .results {
+            text-align: center; padding: 40px;
+            display: none;
+        }
+        .score {
+            font-size: 48px; font-weight: bold;
+            margin: 20px 0; background: linear-gradient(45deg, #56ab2f, #a8e6cf);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .restart-btn {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            color: white; border: none;
+            padding: 15px 40px; border-radius: 25px;
+            font-size: 18px; font-weight: bold;
+            cursor: pointer; margin-top: 20px;
+        }
+        @media (max-width: 768px) {
+            .tab-btn { font-size: 16px; padding: 12px 15px; }
+            .quiz-container { padding: 20px; margin: 10px; }
+            .question h3 { font-size: 18px; padding: 15px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 style="text-align: center; color: white; font-size: 2.5em; margin-bottom: 20px; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">
+            📚 Quiz Espagnol Seconde LV2
+        </h1>
+        
+        <div class="quiz-tabs">
+            <button class="tab-btn tab-solidaridad active" onclick="switchQuiz('solidaridad')">🤝 Solidaridad</button>
+            <button class="tab-btn tab-navidad" onclick="switchQuiz('navidad')">🎄 Navidad</button>
+        </div>
+
+        <!-- Quiz Solidaridad -->
+        <div id="quiz-solidaridad" class="quiz-container active">
+            <div class="progress"><div class="progress-bar" id="progress-solidaridad"></div></div>
+            <div id="questions-solidaridad"></div>
+            <div id="results-solidaridad" class="results"></div>
+        </div>
+
+        <!-- Quiz Navidad -->
+        <div id="quiz-navidad" class="quiz-container">
+            <div class="progress"><div class="progress-bar" id="progress-navidad"></div></div>
+            <div id="questions-navidad"></div>
+            <div id="results-navidad" class="results"></div>
+        </div>
+    </div>
+
+    <script>
+        // Données des quizzes basées sur le fichier PDF [file:1]
+        const quizzes = {
+            solidaridad: {
+                title: "Solidaridad Intergeneracional",
+                questions: [
+                    {
+                        question: "¿Qué asociación lucha contra la soledad de las personas mayores?",
+                        options: ["Grandes Amigos", "Cruz Roja", "Cáritas", "Save the Children"],
+                        correct: 0,
+                        explanation: "La Fundación Grandes Amigos conecta jóvenes con personas mayores para combatir su soledad."
+                    },
+                    {
+                        question: "En el video, ¿qué hace Lupe con los jóvenes?",
+                        options: ["Habla y comparte", "Cocina", "Juega al fútbol", "Trabaja"],
+                        correct: 0,
+                        explanation: "Lupe charla, comparte momentos y recibe compañía de los jóvenes."
+                    },
+                    {
+                        question: "¿Qué necesitan las personas mayores según el texto?",
+                        options: ["Apoyo y atención", "Dinero", "Comida", "Ropa"],
+                        correct: 0,
+                        explanation: "Necesitan apoyo emocional, atención y presencia para no sentirse excluidas."
+                    },
+                    {
+                        question: "La campaña dice: 'Esto NO es una app, es tu...'",
+                        options: ["vecina del quinto", "amiga del barrio", "abuela", "tía"],
+                        correct: 0,
+                        explanation: "La negación 'NO' enfatiza que es una relación humana real, no virtual."
+                    },
+                    {
+                        question: "¿Qué acción solidaria mencionan las manos en la foto?",
+                        options: ["Ayudar con el ordenador", "Cocinar", "Lavar", "Comprar"],
+                        correct: 0,
+                        explanation: "Una nieta ayuda a su abuela con el ordenador (computadora)."
+                    },
+                    {
+                        question: "El vocabulario incluye el término 'compromiso'. ¿Qué significa?",
+                        options: ["Engagement", "Trabajo", "Dinero", "Comida"],
+                        correct: 0,
+                        explanation: "'Compromiso' significa engagement o compromiso personal."
+                    },
+                    {
+                        question: "La solidaridad intergeneracional es entre:",
+                        options: ["Jóvenes y personas mayores", "Solo jóvenes", "Solo mayores", "Niños"],
+                        correct: 0,
+                        explanation: "Se trata de la solidaridad entre diferentes generaciones."
+                    },
+                    {
+                        question: "¿Qué proyecto final proponen?",
+                        options: ["Acción solidaria intergeneracional", "Fiesta", "Concierto", "Deporte"],
+                        correct: 0,
+                        explanation: "Inventar una acción solidaria entre generaciones en España."
+                    },
+                    {
+                        question: "La campaña Grandes Amigos tiene como objetivo:",
+                        options: ["Conectar barrios", "Acabar con la soledad", "Enseñar español", "Vender apps"],
+                        correct: 1,
+                        explanation: "Conecta jóvenes con personas mayores del barrio para combatir la soledad."
+                    },
+                    {
+                        question: "¿Qué verbos aparecen en el texto?",
+                        options: ["Hablar, ayudar, compartir", "Correr, saltar, bailar", "Leer, escribir, estudiar", "Comer, beber, dormir"],
+                        correct: 0,
+                        explanation: "Verbos solidarios: hablar, ayudar, compartir, escuchar, quedar."
+                    }
+                ]
+            },
+            navidad: {
+                title: "Vocabulario Navidad",
+                questions: [
+                    {
+                        question: "¿Qué es 'El belén'?",
+                        options: ["Pesebre", "Árbol", "Estrella", "Muñecos"],
+                        correct: 0,
+                        explanation: "El belén representa el nacimiento de Jesús (pesebre)."
+                    },
+                    {
+                        question: "El 24 de diciembre se celebra:",
+                        options: ["Nochebuena", "Navidad", "Año Nuevo", "Reyes"],
+                        correct: 0,
+                        explanation: "Nochebuena es la víspera de Navidad (24 diciembre)."
+                    },
+                    {
+                        question: "¿Cuándo es la 'Misa del gallo'?",
+                        options: ["Medianoche de Nochebuena", "25 diciembre", "6 enero", "31 diciembre"],
+                        correct: 0,
+                        explanation: "La misa del gallo se celebra a medianoche del 24 de diciembre."
+                    },
+                    {
+                        question: "Los 'Reyes Magos' llegan el:",
+                        options: ["6 de enero", "25 diciembre", "31 diciembre", "1 enero"],
+                        correct: 0,
+                        explanation: "En España, los regalos llegan el Día de Reyes (6 enero)."
+                    },
+                    {
+                        question: "La tradición de las 'uvas' es el:",
+                        options: ["31 de diciembre", "24 diciembre", "6 enero", "25 diciembre"],
+                        correct: 0,
+                        explanation: "Se comen 12 uvas a las 12 campanadas del 31 de diciembre."
+                    },
+                    {
+                        question: "'El nacimiento' representa:",
+                        options: ["Nacimiento de Jesús", "Nacimiento de los Reyes", "Fiesta", "Cena"],
+                        correct: 0,
+                        explanation: "El nacimiento es el pesebre con la escena del nacimiento de Jesús."
+                    },
+                    {
+                        question: "La 'Nochevieja' es el:",
+                        options: ["31 de diciembre", "24 diciembre", "6 enero", "1 noviembre"],
+                        correct: 0,
+                        explanation: "Nochevieja = víspera de Año Nuevo (31 diciembre)."
+                    },
+                    {
+                        question: "¿Qué día reciben los regalos los niños españoles?",
+                        options: ["Reyes Magos (6 enero)", "Papá Noel (25 diciembre)", "Ambos días", "Nochebuena"],
+                        correct: 0,
+                        explanation: "Principalmente los Reyes Magos el 6 de enero."
+                    },
+                    {
+                        question: "El 16 de enero se celebra:",
+                        options: ["San Antonio", "Reyes", "Navidad", "Nochevieja"],
+                        correct: 0,
+                        explanation: "En algunas tradiciones locales, el 16 de enero hay celebraciones."
+                    },
+                    {
+                        question: "La palabra 'regalos' significa:",
+                        options: ["Cadeaux", "Comida", "Luces", "Árbol"],
+                        correct: 0,
+                        explanation: "Regalos = cadeaux/presents en español."
+                    }
+                ]
+            }
+        };
+
+        let currentQuiz = 'solidaridad';
+        let currentQuestion = 0;
+        let scores = { solidaridad: 0, navidad: 0 };
+
+        function initQuiz(quizType) {
+            currentQuiz = quizType;
+            currentQuestion = 0;
+            scores[quizType] = 0;
+            document.getElementById('questions-' + quizType).innerHTML = '';
+            document.getElementById('results-' + quizType).style.display = 'none';
+            document.querySelector('.progress-bar[id*="progress-' + quizType + '"]').style.width = '0%';
+            loadQuestion(quizType);
+        }
+
+        function loadQuestion(quizType) {
+            const quiz = quizzes[quizType];
+            const questionsDiv = document.getElementById('questions-' + quizType);
+            
+            if (currentQuestion >= quiz.questions.length) {
+                showResults(quizType);
+                return;
+            }
+
+            const q = quiz.questions[currentQuestion];
+            const questionDiv = document.createElement('div');
+            questionDiv.className = 'question';
+            questionDiv.innerHTML = `
+                <h3>Pregunta ${currentQuestion + 1}/${quiz.questions.length}: ${q.question}</h3>
+                <div class="options">
+                    ${q.options.map((opt, i) => 
+                        `<div class="option" onclick="selectOption(${i}, '${quizType}')">${opt}</div>`
+                    ).join('')}
+                </div>
+                <div class="feedback" id="feedback-${currentQuestion}-${quizType}"></div>
+                <button class="btn-next" id="next-${quizType}" onclick="nextQuestion('${quizType}')" disabled>Siguiente</button>
+            `;
+            questionsDiv.innerHTML = questionDiv.outerHTML;
+            updateProgress(quizType);
+        }
+
+        function selectOption(selected, quizType) {
+            const q = quizzes[quizType].questions[currentQuestion];
+            const options = document.querySelectorAll('#quiz-' + quizType + ' .option');
+            const feedback = document.getElementById(`feedback-${currentQuestion}-${quizType}`);
+            const nextBtn = document.getElementById(`next-${quizType}`);
+
+            options.forEach((opt, i) => {
+                if (i === q.correct) opt.classList.add('correct');
+                if (i === selected && i !== q.correct) opt.classList.add('incorrect');
+                opt.style.pointerEvents = 'none';
+            });
+
+            if (selected === q.correct) {
+                scores[quizType]++;
+                feedback.textContent = '¡Correcto! ' + q.explanation;
+                feedback.className = 'feedback correct';
+            } else {
+                feedback.textContent = 'Incorrecto. La respuesta correcta es: ' + q.options[q.correct] + '. ' + q.explanation;
+                feedback.className = 'feedback incorrect';
+            }
+            feedback.style.display = 'block';
+            nextBtn.disabled = false;
+        }
+
+        function nextQuestion(quizType) {
+            currentQuestion++;
+            loadQuestion(quizType);
+        }
+
+        function updateProgress(quizType) {
+            const progress = (currentQuestion / quizzes[quizType].questions.length) * 100;
+            document.querySelector(`#progress-${quizType}`).style.width = progress + '%';
+        }
+
+        function showResults(quizType) {
+            const quiz = quizzes[quizType];
+            const resultsDiv = document.getElementById('results-' + quizType);
+            const scorePercent = Math.round((scores[quizType] / quiz.questions.length) * 100);
+            let message = '';
+            if (scorePercent >= 90) message = '¡Excelente! 🎉';
+            else if (scorePercent >= 70) message = '¡Muy bien! 👍';
+            else if (scorePercent >= 50) message = 'Bien, puedes mejorar. 📚';
+            else message = 'Sigue practicando. 💪';
+
+            resultsDiv.innerHTML = `
+                <h2>${quiz.title} - ${message}</h2>
+                <div class="score">${scores[quizType]}/${quiz.questions.length} (${scorePercent}%)</div>
+                <p>Repasa las explicaciones de las preguntas incorrectas.</p>
+                <button class="restart-btn" onclick="initQuiz('${quizType}')">🔄 Refacer el quiz</button>
+            `;
+            resultsDiv.style.display = 'block';
+        }
+
+        function switchQuiz(quizType) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelector(`.tab-${quizType}`).classList.add('active');
+            document.querySelectorAll('.quiz-container').forEach(cont => cont.classList.remove('active'));
+            document.getElementById(`quiz-${quizType}`).classList.add('active');
+            initQuiz(quizType);
+        }
+
+        // Initialisation
+        initQuiz('solidaridad');
+    </script>
+</body>
+</html>

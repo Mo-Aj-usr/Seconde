@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>QCM Espagnol – Vocabulario básico A2</title>
+
+<style>
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #74ebd5, #9face6);
+    margin: 0;
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+    color: #2d3436;
+}
+
+.quiz {
+    background: white;
+    max-width: 850px;
+    margin: 30px auto;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
+
+.question {
+    margin: 18px 0;
+}
+
+.question p {
+    font-weight: bold;
+}
+
+label {
+    display: block;
+    padding: 8px 12px;
+    margin: 6px 0;
+    border-radius: 8px;
+    background: #f1f2f6;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+label:hover {
+    background: #dfe6e9;
+}
+
+.correct {
+    background: #55efc4 !important;
+}
+
+.incorrect {
+    background: #fab1a0 !important;
+}
+
+button {
+    display: block;
+    margin: 25px auto 10px;
+    padding: 12px 25px;
+    font-size: 16px;
+    background: #0984e3;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #0652dd;
+}
+
+.result {
+    text-align: center;
+    font-weight: bold;
+    margin-top: 15px;
+    font-size: 18px;
+}
+</style>
+</head>
+
+<body>
+
+<h1>QCM Espagnol – Vocabulario básico (nivel A2)</h1>
+
+<div class="quiz" id="vocabulario">
+<div class="questions"></div>
+<button onclick="finishQuiz()">Voir le bilan</button>
+<div class="result"></div>
+</div>
+
+<script>
+const questions = [
+{q:"¿Qué significa «siempre»?", a:["jamais","souvent","toujours","parfois"], c:2},
+{q:"La palabra «hacer» significa…", a:["aller","faire","dire","venir"], c:1},
+{q:"¿Cómo se dice «beaucoup» en espagnol ?", a:["poco","muy","mucho","nunca"], c:2},
+{q:"«Casa» significa…", a:["école","maison","ville","famille"], c:1},
+{q:"Le contraire de «grande» est…", a:["bonito","pequeño","alto","nuevo"], c:1},
+{q:"«Porque» signifie…", a:["mais","donc","parce que","quand"], c:2},
+{q:"Le verbe «tener» signifie…", a:["être","avoir","aller","faire"], c:1},
+{q:"«Hoy» veut dire…", a:["hier","demain","aujourd’hui","toujours"], c:2},
+{q:"«Trabajar» signifie…", a:["voyager","étudier","travailler","jouer"], c:2},
+{q:"«También» signifie…", a:["seulement","aussi","jamais","trop"], c:1}
+];
+
+const container = document.querySelector(".questions");
+
+questions.forEach((q, i) => {
+    const div = document.createElement("div");
+    div.className = "question";
+    div.innerHTML = `<p>${i+1}. ${q.q}</p>`;
+    q.a.forEach((rep, j) => {
+        div.innerHTML += `
+        <label>
+            <input type="radio" name="q${i}" onchange="checkAnswer(this, ${i}, ${j})">
+            ${rep}
+        </label>`;
+    });
+    container.appendChild(div);
+});
+
+function checkAnswer(input, qIndex, aIndex) {
+    const labels = input.closest(".question").querySelectorAll("label");
+    labels.forEach(l => l.classList.remove("correct","incorrect"));
+    if (aIndex === questions[qIndex].c) {
+        input.parentElement.classList.add("correct");
+    } else {
+        input.parentElement.classList.add("incorrect");
+        labels[questions[qIndex].c].classList.add("correct");
+    }
+}
+
+function finishQuiz() {
+    let score = 0;
+    questions.forEach((q, i) => {
+        const checked = document.querySelector(`input[name="q${i}"]:checked`);
+        if (checked) {
+            const index = [...checked.closest(".question").querySelectorAll("input")].indexOf(checked);
+            if (index === q.c) score++;
+        }
+    });
+    document.querySelector(".result").innerHTML =
+        `📊 Score final : <strong>${score} / 10</strong><br>
+        ${score>=8 ? "Excelente 🔥" : score>=5 ? "Buen trabajo 🙂" : "Hay que repasar 📘"}`;
+}
+</script>
+
+</body>
+</html>

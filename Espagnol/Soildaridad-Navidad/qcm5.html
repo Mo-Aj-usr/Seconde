@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QCM Vocabulaire Espagnol A2 - Quiz Interactif</title>
+    <style>
+        /* UX Ergo-couleurs : Fond clair neutre, texte sombre pour lisibilité, accents verts pour succès/positif, bleus pour boutons neutres, rouges légers pour erreurs. Police sans-serif grande, espacements généreux. */
+        :root {
+            --bg-color: #f4f7fa; /* Fond clair apaisant */
+            --text-color: #333333; /* Texte sombre contrasté */
+            --primary-color: #4a90e2; /* Bleu doux pour boutons principaux */
+            --success-color: #5cb85c; /* Vert pour correct */
+            --danger-color: #d9534f; /* Rouge pour incorrect */
+            --card-bg: #ffffff; /* Carte blanche */
+            --border-radius: 12px;
+            --transition: all 0.3s ease;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .quiz-container {
+            width: 100%;
+            max-width: 800px;
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 30px;
+            position: relative;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+        }
+
+        .progress-container {
+            margin-bottom: 30px;
+        }
+
+        .progress-bar {
+            height: 10px;
+            background: #e0e0e0;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--primary-color);
+            width: 0;
+            transition: var(--transition);
+        }
+
+        .question-counter {
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+        }
+
+        .question {
+            font-size: 1.3rem;
+            margin-bottom: 25px;
+            font-weight: 600;
+        }
+
+        .options {
+            display: grid;
+            gap: 15px;
+        }
+
+        .option {
+            background: #f9f9f9;
+            border: 2px solid #e0e0e0;
+            border-radius: var(--border-radius);
+            padding: 15px 20px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 1.1rem;
+        }
+
+        .option:hover {
+            border-color: var(--primary-color);
+            background: #eef5ff;
+        }
+
+        .option.selected {
+            border-color: var(--primary-color);
+            background: #eef5ff;
+            font-weight: bold;
+        }
+
+        .option.correct {
+            border-color: var(--success-color);
+            background: #d4edda;
+            color: var(--success-color);
+        }
+
+        .option.incorrect {
+            border-color: var(--danger-color);
+            background: #f8d7da;
+            color: var(--danger-color);
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+        }
+
+        button {
+            padding: 12px 24px;
+            font-size: 1rem;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: bold;
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .prev-btn {
+            background: #bbbbbb;
+            color: white;
+        }
+
+        .prev-btn:hover:not(:disabled) {
+            background: #999999;
+        }
+
+        .next-btn {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .next-btn:hover:not(:disabled) {
+            background: #357abd;
+        }
+
+        .finish-btn {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .finish-btn:hover:not(:disabled) {
+            background: #449d44;
+        }
+
+        .results {
+            text-align: center;
+            display: none;
+        }
+
+        .results h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        .score {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+
+        .restart-btn {
+            background: var(--primary-color);
+            color: white;
+            padding: 12px 30px;
+            font-size: 1.1rem;
+        }
+
+        .restart-btn:hover {
+            background: #357abd;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .quiz-container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            .question {
+                font-size: 1.1rem;
+            }
+
+            .option {
+                padding: 12px 15px;
+                font-size: 1rem;
+            }
+
+            button {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+            }
+
+            .navigation {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .navigation button {
+                width: 100%;
+            }
+        }
+
+        /* Feedback message */
+        .feedback {
+            margin-top: 15px;
+            font-weight: bold;
+            text-align: center;
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .feedback.show {
+            opacity: 1;
+        }
+
+        .feedback.correct {
+            color: var(--success-color);
+        }
+
+        .feedback.incorrect {
+            color: var(--danger-color);
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <h1>QCM Vocabulaire Espagnol A2</h1>
+        
+        <div class="progress-container">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+        </div>
+        
+        <div class="question-counter" id="questionCounter"></div>
+        
+        <div id="quizContent">
+            <div class="question" id="questionText"></div>
+            <div class="options" id="optionsContainer"></div>
+            <div class="feedback" id="feedback"></div>
+        </div>
+        
+        <div class="navigation">
+            <button class="prev-btn" id="prevBtn">Précédent</button>
+            <button class="next-btn" id="nextBtn">Suivant</button>
+            <button class="finish-btn" id="finishBtn">Terminer</button>
+        </div>
+        
+        <div class="results" id="results">
+            <h2>Résultats</h2>
+            <div class="score" id="scoreText"></div>
+            <button class="restart-btn" id="restartBtn">Recommencer</button>
+        </div>
+    </div>
+
+    <script>
+        // Données des deux QCM combinés en un seul quiz de 30 questions
+        const questions = [
+            // QCM 1
+            { q: "Le (article masculin singulier)", options: ["El", "La", "Los", "Las"], correct: 0 },
+            { q: "Je", options: ["Tú", "Yo", "Él", "Nosotros"], correct: 1 },
+            { q: "Avoir", options: ["Ser", "Estar", "Tener", "Ir"], correct: 2 },
+            { q: "Aller", options: ["Venir", "Ir", "Hacer", "Poder"], correct: 1 },
+            { q: "Être (permanent)", options: ["Estar", "Ser", "Tener", "Haber"], correct: 1 },
+            { q: "Maison", options: ["Casa", "Coche", "Ciudad", "Calle"], correct: 0 },
+            { q: "Grand", options: ["Pequeño", "Grande", "Bueno", "Malo"], correct: 1 },
+            { q: "Bonjour", options: ["Adiós", "Hola", "Gracias", "Por favor"], correct: 1 },
+            { q: "Merci", options: ["De nada", "Gracias", "Lo siento", "Sí"], correct: 1 },
+            { q: "Oui", options: ["No", "Sí", "Quizás", "Nunca"], correct: 1 },
+            { q: "Famille", options: ["Amigo", "Familia", "Trabajo", "Escuela"], correct: 1 },
+            { q: "Eau", options: ["Agua", "Comida", "Leche", "Pan"], correct: 0 },
+            { q: "Manger", options: ["Beber", "Comer", "Dormir", "Vivir"], correct: 1 },
+            { q: "Jour", options: ["Noche", "Día", "Semana", "Año"], correct: 1 },
+            { q: "Ami", options: ["Amigo / Amiga", "Hermano", "Padre", "Enemigo"], correct: 0 },
+            // QCM 2
+            { q: "Un (masculin)", options: ["Una", "Un", "Uno", "Una"], correct: 1 }, // Note: "Un" est pour avant voyelle, mais courant ; uno pour nombre
+            { q: "Mère", options: ["Padre", "Madre", "Hijo", "Hermana"], correct: 1 },
+            { q: "Rouge", options: ["Azul", "Rojo", "Verde", "Negro"], correct: 1 },
+            { q: "Ville", options: ["País", "Ciudad", "Casa", "Campo"], correct: 1 },
+            { q: "Travail", options: ["Trabajo", "Escuela", "Vacaciones", "Fiesta"], correct: 0 },
+            { q: "Dix", options: ["Cinco", "Diez", "Veinte", "Cien"], correct: 1 },
+            { q: "Livre", options: ["Libro", "Periódico", "Televisión", "Radio"], correct: 0 },
+            { q: "Voiture", options: ["Coche", "Bicicleta", "Tren", "Avión"], correct: 0 },
+            { q: "Noir", options: ["Blanco", "Negro", "Amarillo", "Gris"], correct: 1 },
+            { q: "École", options: ["Escuela", "Hospital", "Tienda", "Banco"], correct: 0 },
+            { q: "Temps (météo ou durée)", options: ["Tiempo", "Hora", "Día", "Momento"], correct: 0 },
+            { q: "Argent", options: ["Dinero", "Comida", "Agua", "Ropa"], correct: 0 },
+            { q: "Frère", options: ["Hermano", "Primo", "Tío", "Abuelo"], correct: 0 },
+            { q: "Habiter", options: ["Trabajar", "Vivir", "Estudiar", "Comprar"], correct: 1 },
+            { q: "Beaucoup", options: ["Poco", "Mucho", "Nada", "Todo"], correct: 1 }
+        ];
+
+        const totalQuestions = questions.length;
+        let currentQuestion = 0;
+        let answers = new Array(totalQuestions).fill(null); // Stocke l'index sélectionné ou null
+        let locked = false; // Empêche changement après verrouillage (mais navigation libre)
+
+        const questionText = document.getElementById('questionText');
+        const optionsContainer = document.getElementById('optionsContainer');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const finishBtn = document.getElementById('finishBtn');
+        const progressFill = document.getElementById('progressFill');
+        const questionCounter = document.getElementById('questionCounter');
+        const feedback = document.getElementById('feedback');
+        const results = document.getElementById('results');
+        const scoreText = document.getElementById('scoreText');
+        const restartBtn = document.getElementById('restartBtn');
+        const quizContent = document.getElementById('quizContent');
+
+        function loadQuestion(index) {
+            const q = questions[index];
+            questionText.textContent = `${index + 1}. ${q.q}`;
+            optionsContainer.innerHTML = '';
+            feedback.classList.remove('show', 'correct', 'incorrect');
+            feedback.textContent = '';
+
+            q.options.forEach((opt, i) => {
+                const div = document.createElement('div');
+                div.classList.add('option');
+                div.textContent = `${String.fromCharCode(97 + i)}) ${opt}`; // a) b) etc.
+                div.addEventListener('click', () => selectOption(i, div));
+                if (answers[index] === i) {
+                    div.classList.add('selected');
+                    if (locked && i === q.correct) div.classList.add('correct');
+                    if (locked && i !== q.correct && answers[index] === i) div.classList.add('incorrect');
+                }
+                if (locked && i === q.correct) div.classList.add('correct');
+                optionsContainer.appendChild(div);
+            });
+
+            updateNavigation();
+            updateProgress();
+            updateCounter();
+        }
+
+        function selectOption(selectedIndex, element) {
+            if (locked) return; // Pas de changement si verrouillé, mais navigation OK
+            answers[currentQuestion] = selectedIndex;
+            document.querySelectorAll('.option').forEach((opt, i) => {
+                opt.classList.toggle('selected', i === selectedIndex);
+            });
+            // Feedback immédiat optionnel, mais ici on verrouille au Suivant
+        }
+
+        function goToQuestion(delta) {
+            // Verrouille la question actuelle si on passe avec Suivant/Précédent sans verrouillage préalable
+            if (delta > 0 && answers[currentQuestion] !== null && !locked) {
+                lockQuestion();
+            }
+            currentQuestion += delta;
+            if (currentQuestion < 0) currentQuestion = 0;
+            if (currentQuestion >= totalQuestions) currentQuestion = totalQuestions - 1;
+            locked = false; // Déverrouille pour la nouvelle question
+            loadQuestion(currentQuestion);
+        }
+
+        function lockQuestion() {
+            if (answers[currentQuestion] === null) return;
+            locked = true;
+            const q = questions[currentQuestion];
+            document.querySelectorAll('.option').forEach((opt, i) => {
+                if (i === q.correct) opt.classList.add('correct');
+                if (i === answers[currentQuestion] && i !== q.correct) opt.classList.add('incorrect');
+            });
+            const isCorrect = answers[currentQuestion] === q.correct;
+            feedback.textContent = isCorrect ? 'Correct !' : `Incorrect. La bonne réponse est ${String.fromCharCode(97 + q.correct)}) ${q.options[q.correct]}`;
+            feedback.classList.add('show', isCorrect ? 'correct' : 'incorrect');
+        }
+
+        function updateNavigation() {
+            prevBtn.disabled = currentQuestion === 0;
+            nextBtn.disabled = currentQuestion === totalQuestions - 1;
+            nextBtn.textContent = currentQuestion === totalQuestions - 1 ? 'Dernière' : 'Suivant';
+            // Boutons toujours activés, mais Suivant verrouille si réponse choisie
+            nextBtn.onclick = () => {
+                if (answers[currentQuestion] !== null) lockQuestion();
+                goToQuestion(1);
+            };
+            prevBtn.onclick = () => goToQuestion(-1);
+            finishBtn.onclick = finishQuiz;
+            finishBtn.disabled = false; // Toujours activable
+        }
+
+        function updateProgress() {
+            const answered = answers.filter(a => a !== null).length;
+            const percentage = (answered / totalQuestions) * 100;
+            progressFill.style.width = `${percentage}%`;
+        }
+
+        function updateCounter() {
+            questionCounter.textContent = `Question ${currentQuestion + 1} sur ${totalQuestions}`;
+        }
+
+        function finishQuiz() {
+            // Verrouille la dernière si pas fait
+            if (answers[currentQuestion] !== null && !locked) lockQuestion();
+            quizContent.style.display = 'none';
+            results.style.display = 'block';
+            const correctCount = answers.reduce((count, ans, i) => count + (ans === questions[i].correct ? 1 : 0), 0);
+            scoreText.textContent = `Vous avez ${correctCount} bonnes réponses sur ${totalQuestions} (${Math.round((correctCount / totalQuestions) * 100)}%)`;
+        }
+
+        restartBtn.addEventListener('click', () => {
+            currentQuestion = 0;
+            answers.fill(null);
+            locked = false;
+            results.style.display = 'none';
+            quizContent.style.display = 'block';
+            loadQuestion(0);
+        });
+
+        // Init
+        loadQuestion(0);
+
+        // Permet navigation libre avec Précédent/Suivant, verrouillage au passage si réponse choisie
+        // Terminer toujours disponible, montre score même si incomplet
+    </script>
+</body>
+</html>

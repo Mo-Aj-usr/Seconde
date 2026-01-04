@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>QCM Espagnol – Seconde LV2</title>
+
+<style>
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #f6d365, #fda085);
+    margin: 0;
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+    color: #2c2c54;
+}
+
+.quiz {
+    background: white;
+    max-width: 850px;
+    margin: 30px auto;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
+
+h2 {
+    color: #e84393;
+    border-bottom: 2px solid #e84393;
+    padding-bottom: 5px;
+}
+
+.question {
+    margin: 18px 0;
+}
+
+.question p {
+    font-weight: bold;
+}
+
+label {
+    display: block;
+    padding: 8px 12px;
+    margin: 6px 0;
+    border-radius: 8px;
+    background: #f1f2f6;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+label:hover {
+    background: #dfe6e9;
+}
+
+.correct {
+    background: #55efc4 !important;
+}
+
+.incorrect {
+    background: #fab1a0 !important;
+}
+
+button {
+    display: block;
+    margin: 25px auto 10px;
+    padding: 12px 25px;
+    font-size: 16px;
+    background: #6c5ce7;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #4834d4;
+}
+
+.result {
+    text-align: center;
+    font-weight: bold;
+    margin-top: 15px;
+    font-size: 18px;
+}
+</style>
+</head>
+
+<body>
+
+<h1>QCM Espagnol – Seconde LV2</h1>
+
+<!-- SOLIDARIDAD -->
+<div class="quiz" id="solidaridad">
+<h2>Tema 1 – Solidaridad</h2>
+<div class="questions"></div>
+<button onclick="finishQuiz('solidaridad')">Voir le bilan</button>
+<div class="result"></div>
+</div>
+
+<!-- NAVIDAD -->
+<div class="quiz" id="navidad">
+<h2>Tema 2 – Navidad</h2>
+<div class="questions"></div>
+<button onclick="finishQuiz('navidad')">Voir le bilan</button>
+<div class="result"></div>
+</div>
+
+<script>
+const quizzes = {
+solidaridad: [
+{q:"¿Qué significa «solidaridad»?", a:["Pensar solo en uno mismo","Ayudar a los demás","Ganar dinero","Viajar"], c:1},
+{q:"Una persona solidaria es una persona…", a:["egoísta","generosa","violenta","perezosa"], c:1},
+{q:"¿Quién ayuda a los más pobres?", a:["Un voluntario","Un turista","Un cliente","Un jefe"], c:0},
+{q:"Las ONG sirven para…", a:["hacer negocios","ayudar a personas","viajar gratis","estudiar"], c:1},
+{q:"La solidaridad es importante en…", a:["la sociedad","los videojuegos","los exámenes","el dinero"], c:0},
+{q:"Dar comida a los necesitados es un acto de…", a:["egoísmo","solidaridad","violencia","mentira"], c:1},
+{q:"Una acción solidaria puede ser…", a:["insultar","donar ropa","robar","mentir"], c:1},
+{q:"La palabra «ayudar» significa…", a:["abandonar","apoyar","castigar","ignorar"], c:1},
+{q:"La solidaridad une a las personas porque…", a:["crea conflictos","crea miedo","crea vínculos","crea problemas"], c:2},
+{q:"Ser solidario es un valor…", a:["negativo","inútil","humano","peligroso"], c:2}
+],
+
+navidad: [
+{q:"¿Cuándo se celebra la Navidad?", a:["En verano","En otoño","En invierno","En primavera"], c:2},
+{q:"La Navidad celebra…", a:["un cumpleaños","el nacimiento de Jesús","un viaje","una guerra"], c:1},
+{q:"Un símbolo típico de Navidad es…", a:["la playa","el árbol","el libro","la escuela"], c:1},
+{q:"En Navidad, las familias suelen…", a:["pelear","reunirse","trabajar","estudiar"], c:1},
+{q:"Los Reyes Magos llegan el…", a:["24 de diciembre","25 de diciembre","6 de enero","31 de diciembre"], c:2},
+{q:"Un regalo es…", a:["un castigo","una sorpresa","una obligación","un problema"], c:1},
+{q:"En España, en Navidad se come…", a:["pizza","turrón","hamburguesa","pasta"], c:1},
+{q:"La Navidad es una fiesta…", a:["triste","violenta","familiar","peligrosa"], c:2},
+{q:"¿Qué se desea en Navidad?", a:["malos sueños","feliz Navidad","castigos","problemas"], c:1},
+{q:"La Navidad representa valores como…", a:["odio","solidaridad","violencia","egoísmo"], c:1}
+]
+};
+
+function loadQuiz(id) {
+    const container = document.querySelector(`#${id} .questions`);
+    quizzes[id].forEach((q, i) => {
+        const div = document.createElement("div");
+        div.className = "question";
+        div.innerHTML = `<p>${i+1}. ${q.q}</p>`;
+        q.a.forEach((rep, j) => {
+            div.innerHTML += `
+            <label>
+                <input type="radio" name="${id}_${i}" onchange="checkAnswer(this, '${id}', ${i}, ${j})">
+                ${rep}
+            </label>`;
+        });
+        container.appendChild(div);
+    });
+}
+
+function checkAnswer(input, quizId, qIndex, aIndex) {
+    const labels = input.closest(".question").querySelectorAll("label");
+    labels.forEach(l => l.classList.remove("correct","incorrect"));
+    if (aIndex === quizzes[quizId][qIndex].c) {
+        input.parentElement.classList.add("correct");
+    } else {
+        input.parentElement.classList.add("incorrect");
+        labels[quizzes[quizId][qIndex].c].classList.add("correct");
+    }
+}
+
+function finishQuiz(id) {
+    let score = 0;
+    quizzes[id].forEach((q, i) => {
+        const checked = document.querySelector(`input[name="${id}_${i}"]:checked`);
+        if (checked) {
+            const index = [...checked.closest(".question").querySelectorAll("input")].indexOf(checked);
+            if (index === q.c) score++;
+        }
+    });
+    document.querySelector(`#${id} .result`).innerHTML =
+        `✅ Score final : <strong>${score} / 10</strong><br>
+         ${score>=8 ? "Excelente 👍" : score>=5 ? "Bien 🙂" : "Debes repasar 📘"}`;
+}
+
+loadQuiz("solidaridad");
+loadQuiz("navidad");
+</script>
+
+</body>
+</html>

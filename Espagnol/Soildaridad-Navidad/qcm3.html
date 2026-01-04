@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz de Vocabulaire Espagnol Seconde LV2</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f8ff;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        h1 {
+            color: #ff4500;
+            text-align: center;
+        }
+        .theme {
+            width: 100%;
+            max-width: 800px;
+            margin-bottom: 40px;
+        }
+        .theme h2 {
+            color: #228b22;
+            border-bottom: 2px solid #228b22;
+            padding-bottom: 10px;
+        }
+        .question {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .question h3 {
+            margin-top: 0;
+            color: #4169e1;
+        }
+        .options {
+            list-style: none;
+            padding: 0;
+        }
+        .options li {
+            margin-bottom: 10px;
+        }
+        .option-btn {
+            background-color: #87cefa;
+            border: none;
+            color: #fff;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            text-align: left;
+            transition: background-color 0.3s;
+        }
+        .option-btn:hover {
+            background-color: #6495ed;
+        }
+        .feedback {
+            margin-top: 10px;
+            font-weight: bold;
+            display: none;
+        }
+        .correct { color: #32cd32; }
+        .incorrect { color: #ff0000; }
+        .bilan {
+            background-color: #fffacd;
+            border: 1px solid #ffd700;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 20px;
+            display: none;
+        }
+        .bilan h3 {
+            color: #ff8c00;
+        }
+        #global-bilan {
+            width: 100%;
+            max-width: 800px;
+            background-color: #ffe4e1;
+            border: 1px solid #ff69b4;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 40px;
+            display: none;
+        }
+        @media (max-width: 600px) {
+            body { padding: 10px; }
+            .question { padding: 10px; }
+            .option-btn { padding: 8px 12px; }
+        }
+    </style>
+</head>
+<body>
+    <h1>Quiz de Vocabulaire Espagnol Seconde LV2</h1>
+    <p>Ce quiz est divisé en deux thèmes. Répondez aux questions et obtenez un feedback immédiat. À la fin de chaque thème, un bilan détaillé s'affiche.</p>
+
+    <div class="theme" id="theme1">
+        <h2>Thème 1 : Solidaridad (Solidarité intergénérationnelle et engagement)</h2>
+        <!-- Questions for Theme 1 -->
+        <div class="question" data-correct="b">
+            <h3>1. Quel est l'équivalent espagnol de "solidarité" ?</h3>
+            <ul class="options">
+                <li><button class="option-btn" data-choice="a">a) soledad</button></li>
+                <li><button class="option-btn" data-choice="b">b) solidaridad</button></li>
+                <li><button class="option-btn" data-choice="c">c) amistad</button></li>
+                <li><button class="option-btn" data-choice="d">d) barrio</button></li>
+            </ul>
+            <div class="feedback"></div>
+        </div>
+        <div class="question" data-correct="b">
+            <h3>2. Traduisez "compromiso" en français.</h3>
+            <ul class="options">
+                <li><button class="option-btn" data-choice="a">a) défi</button></li>
+                <li><button class="option-btn" data-choice="b">b) engagement</button></li>
+                <li><button class="option-btn" data-choice="c">c) quartier</button></li>
+                <li><button class="option-btn" data-choice="d">d) solitude</button></li>
+            </ul>
+            <div class="feedback"></div>
+        </div>
+        <!-- Add remaining 13 questions for Theme 1 similarly -->
+        <div class="question" data-correct="a">
+            <h3>3. Quel est l'équivalent espagnol de "intergénérationnel" ?</h3>
+            <ul class="options">
+                <li><button class="option-btn" data-choice="a">a) intergeneracional</button></li>
+                <li><button class="option-btn" data-choice="b">b) interpersonal</button></li>
+                <li><button class="option-btn" data-choice="c">c) internacional</button></li>
+                <li><button class="option-btn" data-choice="d">d) interurbano</button></li>
+            </ul>
+            <div class="feedback"></div>
+        </div>
+        <div class="question" data-correct="b">
+            <h3>4. Traduisez "reto" ou "desafío" en français.</h3>
+            <ul class="options">
+                <li><button class="option-btn" data-choice="a">a) amitié</button></li>
+                <li><button class="option-btn" data-choice="b">b) défi / challenge</button></li>
+                <li><button class="option-btn" data-choice="c">c) voisin</button></li>
+                <li><button class="option-btn" data-choice="d">d) association</button></li>
+            </ul>
+            <div class="feedback"></div>
+        </div>
+        <div class="question" data-correct="b">
+            <h3>5. Quel est l'équivalent espagnol de "voisin" ?</h3>
+            <ul class="options">
+                <li><button class="option-btn" data-choice="a">a) barrio</button></li>
+                <li><button class="option-btn" data-choice="b">b) vecino</button></li>
+                <li><button class="option-btn" data-choice="c">c) persona mayor</button></li>
+                <li><button class="option-btn" data-choice="d">d) soledad</button></li>
+            </ul>
+            <div class="feedback"></div>
+        </div>
+        <div class="question" data-correct="a">
+            <h3>6. Traduisez "soledad" en français.</h3>
+            <ul class="options">
+                <li><button class="option-btn" data-choice="a">a) solitude</button></li>
+                <li><button class="option-btn" data-choice="b">b) amitié</button></li>
+                <li><button class="option-btn" data-choice="c">c) conversation</button></li>
+                <li><button class="option-btn" data-choice="d">d) aide</button></li>
+            </ul>
+            <div class="feedback"></div>
+        </div>
+        <div class="question" data-correct="b">
+            <h3>7. Quel est l'équivalent espagnol de "personne âgée" ?</h3>
+            <ul class="options">
+                <li><button class="option-btn" data-choice="a">a) persona joven</button></li>
+                <li><button class="option-btn" data-choice="b">b) persona mayor</button></li>
+                <li><button class="option-btn" data-choice="c">c) persona aislada</button></li>
+                <li><button class="option-btn" data-choice="d">d) persona amiga</button></li>
+            </ul>
+            <div class="feedback"></div>
+        </div>
+        <div class="question" data-correct="c">
+            <h3>8. Traduisez "barrio" en français.</h3>
+            <ul class="options">
+                <li><button class="option-btn" data-choice="a">a) ville</button></li>
+                <li><button class="option-btn" data-choice="b">b) pays</button></li>
+                <li><button class="option-btn" data-choice="c">c) quartier</button></li>
+                <li><button class="option-btn" data-choice="d">d) maison</button></li>
+            </ul>
+            <div class="feedback"></div>
+        </div>
+        <div class="question" data-correct="a">
+            <h3>9. Quel est l'équivalent espagnol de "amitié" ?</h3>
+            <ul class="options">
+                <li><button class="option-btn" data-choice="a">a) amistad</button></li>
+                <li><button class="option-btn" data-choice="b">b) charlar</button></li>
+                <li><button class="option-btn" data-choice="c">c) compartir</button></li>
+                <li><button class="option-btn" data-choice="d">d) ayudar</button></li>
+            </ul>
+            <div class="feedback"></div>
+        </div>
+        <div class="question" data-correct="c">
+            <h3>10. Traduisez "ayudar" en français.</h3>
+            <ul class="options">
+                <li><button class="option-btn" data-choice="a">a) partager</button></li>
+                <li><button class="option-btn" data-choice="b">b) communiquer</button></li>
+                <li><button class="option-btn" data-choice="c">c) aider</button></li>
+                <li><button class="option-btn" data-choice="d">d) bavarder</button></li>
+            </ul>
+            <div class="feedback"></div>
+        </div>
+        <div class="question" data-correct="b">
+            <h3>11. Quel est l'équivalent espagnol de "bavarder" ?</h3>
+            <ul class="options">
+                <li><button class="option-btn" data-choice="a">a) conversar</button></li>
+                <li><button class="option-btn" data-choice="b">b) charlar</button></li>
+                <li><button class="option-btn" data-choice="c">c) sonreír</button></li>
+                <li><button class="option-btn" data-choice="d">d) olvidar</button></li>
+            </ul>
+            <div class="feedback"></div>
+        </div>
+        <div class="question" data-correct="a">
+            <h3>12. Traduisez "compartir" en français.</h3>
+            <ul class="options">
+                <li><button class="option-btn" data-choice="a">a) partager</button></li>
+                <li><button class="option-btn" data-choice="b">b) inventer</button></li>
+                <li><button class="option-btn" data-choice="c">c) lancer</button></li>
+                <li><button class="option-btn" data-choice="d">d) sensibiliser</button></li>
+            </ul>
+            <div class="feedback"></div>
+        </div>
+        <div class="question" data-correct="b">
+            <h3>13. Quel est l'équivalent espagnol de "association" (dans le sens d'organisation solidaire) ?</h3>
+            <ul class="options">
+                <li><button class="option-btn" data-choice="a">a) campaña</button></li>
+                <li><button class="option-btn" data-choice="b">b) asociación</button></li>
+                <li><button class="option-btn" data-choice="c">c) sensibilización</button></li>
+                <li><button class="option-btn" data-choice="d">d) match</button></li>
+            </ul>
+            <div class="feedback"></div>
+        </div>
+        <div class="question" data-correct="b">
+            <h3>14. Traduisez la phrase "faire match avec des personnes âgées" en espagnol (contexte d'app solidaire).</h3>
+            <ul class="options">
+                <li><button class="option-btn" data-choice="a">a) hacer amigos con personas jóvenes</button></li>
+                <li><button class="option-btn" data-choice="b">b) hacer match con personas mayores</button></li>
+                <li><button class="option-btn" data-choice="c">c) hacer soledad con vecinos</button></li>
+                <li><button class="option-btn" data-choice="d">d) hacer barrio con amigos</button></li>
+            </ul>
+            <div class="feedback"></div>
+        </div>
+        <div class="question" data-correct="b">
+            <h3>15. Traduisez la phrase "campagne de sensibilisation" en espagnol.</h3>
+            <ul class="options">
+                <li><button class="option-btn" data-choice="a">a) campaña de aislamiento</button></li>
+                <li><button class="option-btn" data-choice="b">b) campaña de sensibilización</button></li>
+                <li><button class="option-btn" data-choice="c">c) campaña de soledad</button></li>
+                <li><button class="option-btn" data-choice="d">d) campaña de barrio</button></li>
+            </ul>
+            <div class="feedback"></div>
+        </div>
+        <div class="bilan" id="bilan1">
+            <h3>Bilan pour le Thème 1</h3>
+            <p id="score1"></p>
+            <p id="comment1"></p>
+            <p>Réponses correctes : 1b, 2b, 3a, 4b, 5b, 6a, 7b, 8c, 9a, 10c, 11b, 12a, 13b, 14b, 15b.</p>
+        </div>
+    </div>
+
+    <div class="theme" id="theme2">
+        <h2>Thème 2 : Navidad (Noël et traditions)</h2>
+        <!-- Questions for Theme 2 -->
+        <div class="question" data-correct="a">
+            <h3>1. Quel est l'équivalent espagnol de "Noël" ?</h3>
+            <ul class="options">
+                <li><button class="option-btn" data-choice="a">a) Navidad</button></li>
+                <li><button class="option-btn" data-choice="b">b) Nochebuena</button></li>
+                <li><button class="option-btn" data-choice="c">c) Nochevieja</button></li>
+                <li><button class="option-btn" data-choice="d">d) Epifanía</button></li>
+            </ul>
+            <div class="feedback"></div>
+        </div>
+        <div class="question" data-correct="b">
+            <h3>2. Traduisez "los regalos" en français.</h3>
+            <ul class="options">
+                <li><button class="option-btn" data-choice="a">a) les raisins</button></li>
+                <li><button class="option-btn" data-choice="b">b) les cadeaux</button></li>
+                <li><button class="option-btn" data-choice="c">c) les cloches</button></li>
+                <li><button class="option-btn" data-choice="d">d) les rois</button></li>
+            </ul>
+            <div class="feedback"></div>
+        </div>
+        <!-- Add remaining 13 questions for Theme 2 similarly -->
+        <div class="question" data-correct="a">
+            <h3>3. Quel est l'équivalent espagnol de "la crèche" ?</h3>
+            <ul class="options">
+                <li><button class="option-btn" data-choice="a">a) el belén / el pesebre</button></li>
+                <li><button class="option-btn" data-choice="b">b) la misa del gallo</button></li>
+                <li><button class="option-btn" data-choice="c">c) las uvas</button></li>
+                <li><button class="option-btn" data-choice="d">d) el árbol</button></li>
+            </ul>
+            <div class="feedback"></div>
+        </div>
+        <div class="question" data-correct="a">
+            <h3>4. Traduisez "los reyes magos" en français.</h3>
+            <ul class="options">
+                <li><button class="option-btn" data-choice="a">a) les rois mages</button></li>
+                <li><button class="option-btn" data-choice="b">b) le Père Noël</button></li>
+                <li><button class="option-btn" data-choice="c">c) la messe de minuit</button></li>
+                <li><button class="option-btn" data-choice="d">d) le sapin</button></li>
+            </ul>
+            <div class="feedback"></div>
+        </div>
+        <div class="question" data-correct="b">
+            <h3>5. Quel est l'équivalent espagnol de "la messe de minuit" ?</h3>
+            <ul class="options">
+                <li><button class="option-btn" data-choice="a">a) la nochebuena</button></li>
+                <li><button class="option-btn" data-choice="b">b) la misa del gallo</button></li>
+                <li><button class="option-btn" data-choice="c">c) la nochevieja</button></li>
+                <li><button class="option-btn" data-choice="d">d) el nacimiento</button></li>
+            </ul>
+            <div class="feedback"></div>
+        </div>
+        <div class="question" data-correct="a">
+            <h3>6. Traduisez "las uvas" en français (contexte de Nouvel An).</h3>
+            <ul class="options">
+                <li><button class="option-btn" data-choice="a">a) les raisins</button></li>
+                <li><button class="option-btn" data-choice="b">b) les cadeaux</button></li>
+                <li><button class="option-btn" data-choice="c">c) les cloches</button></li>
+                <li><button class="option-btn" data-choice="d">d) les dindes</button></li>
+            </ul>
+            <div class="feedback"></div>
+        </div>
+        <div class="question" data-correct="b">
+            <h3>7. Quel est l'équivalent espagnol de "la veille de Noël" ?</h3>
+            <ul class="options">
+                <li><button class="option-btn" data-choice="a">a) la nochevieja</button></li>
+                <li><button class="option-btn" data-choice="b">b) la nochebuena</button></li>
+                <li><button class="option-btn" data-choice="c">c) el día de reyes</button></li>
+                <li><button class="option-btn" data-choice="d">d) la Epifanía</button></li>
+            </ul>
+            <div class="feedback"></div>
+        </div>
+        <div class="question" data-correct="b">
+            <h3>8. Traduisez "la nochevieja" en français.</h3>
+            <ul class="options">
+                <li><button class="option-btn" data-choice="a">a) la veille de Noël</button></li>
+                <li><button class="option-btn" data-choice="b">b) le réveillon du Nouvel An</button></li>
+                <li><button class="option-btn" data-choice="c">c) l'Épiphanie</button></li>
+                <li><button class="option-btn" data-choice="d">d) la nativité</button></li>
+            </ul>
+            <div class="feedback"></div>
+        </div>
+        <div class="question" data-correct="a">
+            <h3>9. Quel est l'équivalent espagnol de "l'Épiphanie" (fête des rois) ?</h3>
+            <ul class="options">
+                <li><button class="option-btn" data-choice="a">a) el día de los reyes magos</button></li>
+                <li><button class="option-btn" data-choice="b">b) la Navidad</button></li>
+                <li><button class="option-btn" data-choice="c">c) la misa del gallo</button></li>
+                <li><button class="option-btn" data-choice="d">d) el belén</button></li>
+            </ul>
+            <div class="feedback"></div>
+        </div>
+        <div class="question" data-correct="a">
+            <h3>10. Traduisez "el nacimiento" en français.</h3>
+            <ul class="options">
+                <li><button class="option-btn" data-choice="a">a) la nativité / la crèche</button></li>
+                <li><button class="option-btn" data-choice="b">b) le sapin</button></li>
+                <li><button class="option-btn" data-choice="c">c) les vœux</button></li>
+                <li><button class="option-btn" data-choice="d">d) la famille</button></li>
+            </ul>
+            <div class="feedback"></div>
+        </div>
+        <div class="question" data-correct="a">
+            <h3>11. Quel est l'équivalent espagnol de "Père Noël" ?</h3>
+            <ul class="options">
+                <li><button class="option-btn" data-choice="a">a) Papá Noel</button></li>
+                <li><button class="option-btn" data-choice="b">b) Reyes Magos</button></li>
+                <li><button class="option-btn" data-choice="c">c) Belén</button></li>
+                <li><button class="option-btn" data-choice="d">d) Uvas</button></li>
+            </ul>
+            <div class="feedback"></div>
+        </div>
+        <div class="question" data-correct="a">
+            <h3>12. Traduisez "árbol de Navidad" en français.</h3>
+            <ul class="options">
+                <li><button class="option-btn" data-choice="a">a) arbre de Noël / sapin de Noël</button></li>
+                <li><button class="option-btn" data-choice="b">b) messe de Noël</button></li>
+                <li><button class="option-btn" data-choice="c">c) raisins de Noël</button></li>
+                <li><button class="option-btn" data-choice="d">d) crèche de Noël</button></li>
+            </ul>
+            <div class="feedback"></div>
+        </div>
+        <div class="question" data-correct="b">
+            <h3>13. Quel est l'équivalent espagnol de "cloches" (dans un contexte festif) ?</h3>
+            <ul class="options">
+                <li><button class="option-btn" data-choice="a">a) uvas</button></li>
+                <li><button class="option-btn" data-choice="b">b) campanas</button></li>
+                <li><button class="option-btn" data-choice="c">c) regalos</button></li>
+                <li><button class="option-btn" data-choice="d">d) pesebre</button></li>
+            </ul>
+            <div class="feedback"></div>
+        </div>
+        <div class="question" data-correct="a">
+            <h3>14. Traduisez la phrase "Manger les 12 raisins à minuit" en espagnol.</h3>
+            <ul class="options">
+                <li><button class="option-btn" data-choice="a">a) Comer las 12 uvas a medianoche</button></li>
+                <li><button class="option-btn" data-choice="b">b) Comer los regalos a medianoche</button></li>
+                <li><button class="option-btn" data-choice="c">c) Comer la misa del gallo</button></li>
+                <li><button class="option-btn" data-choice="d">d) Comer el belén</button></li>
+            </ul>
+            <div class="feedback"></div>
+        </div>
+        <div class="question" data-correct="a">
+            <h3>15. Traduisez la phrase "Les rois mages apportent les cadeaux le 6 janvier" en espagnol.</h3>
+            <ul class="options">
+                <li><button class="option-btn" data-choice="a">a) Los reyes magos traen los regalos el 6 de enero</button></li>
+                <li><button class="option-btn" data-choice="b">b) Papá Noel trae los regalos el 24 de diciembre</button></li>
+                <li><button class="option-btn" data-choice="c">c) La nochebuena trae las uvas</button></li>
+                <li><button class="option-btn" data-choice="d">d) El belén trae la misa</button></li>
+            </ul>
+            <div class="feedback"></div>
+        </div>
+        <div class="bilan" id="bilan2">
+            <h3>Bilan pour le Thème 2</h3>
+            <p id="score2"></p>
+            <p id="comment2"></p>
+            <p>Réponses correctes : 1a, 2b, 3a, 4a, 5b, 6a, 7b, 8b, 9a, 10a, 11a, 12a, 13b, 14a, 15a.</p>
+        </div>
+    </div>
+
+    <div id="global-bilan">
+        <h3>Bilan Global</h3>
+        <p id="total-score"></p>
+        <p id="global-comment"></p>
+        <p>Conseils : Pour améliorer, associez les mots aux images des documents (mains entrelacées pour solidarité, illustrations de reyes magos pour Navidad). Reprenez le test dans une semaine !</p>
+    </div>
+
+    <script>
+        const themes = [
+            { id: 'theme1', bilan: 'bilan1', scoreId: 'score1', commentId: 'comment1', comments: [
+                { min: 13, text: 'Excellent ! Vous maîtrisez le vocabulaire de la solidarité intergénérationnelle. Vous pourriez décrire une action solidaire sans hésiter.' },
+                { min: 10, text: 'Bon niveau. Revoyez les termes liés aux relations (como vecino, amistad).' },
+                { min: 7, text: 'Moyen. Concentrez-vous sur les défis (reto/desafío) et les actions (ayudar, compartir).' },
+                { min: 0, text: 'À travailler. Relisez les documents sur les images d\'aide entre jeunes et âgés pour contextualiser.' }
+            ]},
+            { id: 'theme2', bilan: 'bilan2', scoreId: 'score2', commentId: 'comment2', comments: [
+                { min: 13, text: 'Excellent ! Vous êtes prêt pour les fêtes espagnoles. Vous pourriez expliquer les traditions comme les uvas ou los reyes magos.' },
+                { min: 10, text: 'Bon niveau. Revoyez les dates clés (nochebuena, nochevieja).' },
+                { min: 7, text: 'Moyen. Concentrez-vous sur les symboles (belén, misa del gallo).' },
+                { min: 0, text: 'À travailler. Relisez le vocabulaire illustré avec les images de Noël pour mieux mémoriser.' }
+            ]}
+        ];
+
+        let totalCorrect = 0;
+
+        themes.forEach(theme => {
+            const questions = document.querySelectorAll(`#${theme.id} .question`);
+            let correctAnswers = 0;
+            let answered = 0;
+
+            questions.forEach(question => {
+                const buttons = question.querySelectorAll('.option-btn');
+                buttons.forEach(button => {
+                    button.addEventListener('click', () => {
+                        if (button.disabled) return;
+                        const choice = button.dataset.choice;
+                        const correct = question.dataset.correct;
+                        const feedback = question.querySelector('.feedback');
+                        buttons.forEach(btn => btn.disabled = true);
+                        if (choice === correct) {
+                            feedback.textContent = 'Correct !';
+                            feedback.classList.add('correct');
+                            correctAnswers++;
+                            totalCorrect++;
+                        } else {
+                            feedback.textContent = `Incorrect. La bonne réponse est ${correct}.`;
+                            feedback.classList.add('incorrect');
+                        }
+                        feedback.style.display = 'block';
+                        answered++;
+                        if (answered === questions.length) {
+                            showBilan(theme, correctAnswers);
+                            if (themes.every(t => document.getElementById(t.bilan).style.display === 'block')) {
+                                showGlobalBilan();
+                            }
+                        }
+                    });
+                });
+            });
+        });
+
+        function showBilan(theme, correct) {
+            const bilan = document.getElementById(theme.bilan);
+            const scoreElem = document.getElementById(theme.scoreId);
+            const commentElem = document.getElementById(theme.commentId);
+            scoreElem.textContent = `Score : ${correct}/15`;
+            let comment = theme.comments.find(c => correct >= c.min) || theme.comments[theme.comments.length - 1];
+            commentElem.textContent = comment.text;
+            bilan.style.display = 'block';
+        }
+
+        function showGlobalBilan() {
+            const globalBilan = document.getElementById('global-bilan');
+            const totalScore = document.getElementById('total-score');
+            const globalComment = document.getElementById('global-comment');
+            totalScore.textContent = `Score total : ${totalCorrect}/30`;
+            let commentText;
+            if (totalCorrect >= 25) commentText = 'Maîtrise avancée ! Vous gérez bien les thèmes solidaires et festifs en espagnol.';
+            else if (totalCorrect >= 20) commentText = 'Bon travail. Un peu plus de pratique sur les phrases pour fluidifier.';
+            else if (totalCorrect >= 15) commentText = 'Niveau intermédiaire. Revoyez les documents attachés pour consolider.';
+            else commentText = 'Effort supplémentaire needed. Concentrez-vous sur les traductions bidirectionnelles et les contextes.';
+            globalComment.textContent = commentText;
+            globalBilan.style.display = 'block';
+        }
+    </script>
+</body>
+</html>
