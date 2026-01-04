@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>QCM – Méditerranée médiévale (Seconde)</title>
+<style>
+body{
+  font-family: "Segoe UI", Arial, sans-serif;
+  background:#f2f4f7;
+  margin:0;
+}
+.container{
+  max-width:900px;
+  margin:30px auto;
+  background:#fff;
+  padding:25px;
+  border-radius:10px;
+  box-shadow:0 4px 12px rgba(0,0,0,0.1);
+}
+h1{
+  text-align:center;
+  color:#2c3e50;
+}
+.progress{
+  font-weight:bold;
+  margin-bottom:15px;
+}
+.question{
+  font-size:1.1em;
+  margin-bottom:15px;
+}
+.answers label{
+  display:block;
+  padding:10px;
+  margin-bottom:8px;
+  border:1px solid #ccc;
+  border-radius:6px;
+  cursor:pointer;
+}
+.answers label:hover{
+  background:#ecf0f1;
+}
+button{
+  background:#8e44ad;
+  color:white;
+  border:none;
+  padding:12px 20px;
+  border-radius:6px;
+  font-size:1em;
+  cursor:pointer;
+}
+button:hover{
+  background:#6c3483;
+}
+.correction{
+  background:#f8f9fa;
+  border-left:4px solid #8e44ad;
+  padding:15px;
+  margin-bottom:15px;
+}
+.good{color:green;font-weight:bold;}
+.bad{color:red;font-weight:bold;}
+</style>
+</head>
+
+<body>
+<div class="container">
+<h1>QCM – La Méditerranée médiévale<br>Histoire – Seconde</h1>
+
+<div id="quiz"></div>
+<button id="nextBtn">Question suivante</button>
+<div id="result"></div>
+</div>
+
+<script>
+const quizData = [
+{
+q:"Pourquoi la Méditerranée est-elle un espace central au Moyen Âge ?",
+a:[
+"Elle sépare totalement les civilisations",
+"Elle est un espace vide et peu peuplé",
+"Elle est un carrefour d’échanges et de conflits",
+"Elle est contrôlée par une seule puissance"
+],
+c:2,
+e:"La Méditerranée est un carrefour reliant l’Europe, l’Afrique et l’Asie, marqué à la fois par des échanges et des conflits."
+},
+{
+q:"Quelles sont les trois grandes civilisations présentes en Méditerranée médiévale ?",
+a:[
+"Chrétienté, monde viking, monde perse",
+"Chrétienté latine, monde byzantin, monde musulman",
+"Empire romain, Empire ottoman, monde chrétien",
+"Europe, Afrique, Asie"
+],
+c:1,
+e:"La Méditerranée médiévale est dominée par la Chrétienté latine, le monde byzantin et le monde musulman."
+},
+{
+q:"Que signifie l’expression « gens du Livre » ?",
+a:[
+"Les peuples commerçants",
+"Les savants médiévaux",
+"Les religions partageant un livre sacré",
+"Les marchands juifs"
+],
+c:2,
+e:"Juifs, chrétiens et musulmans sont dits « gens du Livre » car ils partagent une tradition monothéiste fondée sur des textes sacrés."
+},
+{
+q:"Quelle division religieuse traverse le monde musulman ?",
+a:[
+"Catholiques / orthodoxes",
+"Sunnites / chiites",
+"Iconoclastes / iconodules",
+"Cathares / catholiques"
+],
+c:1,
+e:"La division entre sunnites et chiites naît d’un désaccord sur la succession du Prophète."
+},
+{
+q:"Quelle dynastie musulmane installe sa capitale à Bagdad ?",
+a:["Omeyyades","Fatimides","Abbassides","Seldjoukides"],
+c:2,
+e:"Les Abbassides (750-1258) font de Bagdad un grand centre politique et culturel."
+},
+{
+q:"Quel événement marque la rupture entre catholiques et orthodoxes ?",
+a:[
+"La première croisade",
+"Le schisme de 1054",
+"La chute de Rome",
+"La quatrième croisade"
+],
+c:1,
+e:"Le schisme de 1054 sépare durablement l’Église catholique et l’Église orthodoxe."
+},
+{
+q:"Qu’est-ce que la crise iconoclaste à Byzance ?",
+a:[
+"Un conflit entre musulmans et chrétiens",
+"Un refus du commerce",
+"Un rejet du culte des images",
+"Une invasion viking"
+],
+c:2,
+e:"Les iconoclastes refusent le culte des icônes, jugées idolâtres, ce qui divise l’Empire byzantin."
+},
+{
+q:"Qui lance l’appel à la première croisade en 1095 ?",
+a:[
+"Bernard de Clairvaux",
+"Saladin",
+"Urbain II",
+"Innocent III"
+],
+c:2,
+e:"Le pape Urbain II appelle à la croisade lors du concile de Clermont."
+},
+{
+q:"Quel est le résultat de la première croisade (1099) ?",
+a:[
+"La chute de Constantinople",
+"La prise de Jérusalem",
+"La défaite des croisés",
+"La fin des échanges"
+],
+c:1,
+e:"La première croisade aboutit à la prise de Jérusalem et à la création des États latins d’Orient."
+},
+{
+q:"Quel dirigeant musulman reprend Jérusalem en 1187 ?",
+a:["Nur ad-Din","Saladin","Averroès","Al-Hakim"],
+c:1,
+e:"Saladin reprend Jérusalem après la bataille de Hattin, tout en autorisant les pèlerinages."
+},
+{
+q:"Pourquoi la quatrième croisade est-elle un tournant majeur ?",
+a:[
+"Elle libère Jérusalem",
+"Elle attaque Constantinople",
+"Elle unit les chrétiens",
+"Elle met fin aux croisades"
+],
+c:1,
+e:"En 1204, Constantinople est pillée par les croisés, ce qui affaiblit durablement Byzance."
+},
+{
+q:"Quelle ville devient une grande puissance commerciale grâce aux croisades ?",
+a:["Rome","Paris","Venise","Londres"],
+c:2,
+e:"Venise profite des croisades pour dominer le commerce méditerranéen."
+},
+{
+q:"Quel espace est un foyer majeur d’échanges culturels entre religions ?",
+a:["Scandinavie","Al-Andalus","Angleterre","Germanie"],
+c:1,
+e:"Al-Andalus est un centre de traduction et de coexistence culturelle."
+},
+{
+q:"Qui est Averroès ?",
+a:[
+"Un pape",
+"Un chef de croisade",
+"Un philosophe musulman",
+"Un empereur byzantin"
+],
+c:2,
+e:"Averroès est un philosophe musulman andalou qui transmet Aristote à l’Occident."
+},
+{
+q:"Que montre l’exemple de la Sicile normande ?",
+a:[
+"Une Méditerranée fermée",
+"Un rejet des échanges",
+"Un métissage culturel",
+"Une domination exclusive chrétienne"
+],
+c:2,
+e:"La Sicile normande illustre la coexistence et le métissage entre cultures musulmane, byzantine et latine."
+}
+];
+
+let index=0, score=0, answers=[];
+const quiz=document.getElementById("quiz");
+const btn=document.getElementById("nextBtn");
+const result=document.getElementById("result");
+
+function loadQ(){
+  const q=quizData[index];
+  quiz.innerHTML=`
+    <div class="progress">Question ${index+1} / ${quizData.length}</div>
+    <div class="question">${q.q}</div>
+    <div class="answers">
+      ${q.a.map((x,i)=>`
+        <label><input type="radio" name="a" value="${i}"> ${x}</label>
+      `).join("")}
+    </div>`;
+}
+btn.onclick=()=>{
+  const sel=document.querySelector("input[name='a']:checked");
+  if(!sel) return alert("Choisissez une réponse.");
+  const v=+sel.value;
+  answers.push(v);
+  if(v===quizData[index].c) score++;
+  index++;
+  index<quizData.length?loadQ():showResult();
+}
+function showResult(){
+  quiz.style.display="none";
+  btn.style.display="none";
+  result.innerHTML=`<h2>Score : ${score} / ${quizData.length}</h2>`;
+  quizData.forEach((q,i)=>{
+    result.innerHTML+=`
+      <div class="correction">
+      <strong>Question ${i+1}</strong><br>${q.q}<br>
+      <span class="${answers[i]===q.c?'good':'bad'}">
+      Votre réponse : ${q.a[answers[i]]}
+      </span><br>
+      ✔ Réponse correcte : ${q.a[q.c]}<br>
+      <em>${q.e}</em>
+      </div>`;
+  });
+}
+loadQ();
+</script>
+</body>
+</html>
