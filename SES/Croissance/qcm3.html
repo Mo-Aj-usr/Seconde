@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QCM SES Seconde : Croissance économique et ses limites</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 850px; margin: 0 auto; padding: 20px; background-color: #f0f4f8; line-height: 1.6; }
+        h1 { text-align: center; color: #2c3e50; margin-bottom: 10px; }
+        .intro { text-align: center; font-size: 1.1em; margin-bottom: 30px; color: #34495e; }
+        #quiz-container { background-color: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .question-text { font-size: 1.25em; margin-bottom: 20px; color: #2c3e50; }
+        label { display: block; margin: 15px 0; cursor: pointer; padding: 12px; border-radius: 8px; transition: background 0.3s; font-size: 1.1em; }
+        label:hover { background-color: #ecf0f1; }
+        input[type="radio"] { margin-right: 15px; transform: scale(1.3); }
+        #feedback { margin-top: 25px; padding: 20px; border-radius: 8px; display: none; font-size: 1.1em; }
+        .correct { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .incorrect { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        #navigation { margin-top: 40px; text-align: center; }
+        button { padding: 12px 28px; margin: 0 15px; background-color: #3498db; color: white; border: none; border-radius: 8px; font-size: 1.1em; cursor: pointer; transition: background 0.3s; }
+        button:hover:not(:disabled) { background-color: #2980b9; }
+        button:disabled { background-color: #95a5a6; cursor: not-allowed; }
+        #finish { background-color: #27ae60; }
+        #finish:hover { background-color: #219150; }
+        #score { margin-top: 40px; text-align: center; font-size: 1.8em; font-weight: bold; color: #2c3e50; display: none; }
+    </style>
+</head>
+<body>
+    <h1>QCM SES Seconde : Croissance économique et ses limites</h1>
+    <p class="intro">15 questions sur le chapitre de SES en Seconde : mesure de la croissance, sources, limites et alternatives (PIB, productivité, développement durable, etc.).<br>Choisissez une réponse : l’explication apparaît immédiatement. Navigation libre avec les boutons.</p>
+
+    <div id="quiz-container">
+        <div id="question"></div>
+        <div id="options"></div>
+        <div id="feedback"></div>
+    </div>
+
+    <div id="navigation">
+        <button id="prev">Précédent</button>
+        <button id="next">Suivant</button>
+        <button id="finish">Terminer</button>
+    </div>
+
+    <div id="score"></div>
+
+    <script>
+        const questions = [
+            {
+                text: "Que mesure principalement le PIB ?",
+                options: ["A. Le bien-être de la population", "B. La valeur totale des biens et services produits dans un pays", "C. Les inégalités de revenus", "D. La dégradation de l’environnement"],
+                correct: "B",
+                explanation: "Le PIB est l’indicateur central de la production économique (valeur totale des biens et services produits)."
+            },
+            {
+                text: "Quelle est la différence entre PIB nominal et PIB réel ?",
+                options: ["A. Le PIB réel est corrigé de l’inflation", "B. Le PIB nominal inclut les inégalités", "C. Le PIB réel mesure le bien-être", "D. Le PIB nominal est toujours plus élevé"],
+                correct: "A",
+                explanation: "Le PIB réel est ajusté pour l’inflation, permettant des comparaisons dans le temps."
+            },
+            {
+                text: "Comment calcule-t-on le taux de croissance du PIB ?",
+                options: ["A. (PIB année n – PIB année n-1) / PIB année n-1 × 100", "B. PIB année n / PIB année n-1", "C. PIB nominal – PIB réel", "D. PIB total ÷ population"],
+                correct: "A",
+                explanation: "Formule : variation relative du PIB réel en pourcentage."
+            },
+            {
+                text: "Quelle est une limite majeure du PIB ?",
+                options: ["A. Il ne prend pas en compte les inégalités", "B. Il mesure uniquement l’inflation", "C. Il inclut toujours le travail domestique", "D. Il est toujours supérieur à l’IDH"],
+                correct: "A",
+                explanation: "Le PIB ignore les inégalités, le travail non rémunéré et la dégradation environnementale."
+            },
+            {
+                text: "Quel indicateur complète le PIB en intégrant santé, éducation et niveau de vie ?",
+                options: ["A. IDH (Indice de Développement Humain)", "B. Empreinte écologique", "C. Taux de chômage", "D. Productivité du capital"],
+                correct: "A",
+                explanation: "L’IDH mesure un développement plus large que la seule richesse économique."
+            },
+            {
+                text: "Quels sont les deux facteurs principaux de production selon le cours ?",
+                options: ["A. Capital et travail", "B. Ressources naturelles et innovation", "C. Consommation et exportations", "D. Inégalités et chômage"],
+                correct: "A",
+                explanation: "La croissance repose sur le capital (machines, infrastructures) et le travail (force de travail)."
+            },
+            {
+                text: "Qu’est-ce que le progrès technique ?",
+                options: ["A. Innovations permettant de produire plus avec les mêmes ressources", "B. Augmentation du nombre de travailleurs", "C. Hausse des prix des matières premières", "D. Réduction des inégalités"],
+                correct: "A",
+                explanation: "Il inclut innovations de produit, de procédé et organisationnelles."
+            },
+            {
+                text: "Que mesure la productivité du travail ?",
+                options: ["A. Production par heure travaillée", "B. Nombre total d’emplois", "C. Valeur du capital investi", "D. Taux d’inflation"],
+                correct: "A",
+                explanation: "Productivité = quantité produite / quantité de facteurs utilisés (ici travail)."
+            },
+            {
+                text: "Quelle est une limite liée aux ressources naturelles ?",
+                options: ["A. Leur caractère fini et leur possible épuisement", "B. Leur abondance infinie", "C. Leur gratuité totale", "D. Leur absence d’impact sur l’environnement"],
+                correct: "A",
+                explanation: "La surexploitation entraîne épuisement et hausse des coûts."
+            },
+            {
+                text: "Qu’est-ce qu’une externalité négative de la croissance ?",
+                options: ["A. Pollution et réchauffement climatique", "B. Création d’emplois", "C. Hausse du PIB", "D. Progrès technique"],
+                correct: "A",
+                explanation: "Conséquences non prises en compte dans le prix de marché (pollution, etc.)."
+            },
+            {
+                text: "Que signifie « croissance verte » ?",
+                options: ["A. Croissance minimisant les impacts environnementaux", "B. Croissance maximale du PIB", "C. Croissance uniquement dans les pays riches", "D. Croissance sans progrès technique"],
+                correct: "A",
+                explanation: "Compatibilité entre croissance économique et préservation de l’environnement."
+            },
+            {
+                text: "Quel concept repose sur économie, justice sociale et environnement ?",
+                options: ["A. Développement durable", "B. Croissance nominale", "C. Productivité du capital", "D. Chômage structurel"],
+                correct: "A",
+                explanation: "Les trois piliers du développement durable."
+            },
+            {
+                text: "Quel indicateur mesure la pression humaine sur les ressources naturelles ?",
+                options: ["A. Empreinte écologique", "B. PIB réel", "C. Taux de croissance", "D. Productivité"],
+                correct: "A",
+                explanation: "Il compare la consommation aux capacités de la planète."
+            },
+            {
+                text: "La transition énergétique vise à :",
+                options: ["A. Développer les énergies renouvelables et l’économie circulaire", "B. Augmenter la dépendance au pétrole", "C. Réduire la productivité", "D. Accroître les inégalités"],
+                correct: "A",
+                explanation: "Pour réduire pollution, dépendance aux fossiles et créer des emplois verts."
+            },
+            {
+                text: "Pourquoi la croissance peut-elle accentuer les inégalités ?",
+                options: ["A. Ses bénéfices ne sont pas également répartis", "B. Elle réduit toujours les revenus", "C. Elle supprime tous les emplois", "D. Elle ignore le progrès technique"],
+                correct: "A",
+                explanation: "Certaines populations restent exclues des gains de la croissance."
+            }
+        ];
+
+        let currentQuestion = 0;
+        const userAnswers = Array(questions.length).fill(null);
+        const feedback = document.getElementById('feedback');
+
+        function displayQuestion(index) {
+            currentQuestion = index;
+            document.getElementById('question').innerHTML = `<div class="question-text">${index + 1}/${questions.length} : ${questions[index].text}</div>`;
+            const optionsDiv = document.getElementById('options');
+            optionsDiv.innerHTML = '';
+            questions[index].options.forEach((opt, i) => {
+                const label = document.createElement('label');
+                const radio = document.createElement('input');
+                radio.type = 'radio';
+                radio.name = 'choice';
+                radio.value = String.fromCharCode(65 + i);
+                radio.checked = userAnswers[index] === radio.value;
+                radio.onchange = () => check(radio.value, index);
+                label.appendChild(radio);
+                label.appendChild(document.createTextNode(' ' + opt));
+                optionsDiv.appendChild(label);
+            });
+
+            if (userAnswers[index] !== null) {
+                showFeedback(userAnswers[index], index);
+            } else {
+                feedback.style.display = 'none';
+            }
+
+            document.getElementById('prev').disabled = index === 0;
+            document.getElementById('next').disabled = index === questions.length - 1;
+        }
+
+        function check(choice, index) {
+            userAnswers[index] = choice;
+            showFeedback(choice, index);
+        }
+
+        function showFeedback(choice, index) {
+            const correct = questions[index].correct;
+            feedback.style.display = 'block';
+            if (choice === correct) {
+                feedback.className = 'correct';
+                feedback.innerHTML = `<strong>Correct !</strong> ${questions[index].explanation}`;
+            } else {
+                feedback.className = 'incorrect';
+                feedback.innerHTML = `<strong>Incorrect.</strong> Bonne réponse : ${correct}. ${questions[index].explanation}`;
+            }
+        }
+
+        function showFinalScore() {
+            let score = userAnswers.filter((a, i) => a === questions[i].correct).length;
+            document.getElementById('quiz-container').style.display = 'none';
+            document.getElementById('navigation').style.display = 'none';
+            document.getElementById('score').innerHTML = `<strong>Votre score final : ${score} / 15</strong><br>Bravo ! Vous pouvez revoir les questions si vous le souhaitez.`;
+            document.getElementById('score').style.display = 'block';
+        }
+
+        document.getElementById('prev').onclick = () => displayQuestion(currentQuestion - 1);
+        document.getElementById('next').onclick = () => displayQuestion(currentQuestion + 1);
+        document.getElementById('finish').onclick = showFinalScore;
+
+        displayQuestion(0);
+    </script>
+</body>
+</html>

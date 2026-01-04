@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QCM SES 2nde : Croissance et Limites</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: #f5f7fa;
+    margin: 0;
+    padding: 0;
+  }
+  .container {
+    max-width: 800px;
+    margin: 50px auto;
+    background: #fff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  }
+  h1 { text-align: center; color: #2c3e50; }
+  .question { font-weight: bold; margin-bottom: 15px; }
+  .answers button {
+    display: block;
+    width: 100%;
+    margin: 8px 0;
+    padding: 12px;
+    font-size: 16px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    background: #ecf0f1;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  .answers button:hover { background: #d1d8e0; }
+  .answers button.selected { background: #3498db; color: #fff; }
+  .feedback {
+    margin-top: 15px;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 15px;
+    display: none;
+  }
+  .correct { background: #2ecc71; color: #fff; }
+  .incorrect { background: #e74c3c; color: #fff; }
+  .navigation {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+  .navigation button {
+    padding: 12px 25px;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    color: #fff;
+    background: #34495e;
+    transition: background 0.3s;
+  }
+  .navigation button:hover { background: #2c3e50; }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h1>QCM SES 2nde : Croissance et Limites</h1>
+  <div id="quiz">
+    <div class="question" id="question"></div>
+    <div class="answers" id="answers"></div>
+    <div class="feedback" id="feedback"></div>
+    <div class="navigation">
+      <button id="prev">Précédent</button>
+      <button id="next">Suivant</button>
+      <button id="finish">Terminer</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const quizData = [
+  {
+    question: "1. Que mesure le PIB ?",
+    answers: [
+      "La qualité de vie des habitants",
+      "La production totale de biens et services",
+      "Le niveau d'éducation moyen",
+      "La quantité de ressources naturelles"
+    ],
+    correct: 1,
+    explanation: "Le PIB mesure la valeur totale des biens et services produits dans un pays sur une période donnée."
+  },
+  {
+    question: "2. Quel est le PIB réel ?",
+    answers: [
+      "Le PIB calculé en prix courants",
+      "Le PIB ajusté pour l’inflation",
+      "Le PIB incluant le bénévolat",
+      "Le PIB moyen par habitant"
+    ],
+    correct: 1,
+    explanation: "Le PIB réel est corrigé de l’inflation, permettant une comparaison dans le temps."
+  },
+  {
+    question: "3. Le PIB prend-il en compte les inégalités de revenus ?",
+    answers: ["Oui", "Non"],
+    correct: 1,
+    explanation: "Le PIB ne mesure que la production, pas la répartition des revenus."
+  },
+  {
+    question: "4. Quels sont les deux principaux facteurs de la croissance ?",
+    answers: ["Capital et travail", "Population et climat", "Technologie et culture", "Éducation et santé"],
+    correct: 0,
+    explanation: "La croissance repose sur le capital (machines, infrastructures) et le travail (force de travail)."
+  },
+  {
+    question: "5. Qu’est-ce que le progrès technique ?",
+    answers: [
+      "Augmentation de la population active",
+      "Innovations permettant de produire plus avec les mêmes ressources",
+      "Accumulation de capital",
+      "Hausse du PIB nominal"
+    ],
+    correct: 1,
+    explanation: "Le progrès technique englobe innovations de produit, procédé ou organisation, augmentant l'efficacité."
+  },
+  {
+    question: "6. Comment mesure-t-on la productivité du travail ?",
+    answers: [
+      "Production totale par année",
+      "Production par heure de travail",
+      "Nombre de machines utilisées",
+      "PIB nominal divisé par le PIB réel"
+    ],
+    correct: 1,
+    explanation: "La productivité du travail est la production par unité de travail, souvent par heure."
+  },
+  {
+    question: "7. Quelles sont des limites liées aux ressources naturelles ?",
+    answers: [
+      "Inflation et chômage",
+      "Épuisement des ressources et hausse des coûts",
+      "Innovation et progrès technique",
+      "Éducation et santé"
+    ],
+    correct: 1,
+    explanation: "Les ressources finies, si surexploitées, peuvent s'épuiser et augmenter les coûts de production."
+  },
+  {
+    question: "8. La croissance peut générer des externalités négatives. Exemple ?",
+    answers: [
+      "Augmentation du PIB réel",
+      "Pollution de l’air et de l’eau",
+      "Hausse du niveau de vie",
+      "Progrès technique"
+    ],
+    correct: 1,
+    explanation: "Les externalités négatives incluent la pollution et la dégradation de l’environnement."
+  },
+  {
+    question: "9. Quel indicateur complète le PIB pour mesurer le bien-être ?",
+    answers: ["IDH", "Taux de croissance", "Productivité", "Capital"],
+    correct: 0,
+    explanation: "L’IDH combine santé, éducation et niveau de vie pour mieux refléter le bien-être."
+  },
+  {
+    question: "10. La croissance soutenable vise à concilier :",
+    answers: [
+      "PIB nominal et PIB réel",
+      "Performance économique, justice sociale et protection de l’environnement",
+      "Innovation et chômage",
+      "Capital et travail uniquement"
+    ],
+    correct: 1,
+    explanation: "La croissance durable doit être économiquement efficace, socialement équitable et écologiquement responsable."
+  },
+  {
+    question: "11. L’empreinte écologique mesure :",
+    answers: [
+      "La richesse monétaire d’un pays",
+      "La pression humaine sur les ressources naturelles",
+      "Le taux de croissance du PIB",
+      "La productivité du capital"
+    ],
+    correct: 1,
+    explanation: "Elle évalue l’impact des activités humaines sur les ressources naturelles."
+  },
+  {
+    question: "12. La croissance verte consiste à :",
+    answers: [
+      "Minimiser l’impact environnemental",
+      "Maximiser le PIB nominal",
+      "Augmenter les inégalités",
+      "Limiter le progrès technique"
+    ],
+    correct: 0,
+    explanation: "La croissance verte cherche à réduire la pollution et à préserver les ressources tout en produisant."
+  },
+  {
+    question: "13. Le chômage et le sous-emploi sont des limites :",
+    answers: ["Économiques et sociales", "Environnementales", "Techniques", "Productives uniquement"],
+    correct: 0,
+    explanation: "Même avec une croissance, tout le travail disponible n’est pas toujours absorbé."
+  },
+  {
+    question: "14. Le taux de croissance du PIB se calcule comment ?",
+    answers: [
+      "(PIB nominal ÷ PIB réel) × 100",
+      "((PIB réel année n - PIB réel année n-1)/PIB réel année n-1) × 100",
+      "PIB réel × population",
+      "PIB réel - PIB nominal"
+    ],
+    correct: 1,
+    explanation: "Taux de croissance = variation annuelle du PIB réel exprimée en pourcentage."
+  },
+  {
+    question: "15. L’IDH et le BNB sont utilisés pour :",
+    answers: [
+      "Mesurer uniquement le PIB",
+      "Mesurer la qualité et la soutenabilité de la croissance",
+      "Calculer la productivité",
+      "Évaluer les ressources naturelles"
+    ],
+    correct: 1,
+    explanation: "Ces indicateurs vont au-delà du PIB pour mesurer le bien-être et la soutenabilité."
+  }
+];
+
+let current = 0;
+
+function showQuestion() {
+  const q = quizData[current];
+  document.getElementById('question').innerText = q.question;
+  const answersDiv = document.getElementById('answers');
+  answersDiv.innerHTML = '';
+  q.answers.forEach((a, i) => {
+    const btn = document.createElement('button');
+    btn.innerText = a;
+    btn.addEventListener('click', () => selectAnswer(i));
+    answersDiv.appendChild(btn);
+  });
+  document.getElementById('feedback').style.display = 'none';
+}
+
+function selectAnswer(i) {
+  const q = quizData[current];
+  const feedback = document.getElementById('feedback');
+  const buttons = document.querySelectorAll('#answers button');
+  buttons.forEach(btn => btn.disabled = true);
+  buttons[i].classList.add('selected');
+  
+  if (i === q.correct) {
+    feedback.className = 'feedback correct';
+    feedback.innerText = "Correct ! " + q.explanation;
+  } else {
+    feedback.className = 'feedback incorrect';
+    feedback.innerText = "Incorrect. " + q.explanation;
+  }
+  feedback.style.display = 'block';
+}
+
+document.getElementById('next').addEventListener('click', () => {
+  if (current < quizData.length - 1) current++;
+  showQuestion();
+});
+document.getElementById('prev').addEventListener('click', () => {
+  if (current > 0) current--;
+  showQuestion();
+});
+document.getElementById('finish').addEventListener('click', () => {
+  alert("Quiz terminé ! Vous pouvez revoir les questions ou fermer la page.");
+});
+
+showQuestion();
+</script>
+
+</body>
+</html>

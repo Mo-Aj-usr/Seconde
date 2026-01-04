@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QCM SES 2nde - Croissance économique et ses limites</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .quiz-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            max-width: 900px;
+            width: 100%;
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .quiz-header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            width: 6.67%;
+            transition: width 0.3s ease;
+            border-radius: 4px;
+        }
+
+        .question-counter {
+            font-size: 18px;
+            font-weight: 500;
+        }
+
+        .question-container {
+            padding: 40px 30px;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .question-number {
+            background: linear-gradient(135deg, #ff7e5f, #feb47b);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 15px;
+            font-size: 16px;
+        }
+
+        .question-title {
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 25px;
+            color: #333;
+            line-height: 1.4;
+        }
+
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .option {
+            padding: 20px 25px;
+            border: 2px solid #e1e5e9;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 16px;
+            background: #f8f9fa;
+            position: relative;
+        }
+
+        .option:hover:not(.feedback) {
+            border-color: #1e3c72;
+            background: #f0f7ff;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(30,60,114,0.1);
+        }
+
+        .option.selected {
+            border-color: #2a5298;
+            background: #e3f2fd;
+            box-shadow: 0 5px 15px rgba(42,82,152,0.2);
+        }
+
+        .option.correct {
+            border-color: #28a745 !important;
+            background: linear-gradient(135deg, #d4edda, #c3e6cb);
+            box-shadow: 0 5px 15px rgba(40,167,69,0.2);
+        }
+
+        .option.incorrect {
+            border-color: #dc3545 !important;
+            background: linear-gradient(135deg, #f8d7da, #f5c6cb);
+            box-shadow: 0 5px 15px rgba(220,53,69,0.2);
+        }
+
+        .feedback {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border: 2px solid #dee2e6;
+            cursor: default;
+            margin-top: 20px;
+            padding: 25px;
+            border-radius: 12px;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .feedback-icon {
+            font-size: 32px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .feedback.correct .feedback-icon { color: #28a745; }
+        .feedback.incorrect .feedback-icon { color: #dc3545; }
+
+        .feedback-explanation {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #495057;
+            margin-top: 10px;
+        }
+
+        .feedback strong {
+            color: #1e3c72;
+        }
+
+        .navigation {
+            padding: 25px 30px;
+            background: #f8f9fa;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid #dee2e6;
+            gap: 15px;
+        }
+
+        .nav-btn {
+            flex: 1;
+            padding: 14px 20px;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .nav-btn:hover::before {
+            left: 100%;
+        }
+
+        .prev-btn {
+            background: linear-gradient(135deg, #6c757d, #5a6268);
+            color: white;
+        }
+
+        .prev-btn:disabled {
+            background: #dee2e6;
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+
+        .next-btn {
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            color: white;
+            font-weight: 600;
+        }
+
+        .finish-btn {
+            background: linear-gradient(135deg, #28a745, #1e7e34);
+            color: white;
+            font-weight: 600;
+        }
+
+        .nav-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+        @media (max-width: 768px) {
+            .navigation {
+                flex-direction: column;
+                gap: 12px;
+            }
+            .question-title { font-size: 18px; }
+            .question-container { padding: 30px 20px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container" id="quizContainer">
+        <div class="quiz-header">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="question-counter" id="questionCounter">
+                Question <span id="currentQuestion">1</span>/15 - SES 2nde
+            </div>
+        </div>
+
+        <div class="question-container" id="questionContainer"></div>
+
+        <div class="navigation" id="navigation">
+            <button class="nav-btn prev-btn" id="prevBtn">⬅️ Précédent</button>
+            <button class="nav-btn next-btn" id="nextBtn">Suivant ➡️</button>
+            <button class="nav-btn finish-btn" id="finishBtn" style="display: none;">✅ Terminer</button>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            // 1. PIB nominal vs réel
+            {
+                question: "Quelle est la différence entre <strong>PIB nominal</strong> et <strong>PIB réel</strong> ?",
+                options: [
+                    "PIB nominal ajusté inflation, PIB réel en prix courants",
+                    "PIB nominal en prix courants, PIB réel corrigé de l'inflation",
+                    "PIB nominal mesure le bien-être, PIB réel la production",
+                    "Aucune différence"
+                ],
+                correct: 1,
+                explanation: "PIB nominal = prix courants (non ajusté inflation). PIB réel = corrigé inflation pour comparer dans le temps."
+            },
+
+            // 2. Calcul taux de croissance
+            {
+                question: "Si PIB réel passe de 1000 à 1050 Md€, le taux de croissance est :",
+                options: [
+                    "5%",
+                    "50%",
+                    "0,5%",
+                    "10%"
+                ],
+                correct: 0,
+                explanation: "<code>Taux = (1050-1000)/1000 × 100 = 5%</code> (formule standard du programme)."
+            },
+
+            // 3. Limite du PIB
+            {
+                question: "Quelle limite du PIB n'est <strong>PAS</strong> prise en compte ?",
+                options: [
+                    "Production de biens",
+                    "Inégalités de revenus",
+                    "Travail domestique non rémunéré",
+                    "Dégradation environnementale"
+                ],
+                correct: 0,
+                explanation: "PIB mesure production marchande uniquement, ignore inégalités, travail non payé, pollution."
+            },
+
+            // 4. Facteurs de production
+            {
+                question: "Les deux facteurs principaux de la croissance sont :",
+                options: [
+                    "Capital et progrès technique",
+                    "<strong>Capital et travail</strong>",
+                    "Travail et environnement",
+                    "Innovation et inégalités"
+                ],
+                correct: 1,
+                explanation: "Capital (machines, infrastructures) + Travail (heures travaillées) = production accrue."
+            },
+
+            // 5. Progrès technique
+            {
+                question: "Le <strong>progrès technique</strong> permet de :",
+                options: [
+                    "Produire moins avec plus de ressources",
+                    "Produire <strong>plus avec les mêmes ressources</strong>",
+                    "Augmenter les inégalités",
+                    "Réduire la productivité"
+                ],
+                correct: 1,
+                explanation: "Innovations (produit, procédé, organisation) → +production avec mêmes inputs."
+            },
+
+            // 6. Productivité du travail
+            {
+                question: "Productivité du travail = ",
+                options: [
+                    "Heures / Production",
+                    "<strong>Production / Heure de travail</strong>",
+                    "Capital / Travail",
+                    "PIB / Population"
+                ],
+                correct: 1,
+                explanation: "Efficacité : quantité produite par unité de travail (programme 2.3)."
+            },
+
+            // 7. Limites ressources naturelles
+            {
+                question: "La surexploitation des ressources entraîne :",
+                options: [
+                    "Baisse des coûts",
+                    "<strong>Épuisement + hausse coûts</strong>",
+                    "Amélioration environnement",
+                    "Réduction inégalités"
+                ],
+                correct: 1,
+                explanation: "Ressources finies (pétrole, eau) → épuisement → coûts ↑ (programme 3.1)."
+            },
+
+            // 8. Externalités négatives
+            {
+                question: "Exemple d'<strong>externalité négative</strong> de la croissance :",
+                options: [
+                    "Création d'emplois",
+                    "<strong>Pollution atmosphérique</strong>",
+                    "Hausse du PIB",
+                    "Innovation"
+                ],
+                correct: 1,
+                explanation: "Conséquences non prises en compte : pollution, climat, biodiversité (3.2)."
+            },
+
+            // 9. Limites sociales
+            {
+                question: "La croissance peut aggraver :",
+                options: [
+                    "<strong>Les inégalités</strong>",
+                    "Le plein emploi",
+                    "La soutenabilité",
+                    "L'IDH"
+                ],
+                correct: 0,
+                explanation: "Croissance ≠ répartition égale des bénéfices (3.3)."
+            },
+
+            // 10. IDH
+            {
+                question: "L'<strong>IDH</strong> mesure :",
+                options: [
+                    "Seul le PIB",
+                    "<strong>Santé + Éducation + Niveau de vie</strong>",
+                    "Empreinte écologique",
+                    "Chômage"
+                ],
+                correct: 1,
+                explanation: "Indice de Développement Humain : complément au PIB (4.2)."
+            },
+
+            // 11. Développement durable
+            {
+                question: "Développement durable = ",
+                options: [
+                    "Croissance infinie",
+                    "<strong>Éco + Social + Environnement</strong>",
+                    "PIB maximum",
+                    "Ressources illimitées"
+                ],
+                correct: 1,
+                explanation: "Concilie performance éco, justice sociale, protection environnement (4.1)."
+            },
+
+            // 12. Croissance verte
+            {
+                question: "Croissance verte = croissance qui :",
+                options: [
+                    "Maximise pollution",
+                    "<strong>Minimise impacts environnementaux</strong>",
+                    "Ignore énergies renouvelables",
+                    "Augmente dépendance pétrole"
+                ],
+                correct: 1,
+                explanation: "Énergies renouvelables + efficacité énergétique (4.3)."
+            },
+
+            // 13. Empreinte écologique
+            {
+                question: "Empreinte écologique mesure :",
+                options: [
+                    "Bonheur",
+                    "<strong>Pression humaine sur ressources naturelles</strong>",
+                    "Taux de croissance",
+                    "Productivité"
+                ],
+                correct: 1,
+                explanation: "Impact de l'activité humaine sur la planète (4.2)."
+            },
+
+            // 14. Chômage
+            {
+                question: "Limite économique de la croissance :",
+                options: [
+                    "<strong>Chômage si croissance insuffisante</strong>",
+                    "Plein emploi automatique",
+                    "Inégalités réduites",
+                    "Crises impossibles"
+                ],
+                correct: 0,
+                explanation: "Croissance faible ≠ absorption toute main-d'œuvre (3.3)."
+            },
+
+            // 15. Synthèse
+            {
+                question: "Quelle source explique <strong>principalement</strong> croissance long terme ?",
+                options: [
+                    "Augmentation capital",
+                    "Plus de travail",
+                    "<strong>Progrès technique</strong>",
+                    "Réduction inégalités"
+                ],
+                correct: 2,
+                explanation: "Progrès technique = clé croissance moderne (2.2-2.3)."
+            }
+        ];
+
+        let currentQuestion = 0;
+        let answers = new Array(questions.length).fill(null);
+        let feedbackShown = new Array(questions.length).fill(false);
+
+        const elements = {
+            container: document.getElementById('quizContainer'),
+            questionContainer: document.getElementById('questionContainer'),
+            prevBtn: document.getElementById('prevBtn'),
+            nextBtn: document.getElementById('nextBtn'),
+            finishBtn: document.getElementById('finishBtn'),
+            progressFill: document.getElementById('progressFill'),
+            questionCounter: document.getElementById('currentQuestion')
+        };
+
+        function loadQuestion(index) {
+            const q = questions[index];
+            const userAnswer = answers[index];
+            const hasFeedback = feedbackShown[index];
+            const isAnswered = userAnswer !== null;
+
+            let html = `
+                <div style="display: flex; align-items: flex-start; margin-bottom: 25px;">
+                    <div class="question-number">${index + 1}</div>
+                    <div class="question-title">${q.question}</div>
+                </div>
+                <div class="options-container">
+            `;
+
+            q.options.forEach((option, i) => {
+                let classes = 'option';
+                if (hasFeedback) {
+                    if (i === q.correct) classes += ' correct';
+                    if (userAnswer === i && i !== q.correct) classes += ' incorrect';
+                } else if (isAnswered && userAnswer === i) {
+                    classes += ' selected';
+                }
+                const onclick = hasFeedback ? '' : `onclick="selectOption(${index}, ${i})"`;
+                html += `<div class="${classes}" ${onclick}>${String.fromCharCode(65 + i)}. ${option}</div>`;
+            });
+
+            html += '</div>';
+
+            if (hasFeedback && isAnswered) {
+                const isCorrect = userAnswer === q.correct;
+                html += `
+                    <div class="feedback ${isCorrect ? 'correct' : 'incorrect'}">
+                        <div class="feedback-icon">${isCorrect ? '✅ Correct !' : '❌ Incorrect'}</div>
+                        <div class="feedback-explanation">${q.explanation}</div>
+                    </div>
+                `;
+            }
+
+            elements.questionContainer.innerHTML = html;
+            updateNavigation();
+            updateProgress();
+        }
+
+        function selectOption(questionIndex, optionIndex) {
+            if (feedbackShown[questionIndex]) return;
+            answers[questionIndex] = optionIndex;
+            feedbackShown[questionIndex] = true;
+            loadQuestion(questionIndex);
+        }
+
+        function updateProgress() {
+            const answeredCount = answers.filter(a => a !== null).length;
+            const progress = (answeredCount / questions.length) * 100;
+            elements.progressFill.style.width = `${progress}%`;
+            elements.questionCounter.textContent = currentQuestion + 1;
+        }
+
+        function updateNavigation() {
+            elements.prevBtn.disabled = currentQuestion === 0;
+            const allAnswered = answers.every(a => a !== null);
+            elements.nextBtn.style.display = allAnswered ? 'none' : 'block';
+            elements.finishBtn.style.display = allAnswered ? 'block' : 'none';
+        }
+
+        function nextQuestion() {
+            if (currentQuestion < questions.length - 1) {
+                currentQuestion++;
+                loadQuestion(currentQuestion);
+            }
+        }
+
+        function prevQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                loadQuestion(currentQuestion);
+            }
+        }
+
+        function finishQuiz() {
+            const score = answers.filter((ans, i) => ans === questions[i].correct).length;
+            const percentage = Math.round((score / 15) * 100);
+            elements.container.innerHTML = `
+                <div class="quiz-header">
+                    <div class="progress-bar"><div class="progress-fill" style="width:100%; background: linear-gradient(135deg, #28a745, #20c997);"></div></div>
+                    <div style="font-size:24px; font-weight:600; margin-bottom:10px;">🎉 Quiz terminé !</div>
+                    <div style="font-size:20px;">Score: <strong>${score}/15 (${percentage}%)</strong></div>
+                </div>
+                <div style="padding:40px; text-align:center;">
+                    <button onclick="location.reload()" style="
+                        padding:20px 50px; background:linear-gradient(135deg, #ff7e5f, #feb47b);
+                        color:white; border:none; border-radius:30px; font-size:18px; font-weight:600;
+                        cursor:pointer; transition:all 0.3s; margin:10px;
+                    " onmouseover="this.style.transform='scale(1.05)'">
+                        🔄 Refaire le Quiz
+                    </button>
+                </div>
+            `;
+        }
+
+        // Event Listeners
+        elements.prevBtn.onclick = prevQuestion;
+        elements.nextBtn.onclick = nextQuestion;
+        elements.finishBtn.onclick = finishQuiz;
+
+        // Start
+        loadQuestion(0);
+    </script>
+</body>
+</html>
