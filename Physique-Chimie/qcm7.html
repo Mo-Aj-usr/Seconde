@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>QCM Physique-Chimie 2nde – Cortège électronique</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f2f6fa;
+        padding: 20px;
+    }
+    h1 {
+        text-align: center;
+        color: #2c3e50;
+    }
+    .question {
+        background: #ffffff;
+        padding: 15px;
+        margin-bottom: 15px;
+        border-radius: 8px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    label {
+        display: block;
+        margin: 6px 0;
+        cursor: pointer;
+    }
+    button {
+        display: block;
+        margin: 30px auto;
+        padding: 12px 25px;
+        font-size: 16px;
+        background-color: #2980b9;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+    }
+    button:hover {
+        background-color: #21618c;
+    }
+    #resultats {
+        display: none;
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        margin-top: 30px;
+    }
+    .bonne { color: green; }
+    .fausse { color: red; }
+</style>
+</head>
+
+<body>
+
+<h1>QCM – Le cortège électronique (2nde)</h1>
+
+<div id="quiz"></div>
+
+<button onclick="corriger()">Valider le QCM</button>
+
+<div id="resultats"></div>
+
+<script>
+const questions = [
+{
+q: "Qu’appelle-t-on le cortège électronique d’un atome ?",
+choices: [
+"L’ensemble des nucléons",
+"L’ensemble des électrons autour du noyau",
+"Le noyau uniquement",
+"Les électrons de valence seulement"
+],
+answer: 1,
+explication: "Le cortège électronique correspond à l’ensemble des électrons qui entourent le noyau."
+},
+{
+q: "Quelle est la charge électrique d’un électron ?",
+choices: ["Positive", "Nulle", "Négative", "Variable"],
+answer: 2,
+explication: "Un électron porte une charge électrique négative."
+},
+{
+q: "Quelle couche électronique est remplie en premier ?",
+choices: ["2s", "1s", "2p", "3s"],
+answer: 1,
+explication: "La couche 1s est la première couche occupée par les électrons."
+},
+{
+q: "Combien d’électrons maximum peut contenir la couche 1s ?",
+choices: ["1", "2", "6", "8"],
+answer: 1,
+explication: "La sous-couche 1s peut contenir au maximum 2 électrons."
+},
+{
+q: "Quelle est la configuration électronique de l’atome de carbone (Z = 6) ?",
+choices: [
+"1s² 2s² 2p²",
+"1s² 2s⁴",
+"1s² 2p⁴",
+"1s² 2s²"
+],
+answer: 0,
+explication: "Le carbone possède 6 électrons répartis : 1s² 2s² 2p²."
+},
+{
+q: "Que sont les électrons de valence ?",
+choices: [
+"Les électrons du noyau",
+"Les électrons les plus proches du noyau",
+"Les électrons de la couche externe",
+"Les électrons libres"
+],
+answer: 2,
+explication: "Les électrons de valence sont les électrons de la couche externe."
+},
+{
+q: "Quel est le nombre d’électrons de valence de l’oxygène (Z = 8) ?",
+choices: ["2", "4", "6", "8"],
+answer: 2,
+explication: "Configuration : 1s² 2s² 2p⁴ → 6 électrons de valence."
+},
+{
+q: "Pourquoi les gaz nobles sont-ils chimiquement stables ?",
+choices: [
+"Ils n’ont pas d’électrons",
+"Leur noyau est plus lourd",
+"Leur couche externe est saturée",
+"Ils forment toujours des ions"
+],
+answer: 2,
+explication: "La couche externe des gaz nobles est complète, ce qui les rend stables."
+},
+{
+q: "Quel est le gaz noble de la 2e période ?",
+choices: ["Hélium", "Néon", "Argon", "Krypton"],
+answer: 1,
+explication: "Le néon est le gaz noble de la deuxième période."
+},
+{
+q: "À partir de combien d’électrons la couche externe est-elle saturée (hors première couche) ?",
+choices: ["2", "4", "6", "8"],
+answer: 3,
+explication: "Les couches externes (s et p) sont stables avec 8 électrons (règle de l’octet)."
+},
+{
+q: "Quel ion se forme lorsque l’atome de sodium perd un électron ?",
+choices: ["Na⁻", "Na²⁺", "Na⁺", "Na"],
+answer: 2,
+explication: "Le sodium perd un électron et forme l’ion Na⁺."
+},
+{
+q: "Quelle est la configuration électronique de l’atome de néon (Z = 10) ?",
+choices: [
+"1s² 2s² 2p⁶",
+"1s² 2s² 2p⁴",
+"1s² 2p⁸",
+"1s² 2s⁶"
+],
+answer: 0,
+explication: "Le néon possède une couche externe saturée : 1s² 2s² 2p⁶."
+},
+{
+q: "À quelle famille chimique appartient le chlore ?",
+choices: ["Gaz nobles", "Métaux alcalins", "Halogènes", "Alcalino-terreux"],
+answer: 2,
+explication: "Le chlore appartient à la famille des halogènes."
+},
+{
+q: "Quel lien existe-t-il entre famille chimique et électrons de valence ?",
+choices: [
+"Aucun",
+"Même nombre de protons",
+"Même nombre d’électrons de valence",
+"Même masse atomique"
+],
+answer: 2,
+explication: "Les éléments d’une même famille ont le même nombre d’électrons de valence."
+},
+{
+q: "Pourquoi un atome forme-t-il un ion ?",
+choices: [
+"Pour perdre des protons",
+"Pour atteindre une configuration stable",
+"Pour devenir plus massif",
+"Pour changer de noyau"
+],
+answer: 1,
+explication: "Un atome forme un ion pour atteindre une configuration électronique stable."
+}
+];
+
+const quiz = document.getElementById("quiz");
+
+questions.forEach((q, i) => {
+    let html = `<div class="question">
+        <h3>Question ${i+1} : ${q.q}</h3>`;
+    q.choices.forEach((c, j) => {
+        html += `
+        <label>
+            <input type="radio" name="q${i}" value="${j}">
+            ${c}
+        </label>`;
+    });
+    html += `</div>`;
+    quiz.innerHTML += html;
+});
+
+function corriger() {
+    let score = 0;
+    let correction = `<h2>Score : `;
+
+    let details = `<h3>Corrections détaillées</h3>`;
+
+    questions.forEach((q, i) => {
+        const rep = document.querySelector(`input[name="q${i}"]:checked`);
+        if (rep && parseInt(rep.value) === q.answer) {
+            score++;
+            details += `<p class="bonne">✔ Q${i+1} : ${q.explication}</p>`;
+        } else {
+            details += `<p class="fausse">✘ Q${i+1} — Réponse correcte : <strong>${q.choices[q.answer]}</strong><br>${q.explication}</p>`;
+        }
+    });
+
+    correction += `${score} / ${questions.length}</h2>` + details;
+    document.getElementById("resultats").innerHTML = correction;
+    document.getElementById("resultats").style.display = "block";
+}
+</script>
+
+</body>
+</html>

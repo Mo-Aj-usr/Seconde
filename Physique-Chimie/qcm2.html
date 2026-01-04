@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QCM Chimie 2nde : Électrons et ions</title>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #f0f4f8;
+  margin: 0;
+  padding: 0;
+}
+.container {
+  max-width: 800px;
+  margin: 40px auto;
+  background: #fff;
+  padding: 25px 35px;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+h1 { text-align: center; color: #2c3e50; }
+.question { font-weight: bold; margin-bottom: 15px; font-size: 18px; }
+.answers button {
+  display: block;
+  width: 100%;
+  margin: 8px 0;
+  padding: 12px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  background: #ecf0f1;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+.answers button:hover { background: #d1d8e0; }
+.answers button.selected { background: #3498db; color: #fff; }
+.feedback {
+  margin-top: 15px;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 15px;
+  display: none;
+}
+.correct { background: #2ecc71; color: #fff; }
+.incorrect { background: #e74c3c; color: #fff; }
+.navigation {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+.navigation button {
+  padding: 12px 25px;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  color: #fff;
+  background: #34495e;
+  transition: background 0.3s;
+}
+.navigation button:hover { background: #2c3e50; }
+#result { margin-top: 20px; font-size: 16px; }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h1>QCM Chimie 2nde : Électrons et ions</h1>
+  <div id="quiz">
+    <div class="question" id="question"></div>
+    <div class="answers" id="answers"></div>
+    <div class="feedback" id="feedback"></div>
+    <div class="navigation">
+      <button id="prev">Précédent</button>
+      <button id="next">Suivant</button>
+      <button id="finish">Terminer</button>
+    </div>
+    <div id="result"></div>
+  </div>
+</div>
+
+<script>
+const quizData = [
+  { question: "1. Pourquoi les gaz nobles sont-ils stables ?", 
+    answers: ["Ils ont une couche de valence saturée", "Ils sont très lourds", "Ils ont beaucoup de protons", "Ils ne possèdent pas de neutrons"], 
+    correct: 0, 
+    explanation: "Les gaz nobles ont une couche externe complète, ce qui les rend chimiquement inertes." 
+  },
+  { question: "2. La règle du duet s'applique à :", 
+    answers: ["Hélium", "Oxygène", "Chlore", "Sodium"], 
+    correct: 0, 
+    explanation: "Hélium est stable avec 2 électrons sur sa seule couche (duet)." 
+  },
+  { question: "3. La règle de l'octet concerne :", 
+    answers: ["Tous les éléments sauf H et He", "Seuls les gaz nobles", "Seuls les métaux", "Les isotopes"], 
+    correct: 0, 
+    explanation: "Les atomes cherchent à avoir 8 électrons dans leur couche externe pour stabilité." 
+  },
+  { question: "4. Un atome devient cation quand :", 
+    answers: ["Il perd des électrons", "Il gagne des électrons", "Il perd des neutrons", "Il gagne des protons"], 
+    correct: 0, 
+    explanation: "Un cation est un ion positif formé par perte d'électrons." 
+  },
+  { question: "5. Un anion est :", 
+    answers: ["Ion négatif", "Ion positif", "Neutre", "Un gaz noble"], 
+    correct: 0, 
+    explanation: "Un anion est un ion négatif formé par gain d'électrons." 
+  },
+  { question: "6. Électrons de valence ?", 
+    answers: ["Ceux de la dernière couche", "Tous les électrons", "Ceux du noyau", "Ceux des sous-couches d et f uniquement"], 
+    correct: 0, 
+    explanation: "Les électrons de valence sont dans la couche externe et déterminent la réactivité." 
+  },
+  { question: "7. Sodium (Na) forme Na⁺ pour :", 
+    answers: ["Ressembler au néon", "Ressembler au lithium", "Ressembler au fluor", "Ressembler à l’argon"], 
+    correct: 0, 
+    explanation: "Na perd 1 électron pour obtenir la configuration stable du gaz noble le plus proche : Ne." 
+  },
+  { question: "8. Fluor (F) forme F⁻ pour :", 
+    answers: ["Atteindre 8 électrons de valence", "Perdre 1 proton", "Perdre 1 électron", "Former une molécule d'hydrogène"], 
+    correct: 0, 
+    explanation: "F gagne 1 électron pour saturer sa couche externe, suivant la règle de l'octet." 
+  },
+  { question: "9. Qui a proposé la représentation des électrons de valence avec des points ?", 
+    answers: ["Gilbert Lewis", "Mendeleïev", "Klechkowski", "Bohr"], 
+    correct: 0, 
+    explanation: "Gilbert Lewis a proposé la notation de Lewis pour visualiser les électrons de valence et les liaisons." 
+  },
+  { question: "10. La règle de Klechkowski sert à :", 
+    answers: ["Déterminer l'ordre de remplissage des sous-couches", "Calculer la charge des ions", "Prédire la masse atomique", "Mesurer les électrons de valence"], 
+    correct: 0, 
+    explanation: "Elle indique l'ordre de remplissage des sous-couches selon n+l." 
+  },
+  { question: "11. Un élément de la colonne 17 est :", 
+    answers: ["Un halogène", "Un gaz noble", "Un alcalin", "Un métal de transition"], 
+    correct: 0, 
+    explanation: "Les halogènes ont 7 électrons de valence et forment souvent des anions." 
+  },
+  { question: "12. Combien d’électrons de valence possède le phosphore (P) ?", 
+    answers: ["5", "3", "8", "2"], 
+    correct: 0, 
+    explanation: "Configuration 1s²2s²2p⁶3s²3p³ → 5 électrons sur la dernière couche." 
+  },
+  { question: "13. Quelle est la charge de l’ion calcium (Ca²⁺) ?", 
+    answers: ["+2", "-2", "+1", "0"], 
+    correct: 0, 
+    explanation: "Le calcium perd 2 électrons pour obtenir la configuration stable du néon." 
+  },
+  { question: "14. Quelle propriété est prédite par la position dans le tableau périodique ?", 
+    answers: ["Nombre d’électrons de valence", "Masse atomique exacte", "Nombre de neutrons", "Charge du noyau uniquement"], 
+    correct: 0, 
+    explanation: "La colonne indique le nombre d’électrons de valence et les propriétés chimiques." 
+  },
+  { question: "15. Pourquoi les ions cherchent la configuration des gaz nobles ?", 
+    answers: ["Pour obtenir une couche externe saturée", "Pour perdre des neutrons", "Pour devenir neutres", "Pour changer de masse"], 
+    correct: 0, 
+    explanation: "La stabilité chimique est atteinte lorsque la couche externe est complète, comme les gaz nobles." 
+  }
+];
+
+let current = 0;
+let score = 0;
+let answersSelected = [];
+
+function showQuestion() {
+  const q = quizData[current];
+  document.getElementById('question').innerText = q.question;
+  const answersDiv = document.getElementById('answers');
+  answersDiv.innerHTML = '';
+  q.answers.forEach((a, i) => {
+    const btn = document.createElement('button');
+    btn.innerText = a;
+    btn.addEventListener('click', () => selectAnswer(i));
+    answersDiv.appendChild(btn);
+  });
+  document.getElementById('feedback').style.display = 'none';
+}
+
+function selectAnswer(i) {
+  const q = quizData[current];
+  const feedback = document.getElementById('feedback');
+  const buttons = document.querySelectorAll('#answers button');
+  buttons.forEach(btn => btn.disabled = true);
+  buttons[i].classList.add('selected');
+  
+  if (i === q.correct) {
+    feedback.className = 'feedback correct';
+    feedback.innerText = "Correct ! " + q.explanation;
+    if(!answersSelected[current]) { score++; }
+  } else {
+    feedback.className = 'feedback incorrect';
+    feedback.innerText = "Incorrect. " + q.explanation;
+  }
+  feedback.style.display = 'block';
+  answersSelected[current] = i;
+}
+
+document.getElementById('next').addEventListener('click', () => {
+  if (current < quizData.length - 1) current++;
+  showQuestion();
+});
+document.getElementById('prev').addEventListener('click', () => {
+  if (current > 0) current--;
+  showQuestion();
+});
+document.getElementById('finish').addEventListener('click', () => {
+  let resultText = `Quiz terminé ! Votre score : ${score} / ${quizData.length}\n\nRéponses détaillées :\n`;
+  quizData.forEach((q, i) => {
+    const user = answersSelected[i] !== undefined ? q.answers[answersSelected[i]] : "Non répondu";
+    const correct = q.answers[q.correct];
+    resultText += `${i+1}. ${q.question}\n  Votre réponse : ${user}\n  Correct : ${correct}\n  Explication : ${q.explanation}\n\n`;
+  });
+  document.getElementById('quiz').innerHTML = `<pre>${resultText}</pre>`;
+});
+
+showQuestion();
+</script>
+
+</body>
+</html>

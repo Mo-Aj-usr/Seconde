@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>QCM Chimie 2nde – Électrons</title>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #f4f4f4;
+  margin: 0;
+  padding: 20px;
+}
+.container {
+  max-width: 800px;
+  margin: auto;
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px #ccc;
+}
+h1 { text-align: center; }
+.question { font-weight: bold; margin-bottom: 10px; }
+.answers label {
+  display: block;
+  background: #eef;
+  padding: 10px;
+  margin: 5px 0;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.answers input { margin-right: 10px; }
+.feedback {
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 6px;
+  display: none;
+}
+.correct { background: #c8f7c5; }
+.incorrect { background: #f7c5c5; }
+.nav-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+button {
+  padding: 10px 20px;
+  border: none;
+  background: #0077cc;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+}
+button:hover { background: #005fa3; }
+#results {
+  display: none;
+  margin-top: 20px;
+  padding: 20px;
+  background: #e8ffe8;
+  border-radius: 10px;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+<h1>QCM – Chimie 2nde : Électrons & Stabilité</h1>
+
+<div id="quiz"></div>
+
+<div class="nav-buttons">
+  <button onclick="prevQuestion()">← Précédent</button>
+  <button onclick="nextQuestion()">Suivant →</button>
+  <button onclick="finishQuiz()">Terminer</button>
+</div>
+
+<div id="results"></div>
+</div>
+
+<script>
+const questions = [
+{
+q: "1. Pourquoi les gaz nobles sont-ils chimiquement stables ?",
+a: [
+  "Parce qu’ils ont une couche de valence saturée",
+  "Parce qu’ils ont beaucoup de protons",
+  "Parce qu’ils sont très lourds",
+  "Parce qu’ils ont des électrons très rapides"
+],
+correct: 0,
+explain: "Les gaz nobles possèdent une couche externe complète (duet ou octet), ce qui les rend très stables."
+},
+{
+q: "2. Quel ion forme le fluor (Z=9) pour atteindre l’octet ?",
+a: ["F⁺", "F²⁺", "F⁻", "F²⁻"],
+correct: 2,
+explain: "Le fluor a 7 électrons externes : il gagne 1 électron → F⁻."
+},
+{
+q: "3. Quel ion forme le sodium (Z=11) ?",
+a: ["Na⁻", "Na²⁺", "Na⁺", "Na³⁺"],
+correct: 2,
+explain: "Le sodium perd 1 électron pour atteindre la configuration du néon → Na⁺."
+},
+{
+q: "4. Combien d’électrons peut contenir une sous-couche p ?",
+a: ["2", "4", "6", "8"],
+correct: 2,
+explain: "Une sous-couche p contient au maximum 6 électrons."
+},
+{
+q: "5. Quelle est la configuration électronique de l’oxygène (Z=8) ?",
+a: ["1s² 2s² 2p⁴", "1s² 2s² 2p²", "1s² 2s¹ 2p⁵", "1s² 2s² 3s²"],
+correct: 0,
+explain: "L’oxygène possède 8 électrons : 1s² 2s² 2p⁴."
+},
+{
+q: "6. Un atome est électriquement neutre car :",
+a: [
+  "Il a autant de protons que de neutrons",
+  "Il a autant de protons que d’électrons",
+  "Il a autant d’électrons que de neutrons",
+  "Il n’a pas de charge"
+],
+correct: 1,
+explain: "La neutralité vient de l’égalité protons (+) = électrons (–)."
+},
+{
+q: "7. Quel est le nombre maximal d’électrons dans la couche n=2 ?",
+a: ["2", "4", "6", "8"],
+correct: 3,
+explain: "La formule 2n² donne 2×2² = 8 électrons."
+},
+{
+q: "8. Quel ion forme l’oxygène ?",
+a: ["O⁺", "O²⁺", "O⁻", "O²⁻"],
+correct: 3,
+explain: "L’oxygène a 6 électrons externes : il en gagne 2 → O²⁻."
+},
+{
+q: "9. Quel est le rôle des électrons de valence ?",
+a: [
+  "Déterminer la masse de l’atome",
+  "Déterminer la réactivité chimique",
+  "Déterminer le nombre de neutrons",
+  "Déterminer la charge du noyau"
+],
+correct: 1,
+explain: "Les électrons de valence participent aux liaisons et déterminent la réactivité."
+},
+{
+q: "10. Quelle sous-couche se remplit après 3p ?",
+a: ["3d", "4s", "4p", "2d"],
+correct: 1,
+explain: "Selon la règle de Klechkowski, après 3p vient 4s."
+},
+{
+q: "11. Quel est l’ion formé par le magnésium (Z=12) ?",
+a: ["Mg⁺", "Mg²⁺", "Mg³⁺", "Mg⁻"],
+correct: 1,
+explain: "Le magnésium perd 2 électrons → Mg²⁺."
+},
+{
+q: "12. Pourquoi un atome forme-t-il des liaisons ?",
+a: [
+  "Pour devenir plus lourd",
+  "Pour atteindre une configuration stable (octet/duet)",
+  "Pour augmenter son nombre de protons",
+  "Pour changer de période"
+],
+correct: 1,
+explain: "Les atomes cherchent à saturer leur couche externe."
+},
+{
+q: "13. Quelle est la configuration électronique du sodium (Z=11) ?",
+a: [
+  "1s² 2s² 2p⁶ 3s¹",
+  "1s² 2s² 2p⁴ 3s³",
+  "1s² 2s² 2p⁶",
+  "1s² 2s² 3p⁶"
+],
+correct: 0,
+explain: "Le sodium possède 11 électrons : 1s² 2s² 2p⁶ 3s¹."
+},
+{
+q: "14. Quel est le nombre d’électrons dans 3p³ ?",
+a: ["1", "2", "3", "6"],
+correct: 2,
+explain: "L’exposant indique le nombre d’électrons : 3."
+},
+{
+q: "15. Quel élément appartient à la famille des halogènes ?",
+a: ["Ne", "Na", "Cl", "Mg"],
+correct: 2,
+explain: "Les halogènes sont en colonne 17 : F, Cl, Br, I."
+}
+];
+
+let current = 0;
+let score = 0;
+let userAnswers = [];
+
+function loadQuestion() {
+  const q = questions[current];
+  let html = `<div class='question'>${q.q}</div><div class='answers'>`;
+
+  q.a.forEach((ans, i) => {
+    html += `
+      <label>
+        <input type="radio" name="answer" value="${i}" onclick="checkAnswer(${i})">
+        ${ans}
+      </label>`;
+  });
+
+  html += `</div>
+  <div id="feedback" class="feedback"></div>`;
+
+  document.getElementById("quiz").innerHTML = html;
+}
+
+function checkAnswer(i) {
+  const q = questions[current];
+  const fb = document.getElementById("feedback");
+
+  if (i === q.correct) {
+    fb.className = "feedback correct";
+    fb.innerHTML = "✔️ Bonne réponse !<br>" + q.explain;
+    score++;
+  } else {
+    fb.className = "feedback incorrect";
+    fb.innerHTML = "❌ Mauvaise réponse.<br>" + q.explain;
+  }
+
+  fb.style.display = "block";
+  userAnswers[current] = i;
+}
+
+function nextQuestion() {
+  if (current < questions.length - 1) {
+    current++;
+    loadQuestion();
+  }
+}
+
+function prevQuestion() {
+  if (current > 0) {
+    current--;
+    loadQuestion();
+  }
+}
+
+function finishQuiz() {
+  let html = `<h2>Résultats</h2>
+  <p>Score : <strong>${score} / ${questions.length}</strong></p>
+  <h3>Détails :</h3>`;
+
+  questions.forEach((q, i) => {
+    html += `<p><strong>Q${i+1} :</strong> ${q.q}<br>
+    Votre réponse : ${q.a[userAnswers[i]] || "Aucune"}<br>
+    Bonne réponse : ${q.a[q.correct]}<br>
+    <em>${q.explain}</em></p><hr>`;
+  });
+
+  document.getElementById("results").innerHTML = html;
+  document.getElementById("results").style.display = "block";
+}
+
+loadQuestion();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QCM Chimie 2nde - Électrons & Configuration</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, sans-serif;
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px;
+        }
+        .quiz-container {
+            background: white; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            max-width: 950px; width: 100%; max-height: 90vh; display: flex; flex-direction: column;
+        }
+        .quiz-header {
+            background: linear-gradient(135deg, #ff6b6b, #feca57); color: white; padding: 25px; text-align: center;
+        }
+        .progress-bar { width: 100%; height: 8px; background: rgba(255,255,255,0.3); border-radius: 4px; overflow: hidden; margin-bottom: 20px; }
+        .progress-fill { height: 100%; background: linear-gradient(135deg, #4ecdc4, #44a08d); width: 6.67%; transition: width 0.4s ease; border-radius: 4px; }
+        .question-counter { font-size: 18px; font-weight: 500; }
+        .question-container { padding: 40px 35px; flex: 1; overflow-y: auto; }
+        .question-number {
+            background: linear-gradient(135deg, #a8edea, #fed6e3); color: #333; width: 42px; height: 42px; border-radius: 50%;
+            display: inline-flex; align-items: center; justify-content: center; font-weight: bold; margin-right: 15px; font-size: 16px;
+        }
+        .question-title { font-size: 22px; font-weight: 600; margin-bottom: 25px; color: #2c3e50; line-height: 1.4; }
+        .options-container { display: flex; flex-direction: column; gap: 16px; }
+        .option {
+            padding: 22px 28px; border: 2px solid #e1e8ed; border-radius: 14px; cursor: pointer; transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+            font-size: 16px; background: #f8fafc; position: relative; font-weight: 500;
+        }
+        .option:hover:not(.feedback) {
+            border-color: #3498db; background: #ebf3fd; transform: translateY(-3px); box-shadow: 0 8px 25px rgba(52,152,219,0.15);
+        }
+        .option.selected { border-color: #3498db; background: #d6eaf8; box-shadow: 0 6px 20px rgba(52,152,219,0.2); }
+        .option.correct { border-color: #27ae60 !important; background: linear-gradient(135deg, #d5f4e6, #abebc6); }
+        .option.incorrect { border-color: #e74c3c !important; background: linear-gradient(135deg, #fadbd8, #f1948a); }
+        .feedback {
+            background: linear-gradient(135deg, #f7f9fc, #e8f4f8); border: 2px solid #bdc3c7; cursor: default; margin-top: 25px;
+            padding: 28px; border-radius: 14px; animation: feedbackSlide 0.4s ease-out;
+        }
+        @keyframes feedbackSlide { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        .feedback-icon { font-size: 34px; margin-bottom: 16px; text-align: center; font-weight: bold; }
+        .feedback.correct .feedback-icon { color: #27ae60; } .feedback.incorrect .feedback-icon { color: #e74c3c; }
+        .feedback-explanation { font-size: 16px; line-height: 1.7; color: #34495e; }
+        .feedback strong { color: #2980b9; }
+        .navigation {
+            padding: 28px 35px; background: #f8f9fa; display: flex; justify-content: space-between; align-items: center;
+            border-top: 1px solid #dee2e6; gap: 18px;
+        }
+        .nav-btn {
+            flex: 1; padding: 16px 24px; border: none; border-radius: 28px; font-size: 16px; font-weight: 600; cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4,0,0.2,1); position: relative; overflow: hidden;
+        }
+        .nav-btn::before {
+            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg,transparent,rgba(255,255,255,0.4),transparent);
+            transition: left 0.6s; z-index: 0;
+        }
+        .nav-btn:hover::before { left: 100%; }
+        .prev-btn { background: linear-gradient(135deg, #95a5a6, #7f8c8d); color: white; }
+        .prev-btn:disabled { background: #bdc3c7; cursor: not-allowed; opacity: 0.6; }
+        .next-btn { background: linear-gradient(135deg, #3498db, #2980b9); color: white; }
+        .finish-btn { background: linear-gradient(135deg, #27ae60, #229954); color: white; }
+        .nav-btn:hover:not(:disabled) { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+        @media (max-width: 768px) {
+            .navigation { flex-direction: column; gap: 15px; } .question-title { font-size: 19px; } .question-container { padding: 30px 20px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container" id="quizContainer">
+        <div class="quiz-header">
+            <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+            <div class="question-counter" id="questionCounter">Question <span id="currentQuestion">1</span>/15</div>
+        </div>
+        <div class="question-container" id="questionContainer"></div>
+        <div class="navigation" id="navigation">
+            <button class="nav-btn prev-btn" id="prevBtn">⬅️ Précédent</button>
+            <button class="nav-btn next-btn" id="nextBtn">Suivant ➡️</button>
+            <button class="nav-btn finish-btn" id="finishBtn" style="display:none;">✅ Terminer</button>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            // 1. Stabilité gaz nobles
+            {q:"Pourquoi les <strong>gaz nobles</strong> sont-ils chimiquement stables ?",o:["Couche valence vide","<strong>Couche valence saturée (octet)</strong>","Trop d'électrons","Pas d'électrons valence"],c:1,e:"Gaz nobles (He,Ne,Ar...) ont couche externe pleine : duet (He=2e⁻) ou octet (8e⁻). Très peu réactifs."},
+            // 2. Règle octet
+            {q:"<strong>Règle de l'octet</strong> : les atomes tendent à avoir ",o:["2 électrons externes","<strong>8 électrons de valence</strong>","10 électrons","0 électrons"],c:1,e:"Atomes acquièrent 8e⁻ externes comme gaz nobles pour stabilité (Lewis). He : duet (2e⁻)."},
+            // 3. Config H
+            {q:"Configuration de <strong>H (Z=1)</strong> :",o:["1s²","<strong>1s¹</strong>","2s¹","1p¹"],c:1,e:"1 proton → 1e⁻ en 1s. Notation : 1s¹."},
+            // 4. Config O
+            {q:"Oxygène O (Z=8) :",o:["1s² 2s² 2p³","1s² 2s² 2p⁵","<strong>1s² 2s² 2p⁴</strong>","1s² 2s² 2p⁶"],c:2,e:"Z=8 : 1s² 2s² 2p⁴. 6e⁻ valence (2s²2p⁴)."},
+            // 5. Électrons valence Na
+            {q:"Sodium Na (Z=11), électrons de valence :",o:["1 (3s¹)","8","2","6"],c:0,e:"[Ne] 3s¹ → 1e⁻ valence (couche externe n=3)."},
+            // 6. Charge ion Na
+            {q:"Charge de <strong>Na⁺</strong> ?",o:["Perd 1e⁻ pour octet comme Ne","Gagne 1e⁻","Perd 7e⁻","Gagne 7e⁻"],c:0,e:"Na ([Ne]3s¹) perd 1e⁻ → [Ne] stable (octet). Cation groupe 1."},
+            // 7. Charge ion Cl
+            {q:"Chlorure <strong>Cl⁻</strong> :",o:["Gagne 1e⁻ pour octet comme Ar","Perd 1e⁻","Gagne 7e⁻","Perd 7e⁻"],c:0,e:"Cl ([Ne]3s²3p⁵) gagne 1e⁻ → [Ne]3s²3p⁶ = Ar stable."},
+            // 8. Capacité couche n=1
+            {q:"Couche K (n=1) max :",o:["<strong>2 électrons (1s²)</strong>","8","18","6"],c:0,e:"2n²=2(1)²=2e⁻. Remplie : 1s² (He)."},
+            // 9. Capacité sous-couche p
+            {q:"Sous-couche <strong>p</strong> :",o:["2e⁻","6e⁻","10e⁻","14e⁻"],c:1,e:"p = 6e⁻ max (3 orbitale × 2). Ex: 2p⁶."},
+            // 10. Ordre remplissage
+            {q:"Ordre Aufbau après 3p :",o:["2d → 4s","<strong>4s → 3d</strong>","3d → 4s","4p → 3d"],c:1,e:"1s 2s 2p 3s 3p <strong>4s 3d</strong> 4p... (règle Klechkowski n+l)."},
+            // 11. Période tableau
+            {q:"Élément période 3, groupe 15 (comme P) :",o:["n=2 externe","<strong>n=3 externe</strong>","n=4","n=1"],c:1,e:"Période = n couche externe. P : [Ne]3s²3p³ → période 3."},
+            // 12. Famille alcalins
+            {q:"Groupe 1 (alcalins) : charge ion typique :",o:["+1 (perdent 1e⁻ valence)","-1","+2","-2"],c:0,e:"1e⁻ valence → perd 1 → cation +1 stable (octet)."},
+            // 13. Halogènes groupe 17
+            {q:"Halogènes (F,Cl...) charge ion :",o:["+1","<strong>-1 (gagnent 1e⁻)</strong>","+7","-7"],c:1,e:"7e⁻ valence → +1e⁻ → octet comme gaz noble voisin."},
+            // 14. Formule Lewis C
+            {q:"Carbone C (Z=6), formule Lewis :",o:["•C• (2 points)","••C•• (4 points)","<strong>••C• avec 4 points</strong> (2s²2p²=4e⁻)","8 points"],c:2,e:"4e⁻ valence → 4 points autour C. Forme 4 liaisons."},
+            // 15. Ion oxyde
+            {q:"<strong>O²⁻</strong> (oxyde) :",o:["Perd 2e⁻","Gagne 6e⁻","<strong>Gagne 2e⁻ pour octet comme Ne</strong>","Gagne 8e⁻"],c:2,e:"O (2s²2p⁴=6e⁻ valence) +2e⁻ → 2s²2p⁶ = Ne stable."}
+        ].map(q => ({question: q.q, options: q.o, correct: q.c, explanation: q.e}));
+
+        let currentQuestion = 0, answers = new Array(15).fill(null), feedbackShown = new Array(15).fill(false);
+        const els = {container: document.getElementById('quizContainer'), questionContainer: document.getElementById('questionContainer'),
+                     prevBtn: document.getElementById('prevBtn'), nextBtn: document.getElementById('nextBtn'), finishBtn: document.getElementById('finishBtn'),
+                     progressFill: document.getElementById('progressFill'), questionCounter: document.getElementById('currentQuestion')};
+
+        function loadQuestion(i) {
+            const q = questions[i], ans = answers[i], fb = feedbackShown[i], answered = ans !== null;
+            let html = `<div style="display:flex;align-items:flex-start;margin-bottom:25px;"><div class="question-number">${i+1}</div><div class="question-title">${q.question}</div></div><div class="options-container">`;
+            q.options.forEach((opt, j) => {
+                let cls = 'option'; if (fb) { if (j === q.correct) cls += ' correct'; if (ans === j && j !== q.correct) cls += ' incorrect'; } else if (answered && ans === j) cls += ' selected';
+                html += `<div class="${cls}" ${fb ? '' : `onclick="selectOption(${i},${j})"`}>${String.fromCharCode(65+j)}. ${opt}</div>`;
+            });
+            html += '</div>';
+            if (fb && answered) {
+                const correct = ans === q.correct; html += `<div class="feedback ${correct?'correct':'incorrect'}"><div class="feedback-icon">${correct?'✅ Correct !':'❌ Faux'}</div><div class="feedback-explanation">${q.explanation}</div></div>`;
+            }
+            els.questionContainer.innerHTML = html; updateNav(); updateProgress();
+        }
+
+        function selectOption(qi, oi) { if (feedbackShown[qi]) return; answers[qi] = oi; feedbackShown[qi] = true; loadQuestion(qi); }
+
+        function updateProgress() {
+            const answered = answers.filter(a => a !== null).length; const prog = (answered / 15) * 100;
+            els.progressFill.style.width = `${prog}%`; els.questionCounter.textContent = currentQuestion + 1;
+        }
+
+        function updateNav() {
+            els.prevBtn.disabled = currentQuestion === 0; const allAnswered = answers.every(a => a !== null);
+            els.nextBtn.style.display = allAnswered ? 'none' : 'block'; els.finishBtn.style.display = allAnswered ? 'block' : 'none';
+        }
+
+        function nextQ() { if (currentQuestion < 14) { currentQuestion++; loadQuestion(currentQuestion); } }
+        function prevQ() { if (currentQuestion > 0) { currentQuestion--; loadQuestion(currentQuestion); } }
+
+        function finishQuiz() {
+            const score = answers.filter((a,i) => a === questions[i].correct).length; const pct = Math.round(score/15*100);
+            els.container.innerHTML = `<div class="quiz-header"><div class="progress-bar"><div class="progress-fill" style="width:100%;background:linear-gradient(135deg,#27ae60,#2ecc71);"></div></div><div style="font-size:26px;font-weight:700;margin:10px 0;">🏆 Quiz terminé !</div><div style="font-size:22px;font-weight:600;">Score: <span style="color:#27ae60;">${score}/15</span> (${pct}%)</div></div><div style="padding:50px;text-align:center;font-size:18px;"><div style="margin:30px 0;font-size:20px;font-weight:600;">Réponses détaillées :</div>${questions.map((q,i) => `<div style="background:#f8f9fa;margin:15px 0;padding:20px;border-radius:12px;border-left:5px solid ${answers[i]===q.correct?'#27ae60':'#e74c3c'}"><strong>Q${i+1}:</strong> ${q.question}<br><strong>Réponse:</strong> ${String.fromCharCode(65+q.correct)}. ${q.options[q.correct]}<br><strong>Explication:</strong> ${q.explanation}</div>`).join('')}<button onclick="location.reload()" style="padding:18px 45px;background:linear-gradient(135deg,#e74c3c,#c0392b);color:white;border:none;border-radius:30px;font-size:18px;font-weight:600;cursor:pointer;margin-top:25px;transition:all 0.3s;" onmouseover="this.style.transform='scale(1.05)'">🔄 Recommencer</button></div>`;
+        }
+
+        els.prevBtn.onclick = prevQ; els.nextBtn.onclick = nextQ; els.finishBtn.onclick = finishQuiz;
+        loadQuestion(0);
+    </script>
+</body>
+</html>

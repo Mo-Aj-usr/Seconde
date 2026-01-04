@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QCM Chimie 2nde - Électrons</title>
+<style>
+body { font-family: Arial, sans-serif; max-width: 900px; margin: 40px auto; background-color: #f9f9f9; color: #333; line-height: 1.6; }
+h1 { text-align: center; color: #2c3e50; }
+.quiz-container { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+.question { margin-bottom: 30px; display: none; }
+.question.active { display: block; }
+.question-number { font-size: 1.2em; font-weight: bold; color: #2980b9; }
+.options label { display: block; margin: 10px 0; padding: 10px; background: #ecf0f1; border-radius: 5px; cursor: pointer; }
+.options input[type="radio"] { margin-right: 10px; }
+.buttons { text-align: center; margin: 30px 0; }
+button { padding: 10px 20px; margin: 0 10px; font-size: 1em; border: none; border-radius: 5px; cursor: pointer; }
+#prevBtn { background: #95a5a6; color: white; }
+#nextBtn { background: #27ae60; color: white; }
+#submitBtn { background: #c0392b; color: white; }
+button:disabled { opacity: 0.5; cursor: not-allowed; }
+.result { margin-top: 30px; padding: 20px; background: #e8f4fc; border-radius: 8px; }
+.correction { margin-top: 15px; padding: 15px; background: #f2f2f2; border-left: 5px solid #2980b9; }
+.correct { color: #27ae60; font-weight: bold; }
+.incorrect { color: #c0392b; font-weight: bold; }
+.feedback { margin-top: 10px; padding: 10px; border-radius: 5px; display: none; font-weight: bold; }
+.feedback.correct { background: #2ecc71; color: white; }
+.feedback.incorrect { background: #e74c3c; color: white; }
+</style>
+</head>
+<body>
+<div class="quiz-container">
+<h1>QCM Chimie 2nde - Électrons<br><small>Constitution et transformation de la matière</small></h1>
+
+<form id="quizForm">
+<!-- Question 1 -->
+<div class="question active">
+    <div class="question-number">Question 1</div>
+    <p>Pourquoi les gaz nobles sont-ils chimiquement stables ?</p>
+    <div class="options">
+        <label><input type="radio" name="q1" value="A"> A) Couche vide</label>
+        <label><input type="radio" name="q1" value="B"> B) Couche saturée</label>
+        <label><input type="radio" name="q1" value="C"> C) Nombre impair d'électrons</label>
+        <label><input type="radio" name="q1" value="D"> D) Noyau instable</label>
+    </div>
+    <div class="feedback" id="feedback-q1"></div>
+</div>
+
+<!-- Question 2 -->
+<div class="question">
+    <div class="question-number">Question 2</div>
+    <p>Numéro atomique du sodium (Na) ?</p>
+    <div class="options">
+        <label><input type="radio" name="q2" value="A"> A) 10</label>
+        <label><input type="radio" name="q2" value="B"> B) 11</label>
+        <label><input type="radio" name="q2" value="C"> C) 12</label>
+        <label><input type="radio" name="q2" value="D"> D) 23</label>
+    </div>
+    <div class="feedback" id="feedback-q2"></div>
+</div>
+
+<!-- Question 3 -->
+<div class="question">
+    <div class="question-number">Question 3</div>
+    <p>Configuration électronique de l'oxygène (Z=8) ?</p>
+    <div class="options">
+        <label><input type="radio" name="q3" value="A"> 1s² 2s² 2p²</label>
+        <label><input type="radio" name="q3" value="B"> 1s² 2s² 2p⁴</label>
+        <label><input type="radio" name="q3" value="C"> 1s² 2s² 2p⁶</label>
+        <label><input type="radio" name="q3" value="D"> [He] 2s² 2p⁴</label>
+    </div>
+    <div class="feedback" id="feedback-q3"></div>
+</div>
+
+<!-- Question 4 -->
+<div class="question">
+    <div class="question-number">Question 4</div>
+    <p>Électrons de valence du chlore (Cl) ?</p>
+    <div class="options">
+        <label><input type="radio" name="q4" value="A"> 5</label>
+        <label><input type="radio" name="q4" value="B"> 6</label>
+        <label><input type="radio" name="q4" value="C"> 7</label>
+        <label><input type="radio" name="q4" value="D"> 8</label>
+    </div>
+    <div class="feedback" id="feedback-q4"></div>
+</div>
+
+<!-- Question 5 -->
+<div class="question">
+    <div class="question-number">Question 5</div>
+    <p>Charge de l'ion Na⁺ pour atteindre l'octet ?</p>
+    <div class="options">
+        <label><input type="radio" name="q5" value="A"> Na⁻</label>
+        <label><input type="radio" name="q5" value="B"> Na²⁻</label>
+        <label><input type="radio" name="q5" value="C"> Na⁺</label>
+        <label><input type="radio" name="q5" value="D"> Na²⁺</label>
+    </div>
+    <div class="feedback" id="feedback-q5"></div>
+</div>
+
+<!-- Question 6 -->
+<div class="question">
+    <div class="question-number">Question 6</div>
+    <p>Gaz noble servant de référence pour Na⁺ et Cl⁻ ?</p>
+    <div class="options">
+        <label><input type="radio" name="q6" value="A"> Hélium (He)</label>
+        <label><input type="radio" name="q6" value="B"> Néon (Ne)</label>
+        <label><input type="radio" name="q6" value="C"> Argon (Ar)</label>
+        <label><input type="radio" name="q6" value="D"> Krypton (Kr)</label>
+    </div>
+    <div class="feedback" id="feedback-q6"></div>
+</div>
+
+<!-- Question 7 -->
+<div class="question">
+    <div class="question-number">Question 7</div>
+    <p>Capacité maximale d'une sous-couche p ?</p>
+    <div class="options">
+        <label><input type="radio" name="q7" value="A"> 2</label>
+        <label><input type="radio" name="q7" value="B"> 6</label>
+        <label><input type="radio" name="q7" value="C"> 10</label>
+        <label><input type="radio" name="q7" value="D"> 14</label>
+    </div>
+    <div class="feedback" id="feedback-q7"></div>
+</div>
+
+<!-- Question 8 -->
+<div class="question">
+    <div class="question-number">Question 8</div>
+    <p>Colonne des gaz nobles dans le tableau périodique ?</p>
+    <div class="options">
+        <label><input type="radio" name="q8" value="A"> 1</label>
+        <label><input type="radio" name="q8" value="B"> 2</label>
+        <label><input type="radio" name="q8" value="C"> 17</label>
+        <label><input type="radio" name="q8" value="D"> 18</label>
+    </div>
+    <div class="feedback" id="feedback-q8"></div>
+</div>
+
+<!-- Question 9 -->
+<div class="question">
+    <div class="question-number">Question 9</div>
+    <p>Règle de stabilité pour l'hélium ?</p>
+    <div class="options">
+        <label><input type="radio" name="q9" value="A"> Octet</label>
+        <label><input type="radio" name="q9" value="B"> Duet</label>
+        <label><input type="radio" name="q9" value="C"> Les deux</label>
+        <label><input type="radio" name="q9" value="D"> Aucune</label>
+    </div>
+    <div class="feedback" id="feedback-q9"></div>
+</div>
+
+<!-- Question 10 -->
+<div class="question">
+    <div class="question-number">Question 10</div>
+    <p>Famille chimique formant facilement des cations +1 ?</p>
+    <div class="options">
+        <label><input type="radio" name="q10" value="A"> Halogènes</label>
+        <label><input type="radio" name="q10" value="B"> Alcalino-terreux</label>
+        <label><input type="radio" name="q10" value="C"> Alcalins</label>
+        <label><input type="radio" name="q10" value="D"> Gaz nobles</label>
+    </div>
+    <div class="feedback" id="feedback-q10"></div>
+</div>
+
+<div class="buttons">
+    <button type="button" id="prevBtn" onclick="changeQuestion(-1)" disabled>Précédent</button>
+    <button type="button" id="nextBtn" onclick="changeQuestion(1)">Suivant</button>
+    <button type="button" id="submitBtn" onclick="showResults()">Terminer</button>
+</div>
+</form>
+
+<div id="result" class="result"></div>
+</div>
+
+<script>
+let currentQuestion = 0;
+const questions = document.querySelectorAll('.question');
+const totalQuestions = questions.length;
+
+const correctAnswers = {
+    q1:"B", q2:"B", q3:"B", q4:"C", q5:"C",
+    q6:"C", q7:"B", q8:"D", q9:"B", q10:"C"
+};
+const explanations = {
+    q1:"Couche saturée = stabilité chimique.",
+    q2:"Na = 11 protons.",
+    q3:"Oxygène = 1s²2s²2p⁴.",
+    q4:"Cl a 7 électrons de valence.",
+    q5:"Na perd 1 électron → Na⁺.",
+    q6:"Référence = Argon (période 3).",
+    q7:"Sous-couche p = 6 électrons max.",
+    q8:"Gaz nobles = colonne 18.",
+    q9:"Hélium suit la règle du duet.",
+    q10:"Alcalins = col.1, forment cations +1."
+};
+
+function showQuestion(n){
+    questions.forEach(q=>q.classList.remove('active'));
+    questions[n].classList.add('active');
+    document.getElementById('prevBtn').disabled = n===0;
+    document.getElementById('nextBtn').disabled = n===totalQuestions-1;
+}
+
+function changeQuestion(step){
+    currentQuestion += step;
+    showQuestion(currentQuestion);
+}
+
+// Feedback immédiat
+questions.forEach(q=>{
+    const radios = q.querySelectorAll('input[type="radio"]');
+    radios.forEach(r=>{
+        r.addEventListener('change',()=>{
+            const feedback = q.querySelector('.feedback');
+            const qName = r.name;
+            if(r.value===correctAnswers[qName]){
+                feedback.innerText="Correct ! " + explanations[qName];
+                feedback.className="feedback correct";
+            } else {
+                feedback.innerText="Incorrect. " + explanations[qName];
+                feedback.className="feedback incorrect";
+            }
+            feedback.style.display="block";
+        });
+    });
+});
+
+function showResults(){
+    let score = 0;
+    let resultHTML = `<h3>Score :</h3>`;
+    for(let i=0;i<totalQuestions;i++){
+        const q = questions[i];
+        const qName = "q"+(i+1);
+        const selected = q.querySelector('input[type="radio"]:checked');
+        const correct = correctAnswers[qName];
+        const userAnswer = selected ? selected.value : "Aucune réponse";
+        const isCorrect = selected && selected.value===correct;
+        if(isCorrect) score++;
+        resultHTML += `<div class="correction"><strong>Question ${i+1} :</strong> ${isCorrect?"Correct":"Incorrect"} 
+        <span class="${isCorrect?"correct":"incorrect"}">(Votre réponse: ${userAnswer} | Bonne réponse: ${correct})</span>
+        <br>${explanations[qName]}</div>`;
+    }
+    resultHTML = `<h2>Score : ${score}/${totalQuestions}</h2>` + resultHTML;
+    document.getElementById('result').innerHTML = resultHTML;
+    document.getElementById('quizForm').style.display='none';
+}
+
+// Init
+showQuestion(currentQuestion);
+</script>
+</body>
+</html>

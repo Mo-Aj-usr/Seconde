@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QCM Chimie 2nde - Électrons</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 40px auto;
+            background-color: #f9f9f9;
+            color: #333;
+            line-height: 1.6;
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+        }
+        .quiz-container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .question {
+            margin-bottom: 30px;
+            display: none;
+        }
+        .question.active {
+            display: block;
+        }
+        .question-number {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #2980b9;
+        }
+        .options label {
+            display: block;
+            margin: 10px 0;
+            padding: 10px;
+            background: #ecf0f1;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .options input[type="radio"] {
+            margin-right: 10px;
+        }
+        .buttons {
+            text-align: center;
+            margin: 30px 0;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 0 10px;
+            font-size: 1em;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #prevBtn {
+            background: #95a5a6;
+            color: white;
+        }
+        #nextBtn {
+            background: #27ae60;
+            color: white;
+        }
+        #submitBtn {
+            background: #c0392b;
+            color: white;
+        }
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .result {
+            margin-top: 30px;
+            padding: 20px;
+            background: #e8f4fc;
+            border-radius: 8px;
+            display: none;
+        }
+        .correction {
+            margin-top: 15px;
+            padding: 15px;
+            background: #f2f2f2;
+            border-left: 5px solid #2980b9;
+        }
+        .correct { color: #27ae60; font-weight: bold; }
+        .incorrect { color: #c0392b; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <h1>QCM Chimie 2nde - Électrons<br><small>Constitution et transformation de la matière</small></h1>
+
+        <form id="quizForm">
+            <!-- Question 1 -->
+            <div class="question active">
+                <div class="question-number">Question 1</div>
+                <p>Pourquoi les gaz nobles comme l'hélium, le néon et l'argon sont-ils considérés comme chimiquement stables ?</p>
+                <div class="options">
+                    <label><input type="radio" name="q1" value="A"> A) Leur couche de valence est vide.</label>
+                    <label><input type="radio" name="q1" value="B"> B) Leur couche de valence est saturée (pleine).</label>
+                    <label><input type="radio" name="q1" value="C"> C) Ils ont un nombre impair d'électrons de valence.</label>
+                    <label><input type="radio" name="q1" value="D"> D) Leur noyau est instable.</label>
+                </div>
+            </div>
+
+            <!-- Question 2 -->
+            <div class="question">
+                <div class="question-number">Question 2</div>
+                <p>Quel est le numéro atomique (Z) de l'élément sodium (Na) ?</p>
+                <div class="options">
+                    <label><input type="radio" name="q2" value="A"> A) 10</label>
+                    <label><input type="radio" name="q2" value="B"> B) 11</label>
+                    <label><input type="radio" name="q2" value="C"> C) 12</label>
+                    <label><input type="radio" name="q2" value="D"> D) 23</label>
+                </div>
+            </div>
+
+            <!-- Question 3 -->
+            <div class="question">
+                <div class="question-number">Question 3</div>
+                <p>Quelle est la configuration électronique de l'atome d'oxygène (Z=8) ?</p>
+                <div class="options">
+                    <label><input type="radio" name="q3" value="A"> A) 1s² 2s² 2p²</label>
+                    <label><input type="radio" name="q3" value="B"> B) 1s² 2s² 2p⁴</label>
+                    <label><input type="radio" name="q3" value="C"> C) 1s² 2s² 2p⁶</label>
+                    <label><input type="radio" name="q3" value="D"> D) [He] 2s² 2p⁴</label>
+                </div>
+            </div>
+
+            <!-- Question 4 -->
+            <div class="question">
+                <div class="question-number">Question 4</div>
+                <p>Combien d'électrons de valence possède un atome de chlore (Cl) ?</p>
+                <div class="options">
+                    <label><input type="radio" name="q4" value="A"> A) 5</label>
+                    <label><input type="radio" name="q4" value="B"> B) 6</label>
+                    <label><input type="radio" name="q4" value="C"> C) 7</label>
+                    <label><input type="radio" name="q4" value="D"> D) 8</label>
+                </div>
+            </div>
+
+            <!-- Question 5 -->
+            <div class="question">
+                <div class="question-number">Question 5</div>
+                <p>Quelle est la charge de l'ion monoatomique formé par le sodium pour atteindre la règle de l'octet ?</p>
+                <div class="options">
+                    <label><input type="radio" name="q5" value="A"> A) Na⁻</label>
+                    <label><input type="radio" name="q5" value="B"> B) Na²⁻</label>
+                    <label><input type="radio" name="q5" value="C"> C) Na⁺</label>
+                    <label><input type="radio" name="q5" value="D"> D) Na²⁺</label>
+                </div>
+            </div>
+
+            <!-- Question 6 -->
+            <div class="question">
+                <div class="question-number">Question 6</div>
+                <p>Quel gaz noble sert de référence pour la stabilité des ions Na⁺ et Cl⁻ ?</p>
+                <div class="options">
+                    <label><input type="radio" name="q6" value="A"> A) Hélium (He)</label>
+                    <label><input type="radio" name="q6" value="B"> B) Néon (Ne)</label>
+                    <label><input type="radio" name="q6" value="C"> C) Argon (Ar)</label>
+                    <label><input type="radio" name="q6" value="D"> D) Krypton (Kr)</label>
+                </div>
+            </div>
+
+            <!-- Question 7 -->
+            <div class="question">
+                <div class="question-number">Question 7</div>
+                <p>Quelle est la capacité maximale en électrons de la sous-couche p ?</p>
+                <div class="options">
+                    <label><input type="radio" name="q7" value="A"> A) 2</label>
+                    <label><input type="radio" name="q7" value="B"> B) 6</label>
+                    <label><input type="radio" name="q7" value="C"> C) 10</label>
+                    <label><input type="radio" name="q7" value="D"> D) 14</label>
+                </div>
+            </div>
+
+            <!-- Question 8 -->
+            <div class="question">
+                <div class="question-number">Question 8</div>
+                <p>Dans le tableau périodique, à quelle colonne appartiennent les gaz nobles ?</p>
+                <div class="options">
+                    <label><input type="radio" name="q8" value="A"> A) Colonne 1</label>
+                    <label><input type="radio" name="q8" value="B"> B) Colonne 2</label>
+                    <label><input type="radio" name="q8" value="C"> C) Colonne 17</label>
+                    <label><input type="radio" name="q8" value="D"> D) Colonne 18</label>
+                </div>
+            </div>
+
+            <!-- Question 9 -->
+            <div class="question">
+                <div class="question-number">Question 9</div>
+                <p>Quelle est la règle de stabilité pour l'hélium (duet ou octet) ?</p>
+                <div class="options">
+                    <label><input type="radio" name="q9" value="A"> A) Règle de l'octet (8 électrons)</label>
+                    <label><input type="radio" name="q9" value="B"> B) Règle du duet (2 électrons)</label>
+                    <label><input type="radio" name="q9" value="C"> C) Les deux règles</label>
+                    <label><input type="radio" name="q9" value="D"> D) Aucune règle, il est instable</label>
+                </div>
+            </div>
+
+            <!-- Question 10 -->
+            <div class="question">
+                <div class="question-number">Question 10</div>
+                <p>Quel type d'ion forme généralement un élément du groupe 16 (comme l'oxygène) ?</p>
+                <div class="options">
+                    <label><input type="radio" name="q10" value="A"> A) Cation +1</label>
+                    <label><input type="radio" name="q10" value="B"> B) Cation +2</label>
+                    <label><input type="radio" name="q10" value="C"> C) Anion -2</label>
+                    <label><input type="radio" name="q10" value="D"> D) Anion -1</label>
+                </div>
+            </div>
+
+            <!-- Question 11 -->
+            <div class="question">
+                <div class="question-number">Question 11</div>
+                <p>Quelle est la configuration électronique du néon (Ne) ?</p>
+                <div class="options">
+                    <label><input type="radio" name="q11" value="A"> A) 1s² 2s² 2p⁴</label>
+                    <label><input type="radio" name="q11" value="B"> B) 1s² 2s² 2p⁶</label>
+                    <label><input type="radio" name="q11" value="C"> C) [He] 2s² 2p⁶</label>
+                    <label><input type="radio" name="q11" value="D"> D) Les deux B et C sont correctes</label>
+                </div>
+            </div>
+
+            <!-- Question 12 -->
+            <div class="question">
+                <div class="question-number">Question 12</div>
+                <p>Quel principe régit l'ordre de remplissage des sous-couches électroniques ?</p>
+                <div class="options">
+                    <label><input type="radio" name="q12" value="A"> A) Principe de Pauli</label>
+                    <label><input type="radio" name="q12" value="B"> B) Règle de Hund</label>
+                    <label><input type="radio" name="q12" value="C"> C) Principe d'Aufbau (ou règle de Klechkowski)</label>
+                    <label><input type="radio" name="q12" value="D"> D) Règle de l'octet</label>
+                </div>
+            </div>
+
+            <!-- Question 13 -->
+            <div class="question">
+                <div class="question-number">Question 13</div>
+                <p>Combien de périodes compte le tableau périodique moderne ?</p>
+                <div class="options">
+                    <label><input type="radio" name="q13" value="A"> A) 6</label>
+                    <label><input type="radio" name="q13" value="B"> B) 7</label>
+                    <label><input type="radio" name="q13" value="C"> C) 8</label>
+                    <label><input type="radio" name="q13" value="D"> D) 9</label>
+                </div>
+            </div>
+
+            <!-- Question 14 -->
+            <div class="question">
+                <div class="question-number">Question 14</div>
+                <p>Quel est l'ordre de grandeur de la taille d'un atome ?</p>
+                <div class="options">
+                    <label><input type="radio" name="q14" value="A"> A) 10⁻¹⁵ m</label>
+                    <label><input type="radio" name="q14" value="B"> B) 10⁻¹² m</label>
+                    <label><input type="radio" name="q14" value="C"> C) 10⁻¹⁰ m</label>
+                    <label><input type="radio" name="q14" value="D"> D) 10⁻⁸ m</label>
+                </div>
+            </div>
+
+            <!-- Question 15 -->
+            <div class="question">
+                <div class="question-number">Question 15</div>
+                <p>À quelle famille chimique appartiennent les éléments qui forment facilement des cations +1 ?</p>
+                <div class="options">
+                    <label><input type="radio" name="q15" value="A"> A) Halogènes</label>
+                    <label><input type="radio" name="q15" value="B"> B) Alcalino-terreux</label>
+                    <label><input type="radio" name="q15" value="C"> C) Alcalins</label>
+                    <label><input type="radio" name="q15" value="D"> D) Gaz nobles</label>
+                </div>
+            </div>
+
+            <div class="buttons">
+                <button type="button" id="prevBtn" onclick="changeQuestion(-1)" disabled>Précédent</button>
+                <button type="button" id="nextBtn" onclick="changeQuestion(1)">Suivant</button>
+                <button type="button" id="submitBtn" onclick="showResults()" style="display:none;">Terminer</button>
+            </div>
+        </form>
+
+        <div id="result" class="result"></div>
+    </div>
+
+    <script>
+        let currentQuestion = 0;
+        const totalQuestions = 15;
+        const questions = document.querySelectorAll('.question');
+
+        const correctAnswers = {
+            q1: "B", q2: "B", q3: "B", q4: "C", q5: "C",
+            q6: "C", q7: "B", q8: "D", q9: "B", q10: "C",
+            q11: "D", q12: "C", q13: "B", q14: "C", q15: "C"
+        };
+
+        const explanations = {
+            q1: "Les gaz nobles ont leur couche de valence saturée (pleine), ce qui les rend stables.",
+            q2: "Le sodium a Z = 11 (11 protons).",
+            q3: "Oxygène : 1s² 2s² 2p⁴.",
+            q4: "Chlore (groupe 17) a 7 électrons de valence.",
+            q5: "Le sodium perd 1 électron pour atteindre la configuration du néon → Na⁺.",
+            q6: "Na⁺ et Cl⁻ ont tous deux la configuration électronique de l'argon (période 3).",
+            q7: "Sous-couche p : maximum 6 électrons.",
+            q8: "Gaz nobles : colonne 18 (groupe 18).",
+            q9: "L'hélium suit la règle du duet (2 électrons).",
+            q10: "Groupe 16 : gain de 2 électrons → anion -2 (ex. O²⁻).",
+            q11: "Ne : 1s² 2s² 2p⁶ ou [He] 2s² 2p⁶.",
+            q12: "Le principe d'Aufbau (ou règle de Klechkowski) détermine l'ordre de remplissage.",
+            q13: "Le tableau périodique compte 7 périodes.",
+            q14: "Taille d'un atome ≈ 10⁻¹⁰ m.",
+            q15: "Les alcalins (colonne 1) forment des cations +1."
+        };
+
+        function showQuestion(n) {
+            questions.forEach(q => q.classList.remove('active'));
+            questions[n].classList.add('active');
+            
+            document.getElementById('prevBtn').disabled = n === 0;
+            document.getElementById('nextBtn').style.display = n === totalQuestions - 1 ? 'none' : 'inline-block';
+            document.getElementById('submitBtn').style.display = n === totalQuestions - 1 ? 'inline-block' : 'none';
+        }
+
+        function changeQuestion(step) {
+            currentQuestion += step;
+            showQuestion(currentQuestion);
+        }
+
+        function showResults() {
+            let score = 0;
+            let resultHTML = `<h2>Votre score : `;
+
+            for (let i = 1; i <= totalQuestions; i++) {
+                const selected = document.querySelector(`input[name="q${i}"]:checked`);
+                const correct = correctAnswers[`q${i}`];
+                if (selected && selected.value === correct) {
+                    score++;
+                }
+            }
+
+            resultHTML += `${score}/${totalQuestions}</h2><p><strong>Corrections détaillées :</strong></p>`;
+
+            for (let i = 1; i <= totalQuestions; i++) {
+                const selected = document.querySelector(`input[name="q${i}"]:checked`);
+                const correct = correctAnswers[`q${i}`];
+                const userAnswer = selected ? selected.value : "Aucune réponse";
+                const status = (selected && selected.value === correct) ? "correct" : "incorrect";
+                const statusText = (selected && selected.value === correct) ? "Correct" : "Incorrect";
+
+                resultHTML += `<div class="correction">
+                    <strong>Question ${i} :</strong> ${statusText} 
+                    <span class="${status}">(Votre réponse : ${userAnswer} | Bonne réponse : ${correct})</span><br>
+                    ${explanations[`q${i}`]}
+                </div>`;
+            }
+
+            document.getElementById('result').innerHTML = resultHTML;
+            document.getElementById('result').style.display = 'block';
+            document.getElementById('quizForm').style.display = 'none';
+        }
+
+        // Initialisation
+        showQuestion(0);
+    </script>
+</body>
+</html>
