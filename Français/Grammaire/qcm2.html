@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>QCM 2 – Grammaire 2nde</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    h1 { font-size: 1.6em; }
+    .question { margin-bottom: 15px; padding: 10px; border: 1px solid #ccc; border-radius: 4px; }
+    .question p { margin: 0 0 8px 0; }
+    button { margin-top: 15px; padding: 8px 14px; }
+    #resultat2 { margin-top: 20px; font-weight: bold; }
+    .bonne { color: green; }
+    .fausse { color: red; }
+  </style>
+</head>
+<body>
+
+<h1>QCM 2 – Grammaire (niveau 2nde)</h1>
+
+<form id="qcm2">
+  <div class="question">
+    <p>1. Choisir la forme verbale correcte : « Si tu ___ plus tôt, nous serions partis. »</p>
+    <label><input type="radio" name="q1" value="a"> serais venu</label><br>
+    <label><input type="radio" name="q1" value="b"> étais venu</label><br>
+    <label><input type="radio" name="q1" value="c"> avais venu</label>
+  </div>
+
+  <div class="question">
+    <p>2. Dans « Les élèves, fatigués, sortaient lentement », « fatigués » est :</p>
+    <label><input type="radio" name="q2" value="a"> un adjectif épithète liée</label><br>
+    <label><input type="radio" name="q2" value="b"> un adjectif attribué par un verbe copule</label><br>
+    <label><input type="radio" name="q2" value="c"> un adjectif épithète détachée</label>
+  </div>
+
+  <div class="question">
+    <p>3. Choisir l’accord correct : « Les lettres qu’elle a ___ sont sur la table. »</p>
+    <label><input type="radio" name="q3" value="a"> écrites</label><br>
+    <label><input type="radio" name="q3" value="b"> écrit</label><br>
+    <label><input type="radio" name="q3" value="c"> écrite</label>
+  </div>
+
+  <div class="question">
+    <p>4. Dans « La décision à laquelle je pense », le pronom « laquelle » introduit :</p>
+    <label><input type="radio" name="q4" value="a"> une subordonnée relative</label><br>
+    <label><input type="radio" name="q4" value="b"> une subordonnée conjonctive</label><br>
+    <label><input type="radio" name="q4" value="c"> une proposition indépendante</label>
+  </div>
+
+  <div class="question">
+    <p>5. « Il croit que tu viens » : la subordonnée introduite par « que » exprime surtout :</p>
+    <label><input type="radio" name="q5" value="a"> la cause</label><br>
+    <label><input type="radio" name="q5" value="b"> l’objet de la croyance</label><br>
+    <label><input type="radio" name="q5" value="c"> une condition</label>
+  </div>
+
+  <div class="question">
+    <p>6. « Bien qu’il soit tard, ils discutent encore » : le mode du verbe « soit » marque :</p>
+    <label><input type="radio" name="q6" value="a"> la certitude</label><br>
+    <label><input type="radio" name="q6" value="b"> le souhait</label><br>
+    <label><input type="radio" name="q6" value="c"> la concession</label>
+  </div>
+
+  <div class="question">
+    <p>7. Quel est le type de relation entre les propositions : « Il est venu, mais il est reparti aussitôt » ?</p>
+    <label><input type="radio" name="q7" value="a"> juxtaposition</label><br>
+    <label><input type="radio" name="q7" value="b"> coordination</label><br>
+    <label><input type="radio" name="q7" value="c"> subordination</label>
+  </div>
+
+  <div class="question">
+    <p>8. Dans « Le livre dont l’auteur est célèbre a été réédité », la relative « dont l’auteur est célèbre » :</p>
+    <label><input type="radio" name="q8" value="a"> précise le nom « auteur »</label><br>
+    <label><input type="radio" name="q8" value="b"> précise le nom « livre »</label><br>
+    <label><input type="radio" name="q8" value="c"> précise le verbe « est »</label>
+  </div>
+
+  <div class="question">
+    <p>9. Choisir la phrase où l’accord sujet-verbe est correct :</p>
+    <label><input type="radio" name="q9" value="a"> La plupart des élèves est arrivé en retard.</label><br>
+    <label><input type="radio" name="q9" value="b"> La plupart des élèves sont arrivés en retard.</label><br>
+    <label><input type="radio" name="q9" value="c"> La plupart des élèves arrivèrent en retard.</label>
+  </div>
+
+  <div class="question">
+    <p>10. « Quand il eut terminé, il sortit » : la valeur principale du passé antérieur est ici :</p>
+    <label><input type="radio" name="q10" value="a"> exprimer une action antérieure à une autre action passée</label><br>
+    <label><input type="radio" name="q10" value="b"> exprimer une habitude dans le passé</label><br>
+    <label><input type="radio" name="q10" value="c"> exprimer un ordre</label>
+  </div>
+
+  <button type="button" onclick="corrigerQCM2()">Corriger</button>
+</form>
+
+<div id="resultat2"></div>
+
+<script>
+  function corrigerQCM2() {
+    const bonnesReponses2 = {
+      q1: "b",
+      q2: "c",
+      q3: "a",
+      q4: "a",
+      q5: "b",
+      q6: "c",
+      q7: "b",
+      q8: "b",
+      q9: "b",
+      q10: "a"
+    };
+
+    const form2 = document.getElementById("qcm2");
+    let score = 0;
+    let total = Object.keys(bonnesReponses2).length;
+
+    // réinitialise l’affichage
+    const questions2 = document.querySelectorAll("#qcm2 .question");
+    questions2.forEach(q => {
+      q.classList.remove("bonne", "fausse");
+    });
+
+    for (let nom in bonnesReponses2) {
+      const bonnes = bonnesReponses2[nom];
+      const questionDiv = form2.querySelector('input[name="' + nom + '"]').closest(".question");
+      const choisie = form2.querySelector('input[name="' + nom + '"]:checked');
+
+      if (choisie && choisie.value === bonnes) {
+        score++;
+        questionDiv.classList.add("bonne");
+      } else {
+        questionDiv.classList.add("fausse");
+      }
+    }
+
+    const resultat2 = document.getElementById("resultat2");
+    resultat2.textContent = "Score : " + score + " / " + total;
+  }
+</script>
+
+</body>
+</html>
