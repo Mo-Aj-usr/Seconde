@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>QCM SVT Seconde – Organisation du vivant & ADN</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #f4f6f8;
+        padding: 20px;
+    }
+    h1 {
+        text-align: center;
+        color: #2c3e50;
+    }
+    .question {
+        background: white;
+        padding: 15px;
+        margin-bottom: 15px;
+        border-radius: 8px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    .question h3 {
+        margin-top: 0;
+    }
+    label {
+        display: block;
+        margin: 5px 0;
+        cursor: pointer;
+    }
+    button {
+        display: block;
+        margin: 30px auto;
+        padding: 12px 25px;
+        font-size: 16px;
+        background: #27ae60;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+    }
+    button:hover {
+        background: #219150;
+    }
+    #resultats {
+        background: #ffffff;
+        padding: 20px;
+        border-radius: 10px;
+        margin-top: 30px;
+        display: none;
+    }
+    .bonne { color: green; }
+    .fausse { color: red; }
+</style>
+</head>
+
+<body>
+
+<h1>QCM SVT – Seconde</h1>
+
+<div id="quiz"></div>
+
+<button onclick="corriger()">Valider le QCM</button>
+
+<div id="resultats"></div>
+
+<script>
+const questions = [
+{
+q: "À quelle échelle observe-t-on une cellule ?",
+choices: ["mm", "cm", "µm", "m"],
+answer: 2,
+explication: "Les cellules ont une taille de l’ordre du micromètre (µm), observable au microscope."
+},
+{
+q: "Quelle est l’unité structurale et fonctionnelle du vivant ?",
+choices: ["Le tissu", "L’organe", "La cellule", "La molécule"],
+answer: 2,
+explication: "La cellule est la plus petite unité vivante capable d’assurer des fonctions."
+},
+{
+q: "Qu’est-ce qu’un organe ?",
+choices: [
+"Un ensemble de cellules identiques",
+"Un ensemble de tissus assurant une fonction",
+"Une cellule spécialisée",
+"Une molécule complexe"
+],
+answer: 1,
+explication: "Un organe est constitué de plusieurs tissus qui assurent une ou plusieurs fonctions."
+},
+{
+q: "Qu’est-ce qu’une cellule spécialisée ?",
+choices: [
+"Une cellule sans organites",
+"Une cellule assurant toutes les fonctions",
+"Une cellule adaptée à une fonction précise",
+"Une cellule morte"
+],
+answer: 2,
+explication: "La spécialisation cellulaire permet l’accomplissement d’une fonction particulière."
+},
+{
+q: "Quel organite est spécifique des cellules végétales ?",
+choices: ["Mitochondrie", "Noyau", "Chloroplaste", "Ribosome"],
+answer: 2,
+explication: "Le chloroplaste permet la photosynthèse chez les végétaux."
+},
+{
+q: "Comment appelle-t-on l’ensemble des cellules spécialisées semblables ?",
+choices: ["Organe", "Tissu", "Organisme", "Molécule"],
+answer: 1,
+explication: "Un tissu est un ensemble de cellules spécialisées ayant la même fonction."
+},
+{
+q: "Qu’est-ce que la matrice extracellulaire ?",
+choices: [
+"Un organite",
+"Un réseau de molécules entre les cellules",
+"Une membrane cellulaire",
+"Un noyau"
+],
+answer: 1,
+explication: "La matrice extracellulaire assure l’adhérence, la protection et la communication cellulaire."
+},
+{
+q: "Chez les végétaux, la matrice extracellulaire est appelée :",
+choices: ["Membrane", "Paroi", "Noyau", "Cytoplasme"],
+answer: 1,
+explication: "Chez les végétaux, la paroi joue le rôle de matrice extracellulaire."
+},
+{
+q: "Quelle molécule est le support de l’information génétique ?",
+choices: ["Protéine", "ADN", "Lipide", "Glucide"],
+answer: 1,
+explication: "L’ADN porte l’information génétique sous forme de gènes."
+},
+{
+q: "De quoi est constitué un chromosome ?",
+choices: ["ARN", "Protéines uniquement", "ADN", "Lipides"],
+answer: 2,
+explication: "Un chromosome est constitué d’un long filament d’ADN."
+},
+{
+q: "Quelle est la structure de l’ADN ?",
+choices: [
+"Simple chaîne",
+"Double hélice",
+"Triple hélice",
+"Anneau"
+],
+answer: 1,
+explication: "L’ADN est formé de deux chaînes enroulées en double hélice."
+},
+{
+q: "Quels sont les constituants de base de l’ADN ?",
+choices: ["Acides aminés", "Nucléotides", "Sucres", "Lipides"],
+answer: 1,
+explication: "L’ADN est constitué de nucléotides."
+},
+{
+q: "Quelles bases sont complémentaires dans l’ADN ?",
+choices: [
+"A–C et G–T",
+"A–T et G–C",
+"A–G et C–T",
+"T–C et A–G"
+],
+answer: 1,
+explication: "Dans l’ADN, A s’associe avec T et G avec C."
+},
+{
+q: "Pourquoi les cellules spécialisées sont-elles différentes ?",
+choices: [
+"Elles n’ont pas le même ADN",
+"Elles n’expriment pas les mêmes gènes",
+"Elles ont un noyau différent",
+"Elles viennent d’organismes différents"
+],
+answer: 1,
+explication: "Toutes les cellules ont le même ADN mais n’expriment pas les mêmes gènes."
+},
+{
+q: "Comment appelle-t-on l’ordre des nucléotides dans l’ADN ?",
+choices: ["Code", "Structure", "Séquence", "Fonction"],
+answer: 2,
+explication: "La séquence correspond à l’enchaînement des nucléotides."
+}
+];
+
+const quizDiv = document.getElementById("quiz");
+
+questions.forEach((q, i) => {
+    let html = `<div class="question">
+        <h3>Question ${i+1} : ${q.q}</h3>`;
+    q.choices.forEach((choice, j) => {
+        html += `
+        <label>
+            <input type="radio" name="q${i}" value="${j}">
+            ${choice}
+        </label>`;
+    });
+    html += `</div>`;
+    quizDiv.innerHTML += html;
+});
+
+function corriger() {
+    let score = 0;
+    let correctionHTML = `<h2>Résultats et corrections détaillées</h2>`;
+
+    questions.forEach((q, i) => {
+        const reponse = document.querySelector(`input[name="q${i}"]:checked`);
+        const juste = q.answer;
+
+        if (reponse && parseInt(reponse.value) === juste) {
+            score++;
+            correctionHTML += `<p class="bonne">✔ Question ${i+1} : Bonne réponse.<br>${q.explication}</p>`;
+        } else {
+            correctionHTML += `<p class="fausse">✘ Question ${i+1} : Mauvaise réponse.<br>
+            Réponse correcte : <strong>${q.choices[juste]}</strong><br>
+            ${q.explication}</p>`;
+        }
+    });
+
+    correctionHTML = `<h2>Score : ${score} / ${questions.length}</h2>` + correctionHTML;
+    document.getElementById("resultats").innerHTML = correctionHTML;
+    document.getElementById("resultats").style.display = "block";
+}
+</script>
+
+</body>
+</html>

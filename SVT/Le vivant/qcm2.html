@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>QCM SVT 2nde – Définitions essentielles</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #eef2f5;
+        padding: 20px;
+    }
+    h1 {
+        text-align: center;
+        color: #1f3c88;
+    }
+    .question {
+        background: #ffffff;
+        padding: 15px;
+        margin-bottom: 15px;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    label {
+        display: block;
+        margin: 6px 0;
+        cursor: pointer;
+    }
+    button {
+        display: block;
+        margin: 30px auto;
+        padding: 12px 25px;
+        font-size: 16px;
+        background-color: #1f9d55;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+    }
+    button:hover {
+        background-color: #168f48;
+    }
+    #resultats {
+        display: none;
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        margin-top: 30px;
+    }
+    .bonne { color: green; }
+    .fausse { color: red; }
+</style>
+</head>
+
+<body>
+
+<h1>QCM SVT – Définitions à connaître</h1>
+
+<div id="quiz"></div>
+
+<button onclick="corriger()">Valider</button>
+
+<div id="resultats"></div>
+
+<script>
+const questions = [
+{
+q: "Qu’est-ce qu’une cellule ?",
+choices: [
+"Un ensemble de tissus",
+"L’unité structurale et fonctionnelle du vivant",
+"Une molécule complexe",
+"Un organe microscopique"
+],
+answer: 1,
+explication: "La cellule est la plus petite unité vivante capable d’assurer des fonctions."
+},
+{
+q: "Qu’est-ce qu’un tissu ?",
+choices: [
+"Un ensemble d’organes",
+"Un ensemble de cellules spécialisées assurant la même fonction",
+"Une cellule isolée",
+"Une structure extracellulaire"
+],
+answer: 1,
+explication: "Un tissu est formé de cellules spécialisées ayant une fonction commune."
+},
+{
+q: "Qu’est-ce qu’un organe ?",
+choices: [
+"Un ensemble de molécules",
+"Un ensemble de cellules identiques",
+"Un ensemble de tissus assurant une fonction",
+"Une cellule spécialisée"
+],
+answer: 2,
+explication: "Un organe est composé de plusieurs tissus organisés pour remplir une fonction."
+},
+{
+q: "Qu’est-ce qu’un organite ?",
+choices: [
+"Une cellule spécialisée",
+"Une structure intracellulaire assurant une fonction précise",
+"Une molécule d’ADN",
+"Une partie de la matrice extracellulaire"
+],
+answer: 1,
+explication: "Un organite est une structure présente dans la cellule et assurant une fonction particulière."
+},
+{
+q: "Qu’est-ce que la matrice extracellulaire ?",
+choices: [
+"Une membrane interne",
+"Un réseau de molécules entre les cellules",
+"Un organite cellulaire",
+"Un noyau décondensé"
+],
+answer: 1,
+explication: "La matrice extracellulaire relie les cellules et permet la cohésion des tissus."
+},
+{
+q: "Qu’est-ce que l’ADN ?",
+choices: [
+"Une protéine",
+"Un lipide",
+"La molécule support de l’information génétique",
+"Un organite"
+],
+answer: 2,
+explication: "L’ADN contient l’information génétique sous forme de gènes."
+},
+{
+q: "Qu’est-ce qu’un nucléotide ?",
+choices: [
+"Une base azotée seule",
+"Une protéine",
+"L’unité de base de l’ADN",
+"Un chromosome"
+],
+answer: 2,
+explication: "Un nucléotide est l’unité de base constituant l’ADN."
+},
+{
+q: "Qu’est-ce qu’un chromosome ?",
+choices: [
+"Une cellule spécialisée",
+"Un organite",
+"Un long filament d’ADN",
+"Une molécule de glucose"
+],
+answer: 2,
+explication: "Un chromosome est constitué d’un long filament d’ADN."
+},
+{
+q: "Qu’est-ce qu’un gène ?",
+choices: [
+"Un chromosome entier",
+"Une portion d’ADN portant une information",
+"Un organite cellulaire",
+"Une cellule spécialisée"
+],
+answer: 1,
+explication: "Un gène est une portion d’ADN qui contient une information génétique."
+},
+{
+q: "Qu’appelle-t-on la séquence de l’ADN ?",
+choices: [
+"La forme de l’ADN",
+"L’ordre des nucléotides",
+"La double hélice",
+"La complémentarité des bases"
+],
+answer: 1,
+explication: "La séquence correspond à l’ordre des nucléotides le long de l’ADN."
+}
+];
+
+const quiz = document.getElementById("quiz");
+
+questions.forEach((q, i) => {
+    let html = `<div class="question">
+        <h3>Question ${i+1} : ${q.q}</h3>`;
+    q.choices.forEach((c, j) => {
+        html += `
+        <label>
+            <input type="radio" name="q${i}" value="${j}">
+            ${c}
+        </label>`;
+    });
+    html += `</div>`;
+    quiz.innerHTML += html;
+});
+
+function corriger() {
+    let score = 0;
+    let resultat = `<h2>Score : `;
+
+    let details = `<h3>Corrections détaillées</h3>`;
+
+    questions.forEach((q, i) => {
+        const rep = document.querySelector(`input[name="q${i}"]:checked`);
+        if (rep && parseInt(rep.value) === q.answer) {
+            score++;
+            details += `<p class="bonne">✔ Q${i+1} : ${q.explication}</p>`;
+        } else {
+            details += `<p class="fausse">✘ Q${i+1} — Réponse correcte : <strong>${q.choices[q.answer]}</strong><br>${q.explication}</p>`;
+        }
+    });
+
+    resultat += `${score} / ${questions.length}</h2>` + details;
+    document.getElementById("resultats").innerHTML = resultat;
+    document.getElementById("resultats").style.display = "block";
+}
+</script>
+
+</body>
+</html>
