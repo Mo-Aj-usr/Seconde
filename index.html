@@ -137,16 +137,7 @@ matieres.forEach(m => {
         </p>
     `;
     div.onclick = () => {
-        alert(
-            m.nom +
-            "\\n\\nStructure prévue :\\n" +
-            "→ 10 chapitres\\n" +
-            "→ 5 QCM par chapitre\\n\\n" +
-            "Lien à connecter vers :\\n" +
-            "/Seconde/" + m.dossier + "/"
-        );
-        // PLUS TARD :
-        // window.location.href = m.dossier + "/index.html";
+        window.location.href = "Seconde/" + m.dossier + "/index.html";
     };
     container.appendChild(div);
 });
