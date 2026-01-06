@@ -1,821 +1,369 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <title>QCM – Fonctions Seconde</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <style>
-    :root {
-      --bg: #0f172a;
-      --card-bg: #020617;
-      --accent: #f97316;
-      --accent-soft: rgba(249,115,22,0.1);
-      --accent-strong: #ea580c;
-      --text: #f9fafb;
-      --muted: #cbd5f5;
-      --border: rgba(148,163,184,0.4);
-      --error: #f97373;
-      --success: #4ade80;
-    }
-    * {
-      box-sizing: border-box;
-    }
-    body {
-      margin: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: radial-gradient(circle at top, #1f2937, #020617 60%);
-      color: var(--text);
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: stretch;
-      padding: 16px;
-    }
-    .app {
-      max-width: 900px;
-      width: 100%;
-      background: linear-gradient(145deg, rgba(15,23,42,0.96), rgba(15,23,42,0.98));
-      border-radius: 18px;
-      border: 1px solid rgba(148,163,184,0.35);
-      box-shadow:
-        0 24px 60px rgba(15,23,42,0.85),
-        inset 0 0 0 1px rgba(15,23,42,0.9);
-      padding: 18px 18px 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
-    @media (min-width: 768px) {
-      .app {
-        padding: 22px 26px 22px;
-        gap: 16px;
-      }
-    }
-    .header {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      gap: 10px;
-    }
-    .title-block {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-    .title {
-      font-size: 1.3rem;
-      font-weight: 650;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .badge {
-      font-size: 0.7rem;
-      padding: 2px 8px;
-      border-radius: 999px;
-      border: 1px solid rgba(148,163,184,0.5);
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--muted);
-    }
-    .subtitle {
-      font-size: 0.85rem;
-      color: var(--muted);
-      max-width: 520px;
-    }
-    .stats {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0,1fr));
-      gap: 8px;
-      font-size: 0.8rem;
-    }
-    .stat {
-      background: rgba(15,23,42,0.96);
-      border-radius: 12px;
-      border: 1px solid rgba(31,41,55,0.9);
-      padding: 6px 8px;
-    }
-    .stat-label {
-      color: var(--muted);
-    }
-    .stat-value {
-      font-weight: 600;
-      margin-top: 2px;
-    }
+<meta charset="UTF-8">
+<title>QCM – Fonctions (Seconde)</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-    .card {
-      border-radius: 16px;
-      border: 1px solid rgba(148,163,184,0.3);
-      background:
-        radial-gradient(circle at top left, rgba(148,163,184,0.08), transparent 55%),
-        radial-gradient(circle at bottom right, rgba(249,115,22,0.16), transparent 60%),
-        #020617;
-      padding: 14px 12px 12px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      position: relative;
-      overflow: hidden;
-    }
-    @media (min-width: 768px) {
-      .card {
-        padding: 16px 16px 14px;
-      }
-    }
-    .q-meta {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 0.8rem;
-      color: var(--muted);
-    }
-    .q-index {
-      font-weight: 600;
-      color: #e5e7eb;
-    }
-    .bar {
-      flex: 1;
-      height: 4px;
-      border-radius: 999px;
-      background: rgba(51,65,85,0.9);
-      overflow: hidden;
-    }
-    .bar-fill {
-      height: 100%;
-      width: 0%;
-      background: linear-gradient(90deg, #f97316, #fb923c);
-      transition: width 0.2s ease-out;
-    }
-    .q-text {
-      font-size: 0.98rem;
-      line-height: 1.5;
-    }
-    .hint {
-      font-size: 0.78rem;
-      color: var(--muted);
-      margin-top: 2px;
-    }
-    .answers {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      margin-top: 4px;
-    }
-    .answer {
-      border-radius: 12px;
-      border: 1px solid rgba(148,163,184,0.5);
-      background: rgba(15,23,42,0.97);
-      padding: 8px 9px;
-      display: flex;
-      align-items: flex-start;
-      gap: 8px;
-      cursor: pointer;
-      font-size: 0.9rem;
-      transition: all 0.15s ease;
-      position: relative;
-    }
-    .answer:hover {
-      border-color: rgba(248,250,252,0.45);
-      background: radial-gradient(circle at top, rgba(148,163,184,0.15), rgba(15,23,42,1));
-    }
-    .answer.selected {
-      border-color: var(--accent-strong);
-      background: radial-gradient(circle at top, rgba(249,115,22,0.22), rgba(15,23,42,1));
-      box-shadow: 0 0 0 1px rgba(248,250,252,0.05);
-    }
-    .answer.correct {
-      border-color: var(--success);
-      box-shadow: 0 0 0 1px rgba(74,222,128,0.3);
-    }
-    .answer.wrong {
-      border-color: var(--error);
-      box-shadow: 0 0 0 1px rgba(248,113,113,0.3);
-    }
-    .bullet {
-      width: 18px;
-      height: 18px;
-      border-radius: 999px;
-      border: 2px solid rgba(148,163,184,0.7);
-      flex-shrink: 0;
-      margin-top: 2px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .bullet-inner {
-      width: 8px;
-      height: 8px;
-      border-radius: 999px;
-      background: transparent;
-    }
-    .answer.selected .bullet {
-      border-color: var(--accent-strong);
-      background: rgba(248,250,252,0.04);
-    }
-    .answer.selected .bullet-inner {
-      background: var(--accent-strong);
-    }
-    .answer.correct .bullet-inner {
-      background: var(--success);
-    }
-    .answer.wrong .bullet-inner {
-      background: var(--error);
-    }
-    .answer-text {
-      flex: 1;
-    }
-    .feedback {
-      font-size: 0.8rem;
-      margin-top: 4px;
-      min-height: 1.1em;
-    }
-    .feedback.ok {
-      color: var(--success);
-    }
-    .feedback.ko {
-      color: var(--error);
-    }
+<style>
+:root {
+  --bg: #020617;
+  --card: #020617;
+  --text: #f8fafc;
+  --muted: #cbd5f5;
+  --border: rgba(148,163,184,0.45);
+  --accent: #fb923c;
+  --success: #4ade80;
+  --error: #f87171;
+}
 
-    .nav {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      gap: 8px;
-      margin-top: 4px;
-    }
-    .nav-left,
-    .nav-right {
-      display: flex;
-      gap: 8px;
-    }
-    .btn {
-      border-radius: 999px;
-      border: 1px solid rgba(148,163,184,0.6);
-      background: rgba(15,23,42,0.96);
-      color: var(--text);
-      font-size: 0.83rem;
-      padding: 7px 14px;
-      min-width: 96px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      cursor: pointer;
-      transition: all 0.15s ease;
-    }
-    .btn span.icon {
-      font-size: 0.9rem;
-    }
-    .btn:hover {
-      border-color: rgba(248,250,252,0.75);
-      background: rgba(15,23,42,1);
-      transform: translateY(-0.5px);
-    }
-    .btn:disabled {
-      opacity: 0.45;
-      cursor: default;
-      border-style: dashed;
-      transform: none;
-    }
-    .btn-primary {
-      border-color: var(--accent-strong);
-      background: linear-gradient(135deg, #f97316, #ea580c);
-      color: #0b1120;
-      font-weight: 600;
-      box-shadow: 0 10px 26px rgba(248,113,22,0.45);
-    }
-    .btn-primary:hover:not(:disabled) {
-      background: linear-gradient(135deg, #fb923c, #f97316);
-      box-shadow: 0 12px 30px rgba(248,113,22,0.55);
-    }
+* { box-sizing: border-box; }
 
-    .summary {
-      margin-top: 8px;
-      border-radius: 14px;
-      border: 1px solid rgba(148,163,184,0.4);
-      padding: 10px 10px 9px;
-      background:
-        radial-gradient(circle at top right, rgba(34,197,94,0.18), rgba(15,23,42,0.96));
-      font-size: 0.85rem;
-      display: none;
-      flex-direction: column;
-      gap: 6px;
-    }
-    .summary.visible {
-      display: flex;
-    }
-    .summary-header {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .summary-title {
-      font-weight: 600;
-    }
-    .summary-score {
-      border-radius: 999px;
-      padding: 3px 9px;
-      background: rgba(15,23,42,0.96);
-      border: 1px solid rgba(52,211,153,0.6);
-      font-size: 0.78rem;
-    }
-    .summary-text {
-      color: var(--muted);
-    }
-    .summary-list {
-      margin-top: 4px;
-      max-height: 210px;
-      overflow: auto;
-      padding-right: 4px;
-    }
-    .summary-item {
-      padding: 4px 0;
-      border-top: 1px dashed rgba(148,163,184,0.4);
-      font-size: 0.8rem;
-    }
-    .summary-item:first-child {
-      border-top: none;
-    }
-    .summary-item span.badge {
-      border-radius: 999px;
-      padding: 1px 7px;
-      font-size: 0.72rem;
-      margin-right: 4px;
-    }
-    .summary-item .badge.bad {
-      background: rgba(239,68,68,0.18);
-      border: 1px solid rgba(239,68,68,0.7);
-      color: #fecaca;
-    }
-    .summary-item .badge.good {
-      background: rgba(34,197,94,0.18);
-      border: 1px solid rgba(34,197,94,0.7);
-      color: #bbf7d0;
-    }
-  </style>
+body {
+  margin: 0;
+  font-family: system-ui, sans-serif;
+  background: radial-gradient(circle at top, #1f2937, #020617 70%);
+  color: var(--text);
+  padding: 16px;
+}
+
+.app {
+  max-width: 900px;
+  margin: auto;
+  background: rgba(2,6,23,0.97);
+  border-radius: 18px;
+  border: 1px solid var(--border);
+  padding: 18px;
+}
+
+.title {
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+.subtitle {
+  font-size: 0.9rem;
+  color: var(--muted);
+  margin-bottom: 14px;
+}
+
+.card {
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 16px;
+}
+
+.q-text {
+  font-size: 1.05rem;
+  line-height: 1.6;
+  white-space: pre-line;
+}
+
+.hint {
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin-top: 4px;
+}
+
+.answers {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.answer {
+  background: rgba(15,23,42,0.9);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 10px;
+  cursor: pointer;
+  color: var(--text);
+  text-align: left;
+}
+
+.answer:hover { border-color: #f8fafc; }
+
+.answer.correct { border-color: var(--success); }
+.answer.wrong { border-color: var(--error); }
+
+.feedback {
+  margin-top: 8px;
+  font-size: 0.9rem;
+}
+
+.feedback.ok { color: var(--success); }
+.feedback.ko { color: var(--error); }
+
+.nav {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 12px;
+}
+
+button {
+  padding: 8px 16px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: rgba(15,23,42,0.95);
+  color: var(--text);
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.math-box {
+  background: #020617;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 10px;
+  margin: 10px 0;
+}
+
+/* tableaux */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: center;
+}
+
+th, td {
+  border: 1px solid var(--border);
+  padding: 6px;
+}
+</style>
 </head>
+
 <body>
 <div class="app">
-  <div class="header">
-    <div class="title-block">
-      <div class="title">
-        Fonctions – QCM 8 (Seconde)
-        <span class="badge">15 questions</span>
-      </div>
-      <div class="subtitle">
-        Domaine de définition, images et antécédents à partir d’une expression algébrique, d’un graphique ou d’un tableau de valeurs.
-      </div>
-    </div>
-    <div class="stats">
-      <div class="stat">
-        <div class="stat-label">Question</div>
-        <div class="stat-value" id="statQuestion">1 / 15</div>
-      </div>
-      <div class="stat">
-        <div class="stat-label">Répondues</div>
-        <div class="stat-value" id="statAnswered">0 / 15</div>
-      </div>
-      <div class="stat">
-        <div class="stat-label">Score actuel</div>
-        <div class="stat-value" id="statScore">0 / 15</div>
-      </div>
-    </div>
-  </div>
 
-  <div class="card">
-    <div class="q-meta">
-      <span class="q-index" id="qIndex">Question 1</span>
-      <span>• Fonctions</span>
-      <div class="bar"><div class="bar-fill" id="progressBar"></div></div>
-    </div>
-    <div class="q-text" id="qText"></div>
-    <div class="hint" id="qHint"></div>
-    <div class="answers" id="answers"></div>
-    <div class="feedback" id="feedback"></div>
+<div class="title">Fonctions – QCM (2nde)</div>
+<div class="subtitle">
+Domaine de définition – images – antécédents – lecture de tableaux et de graphiques.
+</div>
 
-    <div class="nav">
-      <div class="nav-left">
-        <button class="btn" id="btnPrev"><span class="icon">◀</span> Précédent</button>
-        <button class="btn" id="btnNext">Suivant <span class="icon">▶</span></button>
-      </div>
-      <div class="nav-right">
-        <button class="btn btn-primary" id="btnFinish"><span class="icon">✓</span> Terminer</button>
-      </div>
-    </div>
-  </div>
+<div class="card">
+  <div class="q-text" id="qText"></div>
+  <div class="hint" id="qHint"></div>
+  <div class="answers" id="answers"></div>
+  <div class="feedback" id="feedback"></div>
 
-  <div class="summary" id="summary">
-    <div class="summary-header">
-      <div class="summary-title" id="summaryTitle">Bilan du QCM</div>
-      <div class="summary-score" id="summaryScore">0 / 15 (0%)</div>
-    </div>
-    <div class="summary-text" id="summaryText"></div>
-    <div class="summary-list" id="summaryList"></div>
+  <div class="nav">
+    <button id="prev">◀ Précédent</button>
+    <button id="next">Suivant ▶</button>
   </div>
 </div>
 
+</div>
+
 <script>
-  // 15 questions : algébrique, graphique (description textuelle), tableau.
-  const questions = [
-    {
-      text: "On considère la fonction f définie par f(x) = 2x + 3. Quel est l’ensemble de définition de f ?",
-      hint: "(On travaille sur les nombres réels.)",
-      choices: [
-        "Tous les nombres réels",
-        "Les réels positifs uniquement",
-        "Tous les réels sauf 0",
-        "Tous les entiers naturels"
-      ],
-      correct: 0,
-      explanation: "Une expression polynomiale comme 2x + 3 est définie pour tout réel x."
-    },
-    {
-      text: "Pour la fonction f(x) = 5 / (x − 2), quel est l’ensemble de définition ?",
-      hint: "On ne peut pas diviser par 0.",
-      choices: [
-        "Tous les réels",
-        "Tous les réels sauf 5",
-        "Tous les réels sauf 2",
-        "Tous les réels strictement positifs"
-      ],
-      correct: 2,
-      explanation: "Le dénominateur x − 2 ne doit pas être nul, donc x ≠ 2."
-    },
-    {
-      text: "Pour f(x) = √(x − 1), quel est l’ensemble de définition de f ?",
-      hint: "On ne prend que les valeurs où la racine est définie.",
-      choices: [
-        "x ≥ 1",
-        "x > 1",
-        "x ≤ 1",
-        "Tous les réels"
-      ],
-      correct: 0,
-      explanation: "Sous la racine, il faut x − 1 ≥ 0, donc x ≥ 1."
-    },
-    {
-      text: "On considère la fonction f définie sur ℝ par f(x) = −3x + 1. Que vaut l’image de 2 ?",
-      hint: "Calcule f(2).",
-      choices: [
-        "−5",
-        "−2",
-        "−3",
-        "7"
-      ],
-      correct: 0,
-      explanation: "f(2) = −3×2 + 1 = −6 + 1 = −5."
-    },
-    {
-      text: "Pour la même fonction f(x) = −3x + 1, quel est un antécédent de 4 ?",
-      hint: "Résoudre −3x + 1 = 4.",
-      choices: [
-        "x = 1",
-        "x = −1",
-        "x = −3",
-        "x = 3"
-      ],
-      correct: 1,
-      explanation: "−3x + 1 = 4 ⇔ −3x = 3 ⇔ x = −1."
-    },
-    {
-      text: "On considère le tableau de valeurs suivant pour une fonction g :\n\nx :  −2   −1    0    1    2\n g(x):  1    0    3    4    3\n\nQue vaut g(1) ?",
-      hint: "Lire la ligne g(x) à la colonne x = 1.",
-      choices: [
-        "0",
-        "1",
-        "3",
-        "4"
-      ],
-      correct: 3,
-      explanation: "Dans le tableau, à x = 1 correspond g(1) = 4."
-    },
-    {
-      text: "Avec le même tableau, quel est un antécédent de 3 par g ?",
-      hint: "Chercher les x tels que g(x) = 3.",
-      choices: [
-        "x = 0 seulement",
-        "x = 2 seulement",
-        "x = 0 et x = 2",
-        "Aucun"
-      ],
-      correct: 2,
-      explanation: "On lit g(0) = 3 et g(2) = 3, donc deux antécédents."
-    },
-    {
-      text: "Le graphique d’une fonction h montre que le point (1, 2) est sur la courbe. Que peut-on affirmer ?",
-      hint: "Un point (x, y) sur la courbe signifie y = h(x).",
-      choices: [
-        "h(2) = 1",
-        "h(1) = 2",
-        "h(−1) = 2",
-        "h(2) = −1"
-      ],
-      correct: 1,
-      explanation: "Le point (1,2) signifie que l’image de 1 par h est 2."
-    },
-    {
-      text: "Toujours à partir d’un graphique de h, on lit que h(0) = −1. Que représente 0 ?",
-      hint: "On regarde l’axe horizontal.",
-      choices: [
-        "Une image",
-        "Un antécédent",
-        "Le maximum de h",
-        "Le minimum de h"
-      ],
-      correct: 1,
-      explanation: "L’abscisse 0 est un antécédent, l’ordonnée −1 est l’image."
-    },
-    {
-      text: "On sait que la courbe de h coupe l’axe des abscisses en x = 3. Que vaut alors h(3) ?",
-      hint: "Couper l’axe des abscisses signifie ordonnée nulle.",
-      choices: [
-        "h(3) = 3",
-        "h(3) = 1",
-        "h(3) = 0",
-        "h(3) = −3"
-      ],
-      correct: 2,
-      explanation: "Sur l’axe des abscisses, l’ordonnée est 0, donc h(3) = 0."
-    },
-    {
-      text: "Soit f(x) = (x + 1)/(x − 4). Quel est l’ensemble de définition de f ?",
-      hint: "Attention au dénominateur.",
-      choices: [
-        "Tous les réels",
-        "Tous les réels sauf −1",
-        "Tous les réels sauf 4",
-        "Tous les réels sauf −1 et 4"
-      ],
-      correct: 2,
-      explanation: "Le dénominateur x − 4 ne doit pas être nul, donc x ≠ 4."
-    },
-    {
-      text: "Pour f(x) = √(5 − x), quelle condition doit vérifier x ?",
-      hint: "Sous la racine, 5 − x ≥ 0.",
-      choices: [
-        "x ≥ 5",
-        "x ≤ 5",
-        "x > 5",
-        "x < 5"
-      ],
-      correct: 1,
-      explanation: "5 − x ≥ 0 ⇔ x ≤ 5, donc le domaine est x ≤ 5."
-    },
-    {
-      text: "On considère f définie sur ℝ par f(x) = x² − 4. Quel est un antécédent possible de 5 ?",
-      hint: "Résoudre x² − 4 = 5.",
-      choices: [
-        "x = 3 seulement",
-        "x = −3 seulement",
-        "x = 3 ou x = −3",
-        "Aucun réel"
-      ],
-      correct: 2,
-      explanation: "x² − 4 = 5 ⇔ x² = 9 ⇔ x = 3 ou x = −3."
-    },
-    {
-      text: "On a le tableau de valeurs suivant pour une fonction k :\n\nx :  −1    0    1    2\nk(x):  2    1    0    −1\n\nQuel est l’ensemble de définition de k d’après ce tableau ?",
-      hint: "On ne connaît k que pour certains x.",
-      choices: [
-        "{−1, 0, 1, 2}",
-        "Tous les réels",
-        "Les entiers naturels",
-        "Les réels ≥ −1"
-      ],
-      correct: 0,
-      explanation: "Le tableau ne donne k que pour x = −1, 0, 1, 2."
-    },
-    {
-      text: "Avec ce même tableau, quelle affirmation est vraie ?",
-      hint: "Regarder les couples (x, k(x)).",
-      choices: [
-        "k(1) = 1",
-        "k(0) = 0",
-        "k(2) = −1",
-        "k(−1) = 0"
-      ],
-      correct: 2,
-      explanation: "On lit k(2) = −1 dans la dernière colonne."
-    }
-  ];
+const questions = [
+/* 1 */
+{
+ text:"On considère la fonction f définie par f(x)=2x+3.\nQuel est son ensemble de définition ?",
+ choices:["ℝ","ℝ⁺","ℝ\\{0}","ℕ"],
+ correct:0,
+ explanation:"Une fonction polynomiale est définie pour tout réel."
+},
+/* 2 */
+{
+ text:"Pour f(x)=5/(x−2), quel est l’ensemble de définition ?",
+ choices:["ℝ","ℝ\\{5}","ℝ\\{2}","ℝ⁺"],
+ correct:2,
+ explanation:"Le dénominateur ne doit pas être nul."
+},
+/* 3 */
+{
+ text:"Pour f(x)=√(x−1), quelle condition doit vérifier x ?",
+ choices:["x≥1","x>1","x≤1","x∈ℝ"],
+ correct:0,
+ explanation:"Sous la racine, x−1≥0."
+},
+/* 4 */
+{
+ text:"Soit f(x)=−3x+1. Que vaut f(2) ?",
+ choices:["−5","−3","−2","7"],
+ correct:0,
+ explanation:"f(2)=−6+1=−5."
+},
+/* 5 */
+{
+ text:"Pour f(x)=−3x+1, quel est un antécédent de 4 ?",
+ choices:["1","−1","3","−3"],
+ correct:1,
+ explanation:"−3x+1=4 ⇒ x=−1."
+},
+/* 6 */
+{
+ text:"On considère la fonction g définie par le tableau suivant :",
+ table:{
+  headers:["x","−2","−1","0","1","2"],
+  values:["g(x)","1","0","3","4","3"]
+ },
+ choices:["0","1","3","4"],
+ correct:3,
+ explanation:"À x=1 correspond g(1)=4."
+},
+/* 7 */
+{
+ text:"Avec ce tableau, quel est un antécédent de 3 ?",
+ table:{
+  headers:["x","−2","−1","0","1","2"],
+  values:["g(x)","1","0","3","4","3"]
+ },
+ choices:["0","2","0 et 2","aucun"],
+ correct:2,
+ explanation:"g(0)=3 et g(2)=3."
+},
+/* 8 */
+{
+ text:"La courbe de h est donnée ci-dessous.",
+ graph:{
+  points:[{x:0,y:-1},{x:1,y:2},{x:3,y:0}]
+ },
+ choices:["h(0)=1","h(1)=2","h(2)=1","h(3)=1"],
+ correct:1,
+ explanation:"Le point (1,2) est sur la courbe."
+},
+/* 9 */
+{
+ text:"D’après le graphique, que représente 0 dans h(0)=−1 ?",
+ choices:["Une image","Un antécédent","Un maximum","Un minimum"],
+ correct:1,
+ explanation:"0 est l’abscisse : un antécédent."
+},
+/* 10 */
+{
+ text:"La courbe coupe l’axe des abscisses en x=3. Que vaut h(3) ?",
+ choices:["3","1","0","−3"],
+ correct:2,
+ explanation:"Sur l’axe des abscisses, l’ordonnée est 0."
+},
+/* 11 */
+{
+ text:"Pour f(x)=(x+1)/(x−4), quel est l’ensemble de définition ?",
+ choices:["ℝ","ℝ\\{−1}","ℝ\\{4}","ℝ\\{−1,4}"],
+ correct:2,
+ explanation:"Le dénominateur ne doit pas être nul."
+},
+/* 12 */
+{
+ text:"Pour f(x)=√(5−x), quelle condition doit vérifier x ?",
+ choices:["x≥5","x≤5","x>5","x<5"],
+ correct:1,
+ explanation:"5−x≥0 ⇒ x≤5."
+},
+/* 13 */
+{
+ text:"Pour f(x)=x²−4, quels sont les antécédents de 5 ?",
+ choices:["3","−3","3 et −3","aucun"],
+ correct:2,
+ explanation:"x²=9 ⇒ x=±3."
+},
+/* 14 */
+{
+ text:"Tableau de la fonction k :",
+ table:{
+  headers:["x","−1","0","1","2"],
+  values:["k(x)","2","1","0","−1"]
+ },
+ choices:["ℝ","{−1,0,1,2}","ℕ","ℝ⁺"],
+ correct:1,
+ explanation:"Le domaine est l’ensemble des x du tableau."
+},
+/* 15 */
+{
+ text:"Avec ce tableau, quelle affirmation est vraie ?",
+ table:{
+  headers:["x","−1","0","1","2"],
+  values:["k(x)","2","1","0","−1"]
+ },
+ choices:["k(1)=1","k(0)=0","k(2)=−1","k(−1)=0"],
+ correct:2,
+ explanation:"On lit k(2)=−1."
+}
+];
 
-  let currentIndex = 0;
-  const userAnswers = Array(questions.length).fill(null);        // index de réponse choisie
-  const answerStatus = Array(questions.length).fill(null);       // true / false
-  const answeredOnce = Array(questions.length).fill(false);      // a déjà eu une correction
+let index = 0;
 
-  const qIndexEl = document.getElementById("qIndex");
-  const qTextEl = document.getElementById("qText");
-  const qHintEl = document.getElementById("qHint");
-  const answersEl = document.getElementById("answers");
-  const feedbackEl = document.getElementById("feedback");
-  const progressBarEl = document.getElementById("progressBar");
+const qText = document.getElementById("qText");
+const qHint = document.getElementById("qHint");
+const answers = document.getElementById("answers");
+const feedback = document.getElementById("feedback");
 
-  const statQuestionEl = document.getElementById("statQuestion");
-  const statAnsweredEl = document.getElementById("statAnswered");
-  const statScoreEl = document.getElementById("statScore");
+function renderTable(t){
+ const d=document.createElement("div");
+ d.className="math-box";
+ d.innerHTML=`<table>
+ <tr>${t.headers.map(h=>`<th>${h}</th>`).join("")}</tr>
+ <tr>${t.values.map(v=>`<td>${v}</td>`).join("")}</tr>
+ </table>`;
+ return d;
+}
 
-  const btnPrev = document.getElementById("btnPrev");
-  const btnNext = document.getElementById("btnNext");
-  const btnFinish = document.getElementById("btnFinish");
+/* REPÈRE ORTHONORMÉ GRADUÉ */
+function renderGraph(g){
+ const d=document.createElement("div");
+ d.className="math-box";
+ const scale=30, ox=120, oy=80;
 
-  const summaryEl = document.getElementById("summary");
-  const summaryTitleEl = document.getElementById("summaryTitle");
-  const summaryScoreEl = document.getElementById("summaryScore");
-  const summaryTextEl = document.getElementById("summaryText");
-  const summaryListEl = document.getElementById("summaryList");
+ const ticks=[];
+ for(let i=-3;i<=4;i++){
+  ticks.push(`<line x1="${ox+i*scale}" y1="${oy-4}" x2="${ox+i*scale}" y2="${oy+4}" stroke="#94a3b8"/>`);
+  ticks.push(`<text x="${ox+i*scale-4}" y="${oy+16}" font-size="10" fill="#e5e7eb">${i}</text>`);
+  ticks.push(`<line x1="${ox-4}" y1="${oy-i*scale}" x2="${ox+4}" y2="${oy-i*scale}" stroke="#94a3b8"/>`);
+  ticks.push(`<text x="${ox+8}" y="${oy-i*scale+4}" font-size="10" fill="#e5e7eb">${i}</text>`);
+ }
 
-  function updateStats() {
-    const total = questions.length;
-    const answeredCount = userAnswers.filter(v => v !== null).length;
-    const score = answerStatus.filter(v => v === true).length;
-    statQuestionEl.textContent = (currentIndex + 1) + " / " + total;
-    statAnsweredEl.textContent = answeredCount + " / " + total;
-    statScoreEl.textContent = score + " / " + total;
-  }
+ const pts=g.points.map(p=>
+ `<circle cx="${ox+p.x*scale}" cy="${oy-p.y*scale}" r="4" fill="#fb923c"/>`
+ ).join("");
 
-  function renderQuestion() {
-    const q = questions[currentIndex];
-    const total = questions.length;
+ d.innerHTML=`
+ <svg width="240" height="160">
+  <line x1="0" y1="${oy}" x2="240" y2="${oy}" stroke="#64748b"/>
+  <line x1="${ox}" y1="0" x2="${ox}" y2="160" stroke="#64748b"/>
+  ${ticks.join("")}
+  ${pts}
+ </svg>`;
+ return d;
+}
 
-    qIndexEl.textContent = "Question " + (currentIndex + 1);
-    qTextEl.textContent = q.text;
-    qHintEl.textContent = q.hint || "";
-    feedbackEl.textContent = "";
-    feedbackEl.className = "feedback";
+function render(){
+ const q=questions[index];
+ qText.innerHTML=q.text;
+ qHint.textContent="";
+ answers.innerHTML="";
+ feedback.textContent="";
 
-    const ratio = ((currentIndex + 1) / total) * 100;
-    progressBarEl.style.width = ratio.toFixed(0) + "%";
+ if(q.table) qText.appendChild(renderTable(q.table));
+ if(q.graph) qText.appendChild(renderGraph(q.graph));
 
-    answersEl.innerHTML = "";
-    q.choices.forEach((choice, idx) => {
-      const btn = document.createElement("button");
-      btn.type = "button";
-      btn.className = "answer";
+ q.choices.forEach((c,i)=>{
+  const b=document.createElement("button");
+  b.className="answer";
+  b.textContent=c;
+  b.onclick=()=>{
+   if(i===q.correct){
+    b.classList.add("correct");
+    feedback.textContent="Bonne réponse. "+q.explanation;
+    feedback.className="feedback ok";
+   } else {
+    b.classList.add("wrong");
+    feedback.textContent="Mauvaise réponse. "+q.explanation;
+    feedback.className="feedback ko";
+   }
+  };
+  answers.appendChild(b);
+ });
+}
 
-      const bullet = document.createElement("div");
-      bullet.className = "bullet";
-      const inner = document.createElement("div");
-      inner.className = "bullet-inner";
-      bullet.appendChild(inner);
-
-      const textDiv = document.createElement("div");
-      textDiv.className = "answer-text";
-      textDiv.textContent = choice;
-
-      btn.appendChild(bullet);
-      btn.appendChild(textDiv);
-
-      // état précédent
-      if (userAnswers[currentIndex] === idx) {
-        btn.classList.add("selected");
-      }
-      if (answeredOnce[currentIndex]) {
-        if (idx === questions[currentIndex].correct) {
-          btn.classList.add("correct");
-        } else if (userAnswers[currentIndex] === idx) {
-          btn.classList.add("wrong");
-        }
-      }
-
-      btn.addEventListener("click", () => handleAnswer(idx));
-      answersEl.appendChild(btn);
-    });
-
-    // feedback si déjà répondu
-    if (answeredOnce[currentIndex]) {
-      showFeedback(currentIndex);
-    }
-
-    // boutons nav
-    btnPrev.disabled = currentIndex === 0;
-    btnNext.disabled = currentIndex === total - 1;
-  }
-
-  function handleAnswer(idx) {
-    const q = questions[currentIndex];
-    const alreadyAnswered = answeredOnce[currentIndex];
-
-    userAnswers[currentIndex] = idx;
-
-    const isCorrect = idx === q.correct;
-    answerStatus[currentIndex] = isCorrect;
-    answeredOnce[currentIndex] = true;
-
-    // Met à jour affichage immédiat
-    const childButtons = Array.from(answersEl.querySelectorAll(".answer"));
-    childButtons.forEach((b, i) => {
-      b.classList.remove("selected", "correct", "wrong");
-      if (i === idx) {
-        b.classList.add("selected");
-      }
-      if (i === q.correct) {
-        b.classList.add("correct");
-      } else if (i === idx && !isCorrect) {
-        b.classList.add("wrong");
-      }
-    });
-
-    showFeedback(currentIndex);
-    updateStats();
-  }
-
-  function showFeedback(index) {
-    const q = questions[index];
-    const chosen = userAnswers[index];
-    if (chosen == null) {
-      feedbackEl.textContent = "";
-      feedbackEl.className = "feedback";
-      return;
-    }
-    const isCorrect = answerStatus[index] === true;
-    if (isCorrect) {
-      feedbackEl.textContent = "Bonne réponse. " + (q.explanation || "");
-      feedbackEl.className = "feedback ok";
-    } else {
-      const correctLabel = q.choices[q.correct];
-      feedbackEl.textContent =
-        "Mauvaise réponse. La bonne réponse est : « " +
-        correctLabel +
-        " ». " +
-        (q.explanation || "");
-      feedbackEl.className = "feedback ko";
-    }
-  }
-
-  function showSummary() {
-    const total = questions.length;
-    const score = answerStatus.filter(v => v === true).length;
-    const answeredCount = userAnswers.filter(v => v !== null).length;
-    const percent = Math.round((score / total) * 100);
-
-    summaryTitleEl.textContent = "Bilan du QCM – Fonctions";
-    summaryScoreEl.textContent = score + " / " + total + " (" + percent + "%)";
-    if (answeredCount < total) {
-      summaryTextEl.textContent =
-        "Tu n’as pas répondu à toutes les questions, mais le score tient compte de celles traitées. Tu peux revenir sur les questions avec Précédent / Suivant.";
-    } else {
-      summaryTextEl.textContent =
-        "Tu as répondu à toutes les questions. Tu peux maintenant revoir les corrections détaillées question par question.";
-    }
-
-    summaryListEl.innerHTML = "";
-    questions.forEach((q, idx) => {
-      const item = document.createElement("div");
-      item.className = "summary-item";
-      const good = answerStatus[idx] === true;
-      const badge = document.createElement("span");
-      badge.className = "badge " + (good ? "good" : "bad");
-      badge.textContent = good ? "✔ Q" + (idx + 1) : "✖ Q" + (idx + 1);
-
-      const text = document.createElement("span");
-      const chosenIdx = userAnswers[idx];
-      let extra = "";
-      if (chosenIdx == null) {
-        extra = " (non répondue)";
-      } else if (!good) {
-        extra =
-          " (ta réponse: « " +
-          questions[idx].choices[chosenIdx] +
-          " »; bonne réponse: « " +
-          questions[idx].choices[questions[idx].correct] +
-          " »)";
-      }
-      text.textContent = " " + q.text.slice(0, 80) + (q.text.length > 80 ? "..." : "") + extra;
-
-      item.appendChild(badge);
-      item.appendChild(text);
-      summaryListEl.appendChild(item);
-    });
-
-    summaryEl.classList.add("visible");
-  }
-
-  btnPrev.addEventListener("click", () => {
-    if (currentIndex > 0) {
-      currentIndex--;
-      renderQuestion();
-      updateStats();
-    }
-  });
-
-  btnNext.addEventListener("click", () => {
-    if (currentIndex < questions.length - 1) {
-      currentIndex++;
-      renderQuestion();
-      updateStats();
-    }
-  });
-
-  btnFinish.addEventListener("click", () => {
-    showSummary();
-  });
-
-  // Initialisation
-  renderQuestion();
-  updateStats();
+document.getElementById("prev").onclick=()=>{ if(index>0){index--;render();}};
+document.getElementById("next").onclick=()=>{ if(index<questions.length-1){index++;render();}};
+render();
 </script>
 </body>
 </html>
