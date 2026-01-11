@@ -1,68 +1,165 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Español – Plataforma QCM</title>
-<style>
-    body {
-        font-family: "Segoe UI", sans-serif;
-        background: linear-gradient(135deg, #ff9a8b, #ff6a88);
-        min-height: 100vh;
-        padding: 30px;
-        color: #2d3436;
-    }
-    h1 { text-align: center; color: white; margin-bottom: 10px; font-size: 2.6em; }
-    .subtitle { text-align: center; color: #ecf0f1; margin-bottom: 40px; font-size: 1.2em; }
-    .grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-        gap: 25px;
-        max-width: 1300px;
-        margin: auto;
-    }
-    .card {
-        background: white;
-        border-radius: 22px;
-        padding: 25px;
-        box-shadow: 0 15px 35px rgba(0,0,0,0.25);
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-        cursor: pointer;
-        position: relative;
-    }
-    .card:hover {
-        transform: translateY(-8px);
-        box-shadow: 0 25px 50px rgba(0,0,0,0.35);
-    }
-    .card h2 { margin-bottom: 12px; font-size: 1.5em; }
-    footer { margin-top: 60px; text-align: center; color: #ecf0f1; font-size: 0.9em; }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Español Seconde – Lanzaté</title>
+    <meta name="description" content="Cours et QCM interactifs d'espagnol Seconde – méthode Lanzaté">
+    
+    <style>
+        :root {
+            --primary: #e74c3c;
+            --primary-dark: #c0392b;
+            --light: #fff;
+            --dark: #2c3e50;
+            --shadow: 0 12px 30px rgba(0,0,0,0.18);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Segoe UI", system-ui, sans-serif;
+            background: linear-gradient(135deg, #ff9a8b 0%, #ff6a88 100%);
+            color: var(--dark);
+            min-height: 100vh;
+            padding: 2.5rem 1rem;
+            line-height: 1.6;
+        }
+
+        header {
+            text-align: center;
+            color: white;
+            margin-bottom: 2.5rem;
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 0.4rem;
+        }
+
+        .subtitle {
+            font-size: 1.25rem;
+            opacity: 0.95;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.8rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: var(--light);
+            border-radius: 16px;
+            padding: 1.8rem;
+            box-shadow: var(--shadow);
+            transition: all 0.28s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.28);
+        }
+
+        .card h2 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .card ul {
+            list-style: none;
+            margin: 1rem 0;
+        }
+
+        .card li {
+            margin: 0.6rem 0;
+            font-size: 1.05rem;
+        }
+
+        .card a {
+            color: var(--primary-dark);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .card a:hover {
+            color: var(--primary);
+            text-decoration: underline;
+        }
+
+        footer {
+            text-align: center;
+            color: white;
+            margin-top: 4rem;
+            font-size: 0.95rem;
+            opacity: 0.9;
+        }
+
+        .highlight {
+            background: rgba(255,255,255,0.25);
+            padding: 0.3rem 0.6rem;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+    </style>
 </head>
 <body>
-<h1>📘 Español</h1>
-<div class="subtitle">Plataforma interactiva – Capítulos & QCM por tema</div>
-<div class="grid" id="matieres"></div>
-<footer>© Plataforma educativa – Seconde MoIAj 2025-2026</footer>
+
+<header>
+    <h1>📘 Español – Seconde</h1>
+    <div class="subtitle">Método Lanzaté • Cours PDF + QCM interactifs</div>
+</header>
+
+<main class="grid">
+
+    <!-- Cours complets (PDF) -->
+    <div class="card">
+        <h2>📚 Cursos (PDF)</h2>
+        <ul>
+            <li><a href="Lanzate_Esp_2nde_U00.pdf" target="_blank">Unidad 0 – Entrada en materia</a></li>
+            <li><a href="Lanzate_Esp_2nde_U01.pdf" target="_blank">Unidad 1</a></li>
+            <li><a href="Lanzate_Esp_2nde_U02.pdf" target="_blank">Unidad 2</a></li>
+            <li><a href="Lanzate_Esp_2nde_U03.pdf" target="_blank">Unidad 3</a></li>
+            <li><a href="Lanzate_Esp_2nde_U04.pdf" target="_blank">Unidad 4</a></li>
+            <li><a href="Lanzate_Esp_2nde_U05.pdf" target="_blank">Unidad 5</a></li>
+            <li><a href="Lanzate_Esp_2nde_U06.pdf" target="_blank">Unidad 6</a></li>
+            <li><a href="Lanzate_Esp_2nde_U07.pdf" target="_blank">Unidad 7</a></li>
+            <li><a href="Lanzate_Esp_2nde_U08.pdf" target="_blank">Unidad 8</a></li>
+        </ul>
+    </div>
+
+    <!-- Thème spécial avec QCM (dossier) -->
+    <div class="card" id="solidaridad-card">
+        <h2>🤝 Solidaridad y Navidad</h2>
+        <p>7 QCM interactivos disponibles</p>
+        <p style="margin-top: 1.5rem;">
+            <strong class="highlight">Accès →</strong>
+        </p>
+    </div>
+
+</main>
+
+<footer>
+    © Seconde – MoIAj – Année scolaire 2025-2026<br>
+    Tous droits réservés – Usage pédagogique uniquement
+</footer>
 
 <script>
-const matieres = [
-    { nom: "🤝 Solidaridad-Navidad", dossier: "Solidaridad-Navidad", description: "7 QCMs disponibles" }
-];
-
-const container = document.getElementById("matieres");
-
-matieres.forEach(m => {
-    const div = document.createElement("div");
-    div.className = "card matiere-espagnol";
-    div.innerHTML = `
-        <h2>${m.nom}</h2>
-        <p>• QCM interactivos sobre Solidaridad y Navidad<br>• ${m.description}</p>
-    `;
-    div.onclick = () => {
-        window.open(m.dossier + "/index.html", "_blank");
-    };
-    container.appendChild(div);
-});
+    // Ouverture du dossier Solidaridad-Navidad au clic
+    document.getElementById('solidaridad-card').addEventListener('click', () => {
+        window.open('Solidaridad-Navidad/index.html', '_blank');
+    });
 </script>
+
 </body>
 </html>
