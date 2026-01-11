@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Español Seconde – Lanzaté</title>
     <meta name="description" content="Cours et QCM interactifs d'espagnol Seconde – méthode Lanzaté">
-    
+
     <style>
         :root {
             --primary: #e74c3c;
@@ -36,15 +36,8 @@
             margin-bottom: 2.5rem;
         }
 
-        h1 {
-            font-size: 2.8rem;
-            margin-bottom: 0.4rem;
-        }
-
-        .subtitle {
-            font-size: 1.25rem;
-            opacity: 0.95;
-        }
+        h1 { font-size: 2.8rem; margin-bottom: 0.4rem; }
+        .subtitle { font-size: 1.25rem; opacity: 0.95; }
 
         .grid {
             display: grid;
@@ -60,9 +53,6 @@
             padding: 1.8rem;
             box-shadow: var(--shadow);
             transition: all 0.28s ease;
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
         }
 
         .card:hover {
@@ -76,23 +66,40 @@
             font-size: 1.5rem;
         }
 
-        .card ul {
+        .course-list {
             list-style: none;
-            margin: 1rem 0;
         }
 
-        .card li {
-            margin: 0.6rem 0;
+        .course-list li {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin: 0.65rem 0;
             font-size: 1.05rem;
+            padding-right: 0.5rem;
         }
 
-        .card a {
+        .course-title {
+            flex: 1;
+            padding-right: 1rem;
+        }
+
+        .page-num {
+            font-variant-numeric: tabular-nums;
+            font-feature-settings: "tnum";
+            color: #7f8c8d;
+            min-width: 4ch;
+            text-align: right;
+            white-space: nowrap;
+        }
+
+        .course-list a {
             color: var(--primary-dark);
             text-decoration: none;
             transition: color 0.2s;
         }
 
-        .card a:hover {
+        .course-list a:hover {
             color: var(--primary);
             text-decoration: underline;
         }
@@ -103,13 +110,6 @@
             margin-top: 4rem;
             font-size: 0.95rem;
             opacity: 0.9;
-        }
-
-        .highlight {
-            background: rgba(255,255,255,0.25);
-            padding: 0.3rem 0.6rem;
-            border-radius: 6px;
-            font-weight: 600;
         }
     </style>
 </head>
@@ -125,25 +125,54 @@
     <!-- Cours complets (PDF) -->
     <div class="card">
         <h2>📚 Cursos (PDF)</h2>
-        <ul>
-            <li><a href="Lanzate_Esp_2nde_U00.pdf" target="_blank">Unidad 0 – Entrada en materia.....................p.0</a></li>
-            <li><a href="Lanzate_Esp_2nde_U01.pdf" target="_blank">Unidad 1 - Sagradas familias......................p.26</a></li>
-            <li><a href="Lanzate_Esp_2nde_U02.pdf" target="_blank">Unidad 2 - El poder de la solidaridad.............p.38</a></li>
-            <li><a href="Lanzate_Esp_2nde_U03.pdf" target="_blank">Unidad 3 - Reencontrase con su pasado.............p.46</a></li>
-            <li><a href="Lanzate_Esp_2nde_U04.pdf" target="_blank">Unidad 4 - Deporte en femenino....................p.50</a></li>
-            <li><a href="Lanzate_Esp_2nde_U05.pdf" target="_blank">Unidad 5 - Almodovar en el espejo.................p.62</a></li>
-            <li><a href="Lanzate_Esp_2nde_U06.pdf" target="_blank">Unidad 6 - Mi lengua, mi voz......................p.70</a></li>
-            <li><a href="Lanzate_Esp_2nde_U07.pdf" target="_blank">Unidad 7 - La generacion de todos los desafios....p.74</a></li>
-            <li><a href="Lanzate_Esp_2nde_U08.pdf" target="_blank">Unidad 8 - Vivir mejor en ciudad..................p.86</a></li>
+        <ul class="course-list">
+            <li>
+                <a href="Lanzate_Esp_2nde_U00.pdf" target="_blank" class="course-title">Unidad 0 – Entrada en materia</a>
+                <span class="page-num">p. 0</span>
+            </li>
+            <li>
+                <a href="Lanzate_Esp_2nde_U01.pdf" target="_blank" class="course-title">Unidad 1 – Sagradas familias</a>
+                <span class="page-num">p.26</span>
+            </li>
+            <li>
+                <a href="Lanzate_Esp_2nde_U02.pdf" target="_blank" class="course-title">Unidad 2 – El poder de la solidaridad</a>
+                <span class="page-num">p.38</span>
+            </li>
+            <li>
+                <a href="Lanzate_Esp_2nde_U03.pdf" target="_blank" class="course-title">Unidad 3 – Reencontrarse con su pasado</a>
+                <span class="page-num">p.46</span>
+            </li>
+            <li>
+                <a href="Lanzate_Esp_2nde_U04.pdf" target="_blank" class="course-title">Unidad 4 – Deporte en femenino</a>
+                <span class="page-num">p.50</span>
+            </li>
+            <li>
+                <a href="Lanzate_Esp_2nde_U05.pdf" target="_blank" class="course-title">Unidad 5 – Almodóvar en el espejo</a>
+                <span class="page-num">p.62</span>
+            </li>
+            <li>
+                <a href="Lanzate_Esp_2nde_U06.pdf" target="_blank" class="course-title">Unidad 6 – Mi lengua, mi voz</a>
+                <span class="page-num">p.70</span>
+            </li>
+            <li>
+                <a href="Lanzate_Esp_2nde_U07.pdf" target="_blank" class="course-title">Unidad 7 – La generación de todos los desafíos</a>
+                <span class="page-num">p.74</span>
+            </li>
+            <li>
+                <a href="Lanzate_Esp_2nde_U08.pdf" target="_blank" class="course-title">Unidad 8 – Vivir mejor en ciudad</a>
+                <span class="page-num">p.86</span>
+            </li>
         </ul>
     </div>
 
-    <!-- Thème spécial avec QCM (dossier) -->
-    <div class="card" id="solidaridad-card">
+    <!-- Thème spécial avec QCM -->
+    <div class="card" id="solidaridad-card" style="cursor: pointer;">
         <h2>🤝 Solidaridad y Navidad</h2>
         <p>7 QCM interactivos disponibles</p>
         <p style="margin-top: 1.5rem;">
-            <strong class="highlight">Accès →</strong>
+            <strong style="background: rgba(255,255,255,0.25); padding: 0.3rem 0.6rem; border-radius: 6px; font-weight: 600;">
+                Accès →
+            </strong>
         </p>
     </div>
 
@@ -155,7 +184,6 @@
 </footer>
 
 <script>
-    // Ouverture du dossier Solidaridad-Navidad au clic
     document.getElementById('solidaridad-card').addEventListener('click', () => {
         window.open('Solidaridad-Navidad/index.html', '_blank');
     });
