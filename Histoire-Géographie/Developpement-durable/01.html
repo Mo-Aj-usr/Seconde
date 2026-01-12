@@ -1,1 +1,331 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QCM Géographie Seconde - Du développement au développement durable</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background-color: #f4f4f4; }
+        .container { max-width: 800px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        .dashboard { text-align: center; margin-bottom: 20px; font-weight: bold; }
+        .question { display: none; }
+        .question.active { display: block; }
+        .options { margin: 10px 0; }
+        .option { margin: 5px 0; }
+        .buttons { text-align: center; margin-top: 20px; }
+        button { padding: 10px 20px; margin: 5px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        button:hover { background: #0056b3; }
+        .feedback { margin-top: 10px; padding: 10px; border: 1px solid #ddd; background: #f9f9f9; display: none; }
+        #results { display: none; }
+        #results h2 { text-align: center; }
+        .result-item { margin-bottom: 20px; padding: 10px; border: 1px solid #ccc; border-radius: 5px; }
+        .correct { color: green; }
+        .incorrect { color: red; }
+        @media (max-width: 600px) { .container { padding: 10px; } button { width: 100%; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>QCM : Du développement au développement durable</h1>
+        <div class="dashboard" id="dashboard">Question 1/15</div>
+        
+        <!-- Question 1 -->
+        <div class="question" id="q1">
+            <p>1. Quelle est la définition du développement durable selon le rapport Brundtland (1987) ?</p>
+            <div class="options">
+                <label class="option"><input type="radio" name="q1" value="A"> A. Un développement qui maximise la croissance économique sans limites.</label><br>
+                <label class="option"><input type="radio" name="q1" value="B"> B. Un développement qui répond aux besoins du présent sans compromettre la capacité des générations futures à répondre aux leurs.</label><br>
+                <label class="option"><input type="radio" name="q1" value="C"> C. Un développement axé uniquement sur la protection de l'environnement.</label><br>
+                <label class="option"><input type="radio" name="q1" value="D"> D. Un développement réservé aux pays riches.</label>
+            </div>
+            <div class="feedback" id="fb1"></div>
+        </div>
+        
+        <!-- Question 2 -->
+        <div class="question" id="q2">
+            <p>2. Quels sont les trois piliers du développement durable ?</p>
+            <div class="options">
+                <label class="option"><input type="radio" name="q2" value="A"> A. Économique, militaire et culturel.</label><br>
+                <label class="option"><input type="radio" name="q2" value="B"> B. Économique, social et environnemental.</label><br>
+                <label class="option"><input type="radio" name="q2" value="C"> C. Politique, technologique et démographique.</label><br>
+                <label class="option"><input type="radio" name="q2" value="D"> D. Urbain, rural et industriel.</label>
+            </div>
+            <div class="feedback" id="fb2"></div>
+        </div>
+        
+        <!-- Question 3 -->
+        <div class="question" id="q3">
+            <p>3. Quel indicateur mesure le développement en tenant compte de l'espérance de vie, du niveau d'éducation et du revenu ?</p>
+            <div class="options">
+                <label class="option"><input type="radio" name="q3" value="A"> A. PIB (Produit Intérieur Brut).</label><br>
+                <label class="option"><input type="radio" name="q3" value="B"> B. RNB (Revenu National Brut).</label><br>
+                <label class="option"><input type="radio" name="q3" value="C"> C. IDH (Indicateur de Développement Humain).</label><br>
+                <label class="option"><input type="radio" name="q3" value="D"> D. PPA (Parité de Pouvoir d'Achat).</label>
+            </div>
+            <div class="feedback" id="fb3"></div>
+        </div>
+        
+        <!-- Question 4 -->
+        <div class="question" id="q4">
+            <p>4. Qu'est-ce que la Triade en termes de développement ?</p>
+            <div class="options">
+                <label class="option"><input type="radio" name="q4" value="A"> A. Les pays les plus pauvres du monde.</label><br>
+                <label class="option"><input type="radio" name="q4" value="B"> B. Amérique du Nord, Union européenne et Asie orientale, les plus riches.</label><br>
+                <label class="option"><input type="radio" name="q4" value="C"> C. Les pays émergents comme le Brésil et la Chine.</label><br>
+                <label class="option"><input type="radio" name="q4" value="D"> D. Les PMA (Pays les Moins Avancés).</label>
+            </div>
+            <div class="feedback" id="fb4"></div>
+        </div>
+        
+        <!-- Question 5 -->
+        <div class="question" id="q5">
+            <p>5. À quelle échelle observe-t-on des inégalités de développement ?</p>
+            <div class="options">
+                <label class="option"><input type="radio" name="q5" value="A"> A. Uniquement à l'échelle mondiale.</label><br>
+                <label class="option"><input type="radio" name="q5" value="B"> B. À toutes les échelles : mondiale, régionale et locale.</label><br>
+                <label class="option"><input type="radio" name="q5" value="C"> C. Seulement à l'échelle locale.</label><br>
+                <label class="option"><input type="radio" name="q5" value="D"> D. À l'échelle régionale uniquement.</label>
+            </div>
+            <div class="feedback" id="fb5"></div>
+        </div>
+        
+        <!-- Question 6 -->
+        <div class="question" id="q6">
+            <p>6. Quelle est la population mondiale estimée en 2050 selon l'ONU ?</p>
+            <div class="options">
+                <label class="option"><input type="radio" name="q6" value="A"> A. 7 milliards.</label><br>
+                <label class="option"><input type="radio" name="q6" value="B"> B. 9 milliards.</label><br>
+                <label class="option"><input type="radio" name="q6" value="C"> C. 11 milliards.</label><br>
+                <label class="option"><input type="radio" name="q6" value="D"> D. 5 milliards.</label>
+            </div>
+            <div class="feedback" id="fb6"></div>
+        </div>
+        
+        <!-- Question 7 -->
+        <div class="question" id="q7">
+            <p>7. Quel est le principal défi lié à l'explosion démographique ?</p>
+            <div class="options">
+                <label class="option"><input type="radio" name="q7" value="A"> A. Le défi rural.</label><br>
+                <label class="option"><input type="radio" name="q7" value="B"> B. Le défi urbain.</label><br>
+                <label class="option"><input type="radio" name="q7" value="C"> C. Le défi industriel.</label><br>
+                <label class="option"><input type="radio" name="q7" value="D"> D. Le défi maritime.</label>
+            </div>
+            <div class="feedback" id="fb7"></div>
+        </div>
+        
+        <!-- Question 8 -->
+        <div class="question" id="q8">
+            <p>8. Qu'est-ce que l'Agenda 21 ?</p>
+            <div class="options">
+                <label class="option"><input type="radio" name="q8" value="A"> A. Un traité contraignant sur le climat.</label><br>
+                <label class="option"><input type="radio" name="q8" value="B"> B. Un plan d'action pour le développement durable issu du Sommet de Rio en 1992.</label><br>
+                <label class="option"><input type="radio" name="q8" value="C"> C. Un indicateur économique.</label><br>
+                <label class="option"><input type="radio" name="q8" value="D"> D. Une organisation non gouvernementale.</label>
+            </div>
+            <div class="feedback" id="fb8"></div>
+        </div>
+        
+        <!-- Question 9 -->
+        <div class="question" id="q9">
+            <p>9. Les pays émergents comme le Brésil et la Chine sont caractérisés par :</p>
+            <div class="options">
+                <label class="option"><input type="radio" name="q9" value="A"> A. Une croissance économique faible.</label><br>
+                <label class="option"><input type="radio" name="q9" value="B"> B. Une forte croissance économique et une intégration dans la mondialisation.</label><br>
+                <label class="option"><input type="radio" name="q9" value="C"> C. Un IDH très bas.</label><br>
+                <label class="option"><input type="radio" name="q9" value="D"> D. Une population âgée.</label>
+            </div>
+            <div class="feedback" id="fb9"></div>
+        </div>
+        
+        <!-- Question 10 -->
+        <div class="question" id="q10">
+            <p>10. Quel est le rôle du GIEC dans le développement durable ?</p>
+            <div class="options">
+                <label class="option"><input type="radio" name="q10" value="A"> A. Mesurer le PIB mondial.</label><br>
+                <label class="option"><input type="radio" name="q10" value="B"> B. Étudier l'évolution du climat et proposer des stratégies d'adaptation.</label><br>
+                <label class="option"><input type="radio" name="q10" value="C"> C. Gérer les migrations internationales.</label><br>
+                <label class="option"><input type="radio" name="q10" value="D"> D. Contrôler les entreprises transnationales.</label>
+            </div>
+            <div class="feedback" id="fb10"></div>
+        </div>
+        
+        <!-- Question 11 -->
+        <div class="question" id="q11">
+            <p>11. Les PMA (Pays les Moins Avancés) sont majoritairement situés en :</p>
+            <div class="options">
+                <label class="option"><input type="radio" name="q11" value="A"> A. Europe.</label><br>
+                <label class="option"><input type="radio" name="q11" value="B"> B. Afrique.</label><br>
+                <label class="option"><input type="radio" name="q11" value="C"> C. Amérique du Nord.</label><br>
+                <label class="option"><input type="radio" name="q11" value="D"> D. Asie orientale.</label>
+            </div>
+            <div class="feedback" id="fb11"></div>
+        </div>
+        
+        <!-- Question 12 -->
+        <div class="question" id="q12">
+            <p>12. Quelle est une critique principale du PIB comme indicateur de développement ?</p>
+            <div class="options">
+                <label class="option"><input type="radio" name="q12" value="A"> A. Il mesure trop les aspects sociaux.</label><br>
+                <label class="option"><input type="radio" name="q12" value="B"> B. Il ne tient pas compte des conditions sociales et environnementales.</label><br>
+                <label class="option"><input type="radio" name="q12" value="C"> C. Il est trop précis pour les pays pauvres.</label><br>
+                <label class="option"><input type="radio" name="q12" value="D"> D. Il ignore la croissance économique.</label>
+            </div>
+            <div class="feedback" id="fb12"></div>
+        </div>
+        
+        <!-- Question 13 -->
+        <div class="question" id="q13">
+            <p>13. Le développement durable est-il réservé aux pays riches selon les documents ?</p>
+            <div class="options">
+                <label class="option"><input type="radio" name="q13" value="A"> A. Oui, c'est un luxe pour eux.</label><br>
+                <label class="option"><input type="radio" name="q13" value="B"> B. Non, il concerne tous les pays mais pose des défis aux pays pauvres.</label><br>
+                <label class="option"><input type="radio" name="q13" value="C"> C. Seulement aux pays émergents.</label><br>
+                <label class="option"><input type="radio" name="q13" value="D"> D. Il n'est pas applicable aux pays en développement.</label>
+            </div>
+            <div class="feedback" id="fb13"></div>
+        </div>
+        
+        <!-- Question 14 -->
+        <div class="question" id="q14">
+            <p>14. Quel est un exemple de pays émergent cité dans les documents ?</p>
+            <div class="options">
+                <label class="option"><input type="radio" name="q14" value="A"> A. Norvège.</label><br>
+                <label class="option"><input type="radio" name="q14" value="B"> B. Brésil.</label><br>
+                <label class="option"><input type="radio" name="q14" value="C"> C. Djibouti.</label><br>
+                <label class="option"><input type="radio" name="q14" value="D"> D. États-Unis.</label>
+            </div>
+            <div class="feedback" id="fb14"></div>
+        </div>
+        
+        <!-- Question 15 -->
+        <div class="question" id="q15">
+            <p>15. Quels sont les acteurs impliqués dans la mise en œuvre du développement durable ?</p>
+            <div class="options">
+                <label class="option"><input type="radio" name="q15" value="A"> A. Seulement les gouvernements.</label><br>
+                <label class="option"><input type="radio" name="q15" value="B"> B. États, entreprises, ONG et société civile.</label><br>
+                <label class="option"><input type="radio" name="q15" value="C"> C. Uniquement les entreprises transnationales.</label><br>
+                <label class="option"><input type="radio" name="q15" value="D"> D. Les villes uniquement.</label>
+            </div>
+            <div class="feedback" id="fb15"></div>
+        </div>
+        
+        <div class="buttons">
+            <button id="prev">Précédent</button>
+            <button id="next">Suivant</button>
+            <button id="finish">Terminer</button>
+        </div>
+        
+        <div id="results">
+            <h2>Résultats du QCM</h2>
+            <div id="score"></div>
+            <div id="summary"></div>
+        </div>
+    </div>
 
+    <script>
+        const totalQuestions = 15;
+        let currentQuestion = 1;
+        const answers = {
+            q1: 'B', fb1: 'Correct : B. Le rapport Brundtland définit le développement durable comme un mode qui répond aux besoins actuels sans compromettre ceux des futures générations. Élaboration détaillée : Cette définition met l\'accent sur les besoins essentiels des plus démunis et les limitations techniques et sociales imposées par l\'environnement.',
+            q2: 'B', fb2: 'Correct : B. Les trois piliers sont économique (viable), social (équitable) et environnemental (reproductible). Élaboration : Ces piliers assurent un équilibre pour ne pas compromettre les ressources futures, comme expliqué dans l\'Agenda 21.',
+            q3: 'C', fb3: 'Correct : C. L\'IDH combine espérance de vie, éducation et revenu. Élaboration : Contrairement au PIB qui est purement économique, l\'IDH donne une vision plus humaine du développement, variant de 0 à 1.',
+            q4: 'B', fb4: 'Correct : B. La Triade regroupe les régions les plus riches. Élaboration : Elle domine l\'économie mondiale avec une agriculture performante, industrie puissante et services avancés.',
+            q5: 'B', fb5: 'Correct : B. Inégalités à toutes les échelles. Élaboration : Mondialement entre Nord/Sud, régionalement entre urbain/rural, localement entre bidonvilles et gated communities.',
+            q6: 'B', fb6: 'Correct : B. 9 milliards en 2050. Élaboration : La croissance démographique pose des défis pour les ressources, avec une augmentation plus forte en Afrique subsaharienne.',
+            q7: 'B', fb7: 'Correct : B. Le défi urbain dû à l\'urbanisation rapide. Élaboration : L\'exode rural mène à des mégapoles avec besoins en services, contrastant avec les régions rurales moins développées.',
+            q8: 'B', fb8: 'Correct : B. Plan d\'action du Sommet de Rio. Élaboration : Il propose des axes pour l\'économie, la société et l\'environnement, sans force contraignante mais comme guide pour les acteurs.',
+            q9: 'B', fb9: 'Correct : B. Forte croissance et intégration mondiale. Élaboration : Les BRICS attirent les IDE, possèdent des ressources, mais gardent des retards sociaux comme la pauvreté.',
+            q10: 'B', fb10: 'Correct : B. Étudier le climat et adapter. Élaboration : Le GIEC propose des stratégies contre la déforestation, pollutions et changements climatiques irréversibles.',
+            q11: 'B', fb11: 'Correct : B. Majoritairement en Afrique. Élaboration : Ces 48 pays cumulent retards : pauvreté extrême, faible scolarisation, peu attractifs pour les investissements.',
+            q12: 'B', fb12: 'Correct : B. Ignore social et environnement. Élaboration : Le PIB mesure seulement la production, sans considérer les conditions de travail ou impacts écologiques.',
+            q13: 'B', fb13: 'Correct : B. Concerne tous, avec défis pour les pauvres. Élaboration : Il n\'est pas un luxe mais nécessite adaptation, comme lutter contre la pauvreté et préserver les ressources.',
+            q14: 'B', fb14: 'Correct : B. Brésil. Élaboration : Pays émergents avec territoires riches, population jeune, attirant IDE, mais avec inégalités internes.',
+            q15: 'B', fb15: 'Correct : B. Tous les acteurs. Élaboration : Gouvernements, entreprises (responsabilité sociale), ONG et collectivités locales pour une application adaptée aux besoins locaux.'
+        };
+        let userAnswers = {};
+        let score = 0;
+
+        function showQuestion(q) {
+            document.querySelectorAll('.question').forEach(el => el.classList.remove('active'));
+            document.getElementById(`q${q}`).classList.add('active');
+            document.getElementById('dashboard').innerText = `Question ${q}/${totalQuestions}`;
+            
+            const selected = userAnswers[`q${q}`];
+            if (selected) {
+                document.querySelector(`input[name="q${q}"][value="${selected}"]`).checked = true;
+                showFeedback(q);
+            } else {
+                document.querySelectorAll(`input[name="q${q}"]`).forEach(input => input.checked = false);
+                document.getElementById(`fb${q}`).style.display = 'none';
+            }
+        }
+
+        function showFeedback(q) {
+            const selected = document.querySelector(`input[name="q${q}"]:checked`);
+            if (!selected) return;
+            const answer = selected.value;
+            userAnswers[`q${q}`] = answer;
+            const correct = answers[`q${q}`];
+            const fb = document.getElementById(`fb${q}`);
+            fb.innerHTML = answer === correct 
+                ? `<span class="correct">Bonne réponse !</span> ${answers[`fb${q}`]}`
+                : `<span class="incorrect">Mauvaise réponse.</span> La bonne est ${correct}. ${answers[`fb${q}`]}`;
+            fb.style.display = 'block';
+            if (answer === correct && !userAnswers[`scored_q${q}`]) {
+                score++;
+                userAnswers[`scored_q${q}`] = true;
+            } else if (answer !== correct && userAnswers[`scored_q${q}`]) {
+                score--;
+                delete userAnswers[`scored_q${q}`];
+            }
+        }
+
+        function nextQuestion() {
+            showFeedback(currentQuestion);
+            if (currentQuestion < totalQuestions) {
+                currentQuestion++;
+                showQuestion(currentQuestion);
+            }
+        }
+
+        function prevQuestion() {
+            if (currentQuestion > 1) {
+                showFeedback(currentQuestion);
+                currentQuestion--;
+                showQuestion(currentQuestion);
+            }
+        }
+
+        function finishQuiz() {
+            showFeedback(currentQuestion);
+            document.querySelectorAll('.question').forEach(el => el.style.display = 'none');
+            document.querySelector('.buttons').style.display = 'none';
+            const results = document.getElementById('results');
+            results.style.display = 'block';
+            document.getElementById('score').innerHTML = `<p>Score : ${score}/${totalQuestions}</p>`;
+            const summary = document.getElementById('summary');
+            summary.innerHTML = '';
+            for (let i = 1; i <= totalQuestions; i++) {
+                const div = document.createElement('div');
+                div.classList.add('result-item');
+                const qText = document.getElementById(`q${i}`).querySelector('p').innerText;
+                const userAns = userAnswers[`q${i}`] || 'Non répondu';
+                const correct = answers[`q${i}`];
+                const fb = answers[`fb${i}`].replace('Élaboration :', '<br><strong>Explication élaborée :</strong>');
+                div.innerHTML = `<strong>${qText}</strong><br>Votre réponse : ${userAns}<br>Bonne réponse : ${correct}${fb}`;
+                summary.appendChild(div);
+            }
+        }
+
+        document.querySelectorAll('input[type="radio"]').forEach(input => {
+            input.addEventListener('change', () => showFeedback(currentQuestion));
+        });
+
+        document.getElementById('next').addEventListener('click', nextQuestion);
+        document.getElementById('prev').addEventListener('click', prevQuestion);
+        document.getElementById('finish').addEventListener('click', finishQuiz);
+
+        showQuestion(1);
+    </script>
+</body>
+</html>
