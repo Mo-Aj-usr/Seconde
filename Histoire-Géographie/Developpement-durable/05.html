@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QCM Avancé - Développement Durable Seconde Géographie</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            min-height: 100vh;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+        }
+        .dashboard {
+            background: rgba(255,255,255,0.95);
+            padding: 1.2rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        .progress-section {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+        .progress-bar {
+            width: 250px;
+            height: 12px;
+            background: #e0e0e0;
+            border-radius: 6px;
+            overflow: hidden;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ff6b6b, #4ecdc4);
+            width: 0%;
+            transition: width 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        .stats {
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+        .question-container {
+            flex: 1;
+            max-width: 900px;
+            margin: 2.5rem auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+            overflow: hidden;
+            animation: slideIn 0.5s ease-out;
+        }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .question-header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+        .question-num { font-size: 1.5rem; opacity: 0.9; }
+        .question-text { font-size: 1.3rem; margin-top: 0.5rem; line-height: 1.5; }
+        .options {
+            padding: 2rem;
+            display: grid;
+            gap: 1rem;
+        }
+        .option {
+            padding: 1.2rem;
+            background: #f8f9ff;
+            border: 2px solid #e1e5e9;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            font-size: 1.1rem;
+        }
+        .option:hover { background: #e8f0fe; border-color: #667eea; transform: translateX(5px); }
+        .option.selected { background: #667eea; color: white; border-color: #5a67d8; }
+        .option.correct { background: #48bb78 !important; border-color: #38a169 !important; color: white !important; }
+        .option.incorrect { background: #f56565 !important; border-color: #e53e3e !important; color: white !important; }
+        .feedback {
+            padding: 1.5rem 2rem;
+            margin: 1rem 2rem 2rem;
+            border-radius: 12px;
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .feedback.correct { background: #c6f6d5; color: #22543d; border-left: 5px solid #38a169; }
+        .feedback.incorrect { background: #fed7d7; color: #742a2a; border-left: 5px solid #e53e3e; }
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            padding: 2.5rem;
+            background: rgba(255,255,255,0.95);
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.1);
+        }
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            min-width: 140px;
+        }
+        .btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none !important; }
+        .btn-prev { background: #718096; color: white; }
+        .btn-next { background: #4299e1; color: white; }
+        .btn-finish { background: #38a169; color: white; }
+        .btn:hover:not(:disabled) { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0,0,0,0.2); }
+        .summary {
+            max-width: 900px;
+            margin: 2rem auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+            padding: 3rem;
+            display: none;
+            text-align: center;
+        }
+        .score-circle {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: conic-gradient(#48bb78 0deg 360deg, #e2e8f0 360deg);
+            margin: 0 auto 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #22543d;
+        }
+        .detailed-list {
+            text-align: left;
+            max-height: 400px;
+            overflow-y: auto;
+            margin-top: 2rem;
+        }
+        .detailed-item {
+            background: #f7fafc;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border-radius: 12px;
+            border-left: 5px solid #4299e1;
+        }
+        .detailed-item.correct { border-left-color: #38a169; }
+        .detailed-item.incorrect { border-left-color: #f56565; }
+        @media (max-width: 768px) {
+            .dashboard { flex-direction: column; gap: 1rem; }
+            .progress-bar { width: 100%; }
+            .controls { flex-direction: column; }
+            .btn { width: 100%; }
+            .options { padding: 1.5rem; grid-template-columns: 1fr; }
+            .question-container { margin: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <div class="progress-section">
+            <span class="stats" id="questionNum">Question 1 / 20</span>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+        </div>
+        <div class="stats" id="scoreLive">Score: 0/0</div>
+    </div>
+
+    <div class="question-container" id="quizContainer">
+        <div class="question-header">
+            <div class="question-num" id="questionNumHeader"></div>
+            <h2 class="question-text" id="questionTitle"></h2>
+        </div>
+        <div class="options" id="options"></div>
+        <div id="feedback" class="feedback"></div>
+    </div>
+
+    <div class="controls">
+        <button class="btn btn-prev" id="prevBtn" disabled>Précédent</button>
+        <button class="btn btn-next" id="nextBtn">Suivant</button>
+        <button class="btn btn-finish" id="finishBtn">Terminer</button>
+    </div>
+
+    <div class="summary" id="summary">
+        <h1>Résultats Détaillés</h1>
+        <div class="score-circle" id="scoreCircle">0%</div>
+        <div id="finalScore"></div>
+        <div class="detailed-list" id="detailedFeedback"></div>
+        <button class="btn" onclick="location.reload()" style="background: #ed8936; color: white; margin-top: 2rem; padding: 1rem 3rem;">Recommencer</button>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                question: "Parmi les indicateurs suivants, lequel est le PLUS complet pour mesurer le développement d'un pays ?",
+                options: ["Le PIB total", "Le RNB par habitant", "L'IDH (Indice de Développement Humain)", "Le taux de croissance économique"],
+                correct: 2,
+                explanation: "L'IDH synthétise espérance de vie, éducation et niveau de vie (RNB/hab.). Plus pertinent que le PIB seul qui ignore les inégalités sociales. Norvège IDH 0,955 vs Djibouti 0,445 (2012). [file:1][web:2]"
+            },
+            {
+                question: "En 2015, quel pays avait le 2e PIB mondial mais un PIB/hab. faible (<10 000$) ?",
+                options: ["États-Unis", "Japon", "Chine", "Allemagne"],
+                correct: 2,
+                explanation: "Chine : PIB 10 966 Md$, mais /hab. <10 000$ vs USA >50 000$. Montre contrastes Nord-Sud et inégalités internes. Banque Mondiale classe par RNB/hab. (revenus élevés >12 615$). [file:1]"
+            },
+            {
+                question: "Les BRICS sont des pays émergents. Quel critère les définit principalement ?",
+                options: ["Faible croissance", "Forte croissance et intégration mondialisation", "IDH très élevé", "Absence d'exportations"],
+                correct: 1,
+                explanation: "Brésil, Russie, Inde, Chine, Afrique du Sud : 15% commerce mondial, forte croissance mais retards (ex. 20% Indiens sous seuil pauvreté). [file:1][web:7]"
+            },
+            {
+                question: "Quelle proportion des habitants des PMA vit en pauvreté extrême (<1,9$/jour) ?",
+                options: ["10%", "25%", "40%", "60%"],
+                correct: 2,
+                explanation: ">40% en PMA (48 pays, majoritairement Afrique). Faible scolarisation, espérance vie basse, 1% commerce mondial. [file:1]"
+            },
+            {
+                question: "À quelle échelle les inégalités de développement sont-elles les plus marquées selon le programme ?",
+                options: ["Mondiale uniquement", "Mondiale, régionale et locale", "Locale uniquement", "Régionale uniquement"],
+                correct: 1,
+                explanation: "Ex. métropoles > villes intermédiaires > rural ; littoraux > intérieur ; bidonvilles vs gated communities (ex. Mexico). [file:1][web:4]"
+            },
+            {
+                question: "Quelle région connaîtra la plus forte croissance démographique d'ici 2100 (4,4 milliards) ?",
+                options: ["Europe", "Amérique du Nord", "Afrique", "Asie de l'Est"],
+                correct: 2,
+                explanation: "Afrique : 1,2 Md (2015) → 2,5 Md (2050) → 4,4 Md (2100). Transition démographique en cours (natalité encore forte). [file:1]"
+            },
+            {
+                question: "La transition démographique achevée concerne principalement :",
+                options: ["Les PMA", "Les pays du Nord", "Les BRICS", "L'Afrique subsaharienne"],
+                correct: 1,
+                explanation: "Nord : mortalité et natalité basses. Sud : mortalité ↓ mais natalité encore haute dans PMA. [file:1]"
+            },
+            {
+                question: "Quel usage de l'eau augmente le plus avec l'urbanisation et l'agriculture ?",
+                options: ["Usage domestique uniquement", "Agriculture (70%), industrie, domestique", "Industrie uniquement", "Énergie"],
+                correct: 1,
+                explanation: "Agriculture principale consommatrice. 9% population sans eau améliorée malgré progrès. Défi pour 10 Md habitants. [file:1][web:7]"
+            },
+            {
+                question: "Les énergies fossiles (charbon, pétrole, gaz) représentent quelle part de la conso. énergétique mondiale ?",
+                options: ["60%", "75%", "85%", "95%"],
+                correct: 2,
+                explanation: "85%, source gaz effet de serre et réchauffement. Industrialisation + agriculture intensive → pollutions/biodiversité ↓. [file:1]"
+            },
+            {
+                question: "Quel pilier du DD est OMIS dans certains projets 'verts' selon le document ?",
+                options: ["Environnemental", "Économique", "Social (lutte inégalités)", "Temporel"],
+                correct: 2,
+                explanation: "3 piliers : éco (croissance), social (équité), enviro (ressources futures). Souvent social négligé. [file:1]"
+            },
+            {
+                question: "Le Rapport Brundtland (1987) définit le DD comme conciliant besoins présents sans compromettre :",
+                options: ["Les ressources infinies", "Les générations futures", "La croissance illimitée", "Les inégalités actuelles"],
+                correct: 1,
+                explanation: "Fondement DD : bien-être aujourd'hui et demain. [file:1][web:7]"
+            },
+            {
+                question: "Les Agendas 21 (Sommet Rio 1992) concernent des actions à quelle échelle ?",
+                options: ["Mondiale uniquement", "Locale (villes, territoires)", "Nationale uniquement", "Régionale européenne"],
+                correct: 1,
+                explanation: "Initiatives locales : pollutions, déchets, eau. Souvent affichés mais peu appliqués. [file:1]"
+            },
+            {
+                question: "Le Protocole de Kyoto (1997) cible les réductions de GES pour quels pays ?",
+                options: ["Tous les pays", "Pays en développement", "Pays développés", "USA uniquement"],
+                correct: 2,
+                explanation: "Objectifs contraignants pour Annexe I (développés). USA non ratifié. [file:1]"
+            },
+            {
+                question: "L'Accord de Paris (COP21, 2015) est ratifié par combien d'États ?",
+                options: ["100", "150", "195", "Tous les PMA"],
+                correct: 2,
+                explanation: "195 États, premier accord universel climat. [file:1]"
+            },
+            {
+                question: "L'UE utilise un marché de quoi pour encourager l'efficacité énergétique ?",
+                options: ["Énergies fossiles", "Émissions de CO2 (quotas)", "Eau potable", "Aliments"],
+                correct: 1,
+                explanation: "Entreprises achètent/vendent droits d'émission. Engagée ENR, pollutions ↓, biodiversité. [file:1]"
+            },
+            {
+                question: "Les PMA priorisent souvent le DD sur :",
+                options: ["Croissance économique immédiate", "Réduction GES", "Agendas 21 locaux", "Énergies fossiles"],
+                correct: 0,
+                explanation: "Répondre besoins vitaux (pauvreté, emplois) avant enviro, vu comme 'luxe des riches'. [file:1]"
+            },
+            {
+                question: "Quel foyer de population abrite l'essentiel de l'humanité (Chine, Inde, etc.) ?",
+                options: ["Europe", "Amérique du Nord", "Asie de l'Est et du Sud", "Afrique"],
+                correct: 2,
+                explanation: "Asie densément peuplée, urbanisation croissante (75% monde en ville 2050). [file:1]"
+            },
+            {
+                question: "Le défi énergétique prévoit +50% d'électricité d'ici quand ?",
+                options: ["2020", "2030", "2050", "2100"],
+                correct: 1,
+                explanation: "Besoins ↑ avec pop./niveau vie, mais GES/réserves limitées. [file:1]"
+            },
+            {
+                question: "Dans les villes du Sud, les bidonvilles grandissent du fait de :",
+                options: ["Exode rural", "Immigration nord-sud", "Déclin industriel", "Tourisme"],
+                correct: 0,
+                explanation: "Ruptures urbaines : bidonvilles vs gated communities. [file:1][web:4]"
+            },
+            {
+                question: "Selon Eduscol, le thème 'Développement durable' intègre quels enjeux principaux ?",
+                options: ["Économiques uniquement", "Éco, sociaux, environnementaux, solidarités spatiales/temporelles", "Démographiques seuls", "Climat uniquement"],
+                correct: 1,
+                explanation: "Intro programme géo seconde : inégalités développement, ressources limitées, modes durables. 7-8h. [web:2][web:4]"
+            }
+        ];
+
+        let currentQuestion = 0;
+        let answers = new Array(questions.length).fill(null);
+        let score = 0;
+
+        // Éléments DOM
+        const els = {
+            questionNum: document.getElementById('questionNum'),
+            questionNumHeader: document.getElementById('questionNumHeader'),
+            questionTitle: document.getElementById('questionTitle'),
+            options: document.getElementById('options'),
+            feedback: document.getElementById('feedback'),
+            prevBtn: document.getElementById('prevBtn'),
+            nextBtn: document.getElementById('nextBtn'),
+            finishBtn: document.getElementById('finishBtn'),
+            progressFill: document.getElementById('progressFill'),
+            scoreLive: document.getElementById('scoreLive'),
+            quizContainer: document.getElementById('quizContainer'),
+            summary: document.getElementById('summary'),
+            finalScore: document.getElementById('finalScore'),
+            detailedFeedback: document.getElementById('detailedFeedback'),
+            scoreCircle: document.getElementById('scoreCircle')
+        };
+
+        function loadQuestion(index) {
+            const q = questions[index];
+            els.questionTitle.textContent = q.question;
+            els.questionNumHeader.textContent = `Question ${index + 1}`;
+            els.options.innerHTML = '';
+            els.feedback.style.display = 'none';
+
+            q.options.forEach((opt, i) => {
+                const div = document.createElement('div');
+                div.className = 'option';
+                div.textContent = opt;
+                div.onclick = () => selectOption(i);
+                if (answers[index] === i) div.classList.add('selected');
+                els.options.appendChild(div);
+            });
+
+            updateUI();
+        }
+
+        function selectOption(index) {
+            answers[currentQuestion] = index;
+            showFeedback();
+            updateScoreLive();
+        }
+
+        function showFeedback() {
+            const q = questions[currentQuestion];
+            const isCorrect = answers[currentQuestion] === q.correct;
+            const divs = Array.from(els.options.children);
+
+            // Reset classes
+            divs.forEach(d => {
+                d.classList.remove('selected', 'correct', 'incorrect');
+            });
+
+            // User selection
+            if (divs[answers[currentQuestion]]) {
+                divs[answers[currentQuestion]].classList.add('selected');
+            }
+
+            // Correct one
+            divs[q.correct].classList.add('correct');
+
+            if (!isCorrect && answers[currentQuestion] !== null) {
+                divs[answers[currentQuestion]].classList.add('incorrect');
+            }
+
+            // Feedback text
+            els.feedback.className = `feedback ${isCorrect ? 'correct' : 'incorrect'}`;
+            const status = isCorrect ? '✅ Correct !' : answers[currentQuestion] === null ? '' : '❌ Incorrect. Bonne réponse : ' + q.options[q.correct];
+            els.feedback.innerHTML = `<strong>${status}</strong><br>${q.explanation}`;
+            els.feedback.style.display = 'block';
+        }
+
+        function updateUI() {
+            els.prevBtn.disabled = currentQuestion === 0;
+            els.finishBtn.disabled = answers.filter(a => a !== null).length === 0;
+            updateProgress();
+            updateScoreLive();
+        }
+
+        function updateProgress() {
+            const progress = ((currentQuestion + 1) / questions.length) * 100;
+            els.progressFill.style.width = progress + '%';
+            els.questionNum.textContent = `Question ${currentQuestion + 1} / ${questions.length}`;
+        }
+
+        function updateScoreLive() {
+            let currentScore = 0;
+            let answered = 0;
+            answers.forEach((ans, i) => {
+                if (ans !== null) {
+                    answered++;
+                    if (ans === questions[i].correct) currentScore++;
+                }
+            });
+            els.scoreLive.textContent = `Score: ${currentScore}/${answered}`;
+        }
+
+        els.prevBtn.onclick = () => { if (currentQuestion > 0) { currentQuestion--; loadQuestion(currentQuestion); } };
+        els.nextBtn.onclick = () => { if (currentQuestion < questions.length - 1) { currentQuestion++; loadQuestion(currentQuestion); } };
+
+        els.finishBtn.onclick = finishQuiz;
+
+        function finishQuiz() {
+            score = answers.reduce((s, ans, i) => ans === questions[i].correct ? s + 1 : s, 0);
+            const percent = Math.round((score / questions.length) * 100);
+            els.finalScore.textContent = `${score} / ${questions.length} (${percent}%)`;
+            els.scoreCircle.style.background = `conic-gradient(#48bb78 0deg ${percent * 3.6}deg, #e2e8f0 ${percent * 3.6}deg 360deg)`;
+
+            els.detailedFeedback.innerHTML = '<h3>Toutes les réponses et explications détaillées :</h3>';
+            questions.forEach((q, i) => {
+                const userAns = answers[i] !== null ? q.options[answers[i]] : 'Non répondu';
+                const isCorrect = answers[i] === q.correct;
+                const status = isCorrect ? '✅ Correcte' : answers[i] === null ? '❌ Non répondu' : '❌ Incorrecte';
+                els.detailedFeedback.innerHTML += `
+                    <div class="detailed-item ${isCorrect ? 'correct' : 'incorrect'}">
+                        <strong>Q${i+1}:</strong> ${q.question}<br>
+                        <strong>Votre réponse:</strong> ${userAns}<br>
+                        <strong>Bonne:</strong> ${q.options[q.correct]} | <em>${status}</em><br>
+                        <strong>Explication détaillée:</strong> ${q.explanation}
+                    </div>
+                `;
+            });
+
+            els.quizContainer.style.display = 'none';
+            els.summary.style.display = 'block';
+        }
+
+        loadQuestion(0);
+    </script>
+</body>
+</html>

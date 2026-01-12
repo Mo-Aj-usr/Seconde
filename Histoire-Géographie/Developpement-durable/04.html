@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QCM Développement Durable Avancé - Seconde</title>
+<style>
+  body { font-family: Arial, sans-serif; margin: 0; background: #f4f6f8; }
+  header { background: #16a085; color: #fff; padding: 1rem; text-align: center; }
+  main { max-width: 900px; margin: 2rem auto; background: #fff; padding: 2rem; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+  h2 { color: #16a085; }
+  .question { margin-bottom: 1.5rem; }
+  .options { list-style: none; padding: 0; }
+  .options li { margin: 0.5rem 0; }
+  button { padding: 0.5rem 1rem; margin: 0.5rem; border: none; border-radius: 5px; cursor: pointer; background: #16a085; color: #fff; }
+  button:disabled { opacity: 0.5; cursor: not-allowed; }
+  .dashboard { margin-bottom: 1rem; }
+  .dashboard span { margin-right: 1rem; font-weight: bold; }
+  .feedback { margin-top: 1rem; background: #ecf0f1; padding: 1rem; border-radius: 5px; }
+  .summary { margin-top: 2rem; background: #dff0d8; padding: 1rem; border-radius: 5px; }
+  @media(max-width: 600px) { main { padding: 1rem; } }
+</style>
+</head>
+<body>
+<header>
+  <h1>QCM Avancé - Développement Durable (Seconde)</h1>
+</header>
+<main>
+  <div class="dashboard">
+    <span id="progress">Question 1 / 15</span>
+    <span id="score">Score: 0</span>
+  </div>
+  <div id="quiz-container"></div>
+  <div>
+    <button id="prev-btn">Précédent</button>
+    <button id="next-btn">Suivant</button>
+    <button id="finish-btn">Terminer</button>
+  </div>
+  <div id="summary" class="summary" style="display:none;"></div>
+</main>
+<script>
+const questions = [
+  { question: "1. Quelle est la définition la plus complète du développement durable ?",
+    options: ["Satisfaire les besoins économiques uniquement", "Répondre aux besoins du présent tout en préservant l'environnement et l'équité sociale pour les générations futures", "Conserver uniquement les ressources naturelles", "Favoriser le commerce international"],
+    answer: 1,
+    explanation: "Le développement durable intègre simultanément les dimensions économique, sociale et environnementale pour assurer un équilibre à long terme." },
+  { question: "2. Parmi ces propositions, laquelle illustre une action concrète de développement durable ?",
+    options: ["Augmenter la production de plastique", "Créer des zones protégées pour la biodiversité", "Construire une centrale à charbon", "Utiliser des pesticides massivement"],
+    answer: 1,
+    explanation: "La création de zones protégées aide à préserver les écosystèmes et la biodiversité, un objectif central du développement durable." },
+  { question: "3. Quel indicateur mesure la pression de l'activité humaine sur les ressources naturelles ?",
+    options: ["Indice de Développement Humain (IDH)", "Empreinte écologique", "Produit Intérieur Brut (PIB)", "Taux de natalité"],
+    answer: 1,
+    explanation: "L'empreinte écologique évalue la surface nécessaire pour soutenir un mode de vie donné et absorber ses déchets." },
+  { question: "4. Laquelle de ces politiques publiques favorise le développement durable ?",
+    options: ["Subventionner les énergies fossiles", "Encourager l'utilisation d'énergies renouvelables", "Augmenter la déforestation", "Éliminer le recyclage"],
+    answer: 1,
+    explanation: "Promouvoir les énergies renouvelables réduit les émissions de gaz à effet de serre et la dépendance aux ressources non renouvelables." },
+  { question: "5. Quelles sont les conséquences de la surexploitation des ressources naturelles ?",
+    options: ["Équilibre écologique", "Épuisement des ressources, perte de biodiversité et dégradation des sols", "Amélioration de la qualité de l'air", "Réduction des gaz à effet de serre"],
+    answer: 1,
+    explanation: "La surexploitation entraîne des déséquilibres écologiques et menace la capacité des générations futures à satisfaire leurs besoins." },
+  { question: "6. Quel est le rôle des ODD (Objectifs de Développement Durable) ?",
+    options: ["Mesurer uniquement la croissance économique", "Orienter les actions des États et acteurs mondiaux vers des objectifs sociaux, environnementaux et économiques", "Créer des entreprises", "Réguler le commerce international uniquement"],
+    answer: 1,
+    explanation: "Les ODD fixent des objectifs concrets pour concilier développement économique, justice sociale et protection de l'environnement." },
+  { question: "7. Quelles sont les trois dimensions du développement durable ?",
+    options: ["Économie, social, environnement", "Politique, culture, religion", "Science, technologie, innovation", "Transport, urbanisme, agriculture"],
+    answer: 0,
+    explanation: "Le développement durable repose sur l'équilibre entre l'économie, le social et l'environnement." },
+  { question: "8. Quel est l'effet principal du changement climatique ?",
+    options: ["Stabilité climatique", "Hausse des températures, fonte des glaces, phénomènes météorologiques extrêmes", "Augmentation de la biodiversité", "Réduction de la pollution de l'air"],
+    answer: 1,
+    explanation: "Le changement climatique provoque des dérèglements climatiques et des impacts sur les écosystèmes et les sociétés humaines." },
+  { question: "9. Pourquoi les villes cherchent-elles à devenir durables ?",
+    options: ["Pour réduire les coûts énergétiques, améliorer la qualité de vie et limiter l'impact environnemental", "Pour augmenter le trafic automobile", "Pour construire plus de gratte-ciel", "Pour interdire les transports publics"],
+    answer: 0,
+    explanation: "Les villes durables cherchent à concilier développement économique, confort des habitants et respect de l'environnement." },
+  { question: "10. Que désigne le terme 'biodiversité' ?",
+    options: ["La diversité culturelle", "La variété des espèces vivantes et des écosystèmes", "La quantité de forêts", "Le nombre de véhicules"],
+    answer: 1,
+    explanation: "La biodiversité comprend la richesse et la variété des espèces et des habitats naturels." },
+  { question: "11. Quelle action individuelle contribue au développement durable ?",
+    options: ["Réduire les déchets, consommer local et éco-responsable", "Acheter uniquement des produits importés", "Jeter les piles dans la nature", "Augmenter la consommation d'énergie"],
+    answer: 0,
+    explanation: "Les choix quotidiens des citoyens, comme le tri, la réduction de consommation et le choix de produits durables, participent au développement durable." },
+  { question: "12. Qu'est-ce qu'une ressource non renouvelable ?",
+    options: ["Le vent", "Le charbon, le pétrole, le gaz", "L'eau douce", "Le soleil"],
+    answer: 1,
+    explanation: "Les ressources non renouvelables s'épuisent à mesure de leur utilisation et ne se régénèrent pas à l'échelle humaine." },
+  { question: "13. Quelles sont les causes principales de la déforestation ?",
+    options: ["Agriculture intensive, exploitation forestière, urbanisation", "Reforestation massive", "Changement climatique uniquement", "Production d'énergie solaire"],
+    answer: 0,
+    explanation: "Les forêts sont détruites pour l'agriculture, l'industrie du bois et l'extension des villes, affectant la biodiversité et le climat." },
+  { question: "14. Quel est le rôle de l'Accord de Paris ?",
+    options: ["Limiter le réchauffement climatique à moins de 2°C et encourager la transition énergétique", "Créer des zones industrielles", "Réduire le commerce international", "Augmenter la production de charbon"],
+    answer: 0,
+    explanation: "L'Accord de Paris fixe des objectifs internationaux pour limiter le réchauffement climatique et favoriser les énergies propres." },
+  { question: "15. Quelle action relève du concept d'économie circulaire ?",
+    options: ["Recycler, réutiliser, réduire les déchets et concevoir des produits durables", "Produire plus de plastique à usage unique", "Brûler les déchets", "Utiliser des ressources non renouvelables uniquement"],
+    answer: 0,
+    explanation: "L'économie circulaire vise à réduire les déchets, prolonger la durée de vie des produits et préserver les ressources naturelles." }
+];
+
+let current = 0;
+let score = 0;
+const userAnswers = Array(questions.length).fill(null);
+
+const quizContainer = document.getElementById('quiz-container');
+const progress = document.getElementById('progress');
+const scoreDisplay = document.getElementById('score');
+const prevBtn = document.getElementById('prev-btn');
+const nextBtn = document.getElementById('next-btn');
+const finishBtn = document.getElementById('finish-btn');
+const summary = document.getElementById('summary');
+
+function renderQuestion() {
+  const q = questions[current];
+  let html = `<div class='question'><h2>${q.question}</h2><ul class='options'>`;
+  q.options.forEach((opt, index) => {
+    const checked = userAnswers[current] === index ? 'checked' : '';
+    html += `<li><label><input type='radio' name='option' value='${index}' ${checked}> ${opt}</label></li>`;
+  });
+  html += `</ul></div>`;
+  if(userAnswers[current] !== null){
+    html += `<div class='feedback'>Réponse : ${q.options[q.answer]}<br>${q.explanation}</div>`;
+  }
+  quizContainer.innerHTML = html;
+  progress.textContent = `Question ${current+1} / ${questions.length}`;
+  scoreDisplay.textContent = `Score: ${score}`;
+}
+
+function checkAnswer() {
+  const selected = document.querySelector('input[name="option"]:checked');
+  if(selected){
+    const answer = parseInt(selected.value);
+    if(userAnswers[current] === questions[current].answer) score--;
+    userAnswers[current] = answer;
+    if(answer === questions[current].answer) score++;
+  }
+}
+
+prevBtn.addEventListener('click', () => {
+  checkAnswer();
+  if(current > 0) current--;
+  renderQuestion();
+});
+
+nextBtn.addEventListener('click', () => {
+  checkAnswer();
+  if(current < questions.length-1) current++;
+  renderQuestion();
+});
+
+finishBtn.addEventListener('click', () => {
+  checkAnswer();
+  let html = '<h2>Résumé du QCM Avancé</h2>';
+  questions.forEach((q, index) => {
+    html += `<p><strong>Q${index+1}:</strong> ${q.question}<br>`;
+    html += `Votre réponse: ${userAnswers[index] !== null ? q.options[userAnswers[index]] : 'Aucune'}<br>`;
+    html += `Réponse correcte: ${q.options[q.answer]}<br>`;
+    html += `Explication: ${q.explanation}</p>`;
+  });
+  html += `<h3>Score final: ${score} / ${questions.length}</h3>`;
+  quizContainer.style.display = 'none';
+  document.querySelector('.dashboard').style.display = 'none';
+  prevBtn.style.display = 'none';
+  nextBtn.style.display = 'none';
+  finishBtn.style.display = 'none';
+  summary.style.display = 'block';
+  summary.innerHTML = html;
+});
+
+renderQuestion();
+</script>
+</body>
+</html>
