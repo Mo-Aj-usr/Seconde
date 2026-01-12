@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QCM Géographie Seconde - Développement Durable</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: #333;
+        }
+        .dashboard {
+            background: rgba(255,255,255,0.95);
+            padding: 1rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .progress {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .progress-bar {
+            width: 200px;
+            height: 10px;
+            background: #ddd;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4CAF50, #45a049);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        .question-container {
+            flex: 1;
+            max-width: 800px;
+            margin: 2rem auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+        .question-header {
+            background: #2196F3;
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+        }
+        .question-text {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+        }
+        .options {
+            padding: 0 2rem 2rem;
+        }
+        .option {
+            display: block;
+            padding: 1rem;
+            margin: 0.5rem 0;
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .option:hover {
+            background: #e3f2fd;
+            border-color: #2196F3;
+        }
+        .option.selected {
+            background: #2196F3;
+            color: white;
+            border-color: #1976D2;
+        }
+        .feedback {
+            padding: 1rem 2rem;
+            margin: 1rem 0;
+            border-radius: 8px;
+            display: none;
+        }
+        .feedback.correct {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .feedback.incorrect {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            padding: 2rem;
+            background: rgba(255,255,255,0.95);
+        }
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            min-width: 120px;
+        }
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .btn-prev {
+            background: #6c757d;
+            color: white;
+        }
+        .btn-next {
+            background: #007bff;
+            color: white;
+        }
+        .btn-finish {
+            background: #28a745;
+            color: white;
+        }
+        .btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        .summary {
+            max-width: 800px;
+            margin: 2rem auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            padding: 2rem;
+            display: none;
+        }
+        .score {
+            font-size: 2rem;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+        @media (max-width: 768px) {
+            .dashboard {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            .question-container {
+                margin: 1rem;
+            }
+            .controls {
+                flex-direction: column;
+            }
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <div class="progress">
+            <span id="questionNum">Question 1 / 15</span>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+        </div>
+        <div id="scoreLive">Score: 0/0</div>
+    </div>
+
+    <div class="question-container" id="quizContainer">
+        <div class="question-header">
+            <h2 id="questionTitle"></h2>
+        </div>
+        <div class="options" id="options"></div>
+        <div id="feedback"></div>
+    </div>
+
+    <div class="controls">
+        <button class="btn btn-prev" id="prevBtn" disabled>Précédent</button>
+        <button class="btn btn-next" id="nextBtn">Suivant</button>
+        <button class="btn btn-finish" id="finishBtn">Terminer</button>
+    </div>
+
+    <div class="summary" id="summary">
+        <h1>Résultats finaux</h1>
+        <div class="score" id="finalScore"></div>
+        <div id="detailedFeedback"></div>
+        <button class="btn" onclick="location.reload()" style="margin-top: 2rem;">Refaire le QCM</button>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                question: "Qu'est-ce que le Produit Intérieur Brut (PIB) ?",
+                options: ["Somme des richesses produites dans un pays en un an", "Revenu par habitant", "Indice tenant compte de l'espérance de vie et de l'éducation", "Somme des exportations"],
+                correct: 0,
+                explanation: "Le PIB correspond à la somme des richesses produites dans un pays sur une année. C'est un indicateur économique clé pour mesurer la croissance. [file:1][web:2]"
+            },
+            {
+                question: "Quel pays a le PIB par habitant le plus élevé selon les exemples classiques ?",
+                options: ["Chine", "États-Unis", "Brésil", "Djibouti"],
+                correct: 1,
+                explanation: "Malgré un PIB total élevé, la Chine a un PIB/habitant faible (<10 000$), contrairement aux États-Unis (>50 000$). Cela montre les inégalités mondiales. [file:1]"
+            },
+            {
+                question: "L'Indice de Développement Humain (IDH) prend en compte :",
+                options: ["Seul le revenu", "Espérance de vie, éducation et revenu", "Seule l'espérance de vie", "Le PIB total uniquement"],
+                correct: 1,
+                explanation: "L'IDH intègre espérance de vie, éducation (alphabétisation, scolarisation) et RNB/habitant. Il varie de 0 (pauvre) à 1 (riche). [file:1][web:5]"
+            },
+            {
+                question: "Les pays émergents se caractérisent par :",
+                options: ["Une croissance faible", "Une forte croissance et intégration à la mondialisation", "Un IDH très bas", "Absence de commerce international"],
+                correct: 1,
+                explanation: "Exemples : BRICS (Brésil, Russie, Inde, Chine, Afrique du Sud). Ils représentent 15% du commerce mondial mais ont encore des retards sociaux. [file:1]"
+            },
+            {
+                question: "Les Pays les Moins Avancés (PMA) sont majoritairement situés en :",
+                options: ["Europe", "Asie de l'Est", "Afrique", "Amérique du Nord"],
+                correct: 2,
+                explanation: "48 PMA, surtout en Afrique, avec >40% en pauvreté extrême et faible attractivité pour les IDE. [file:1]"
+            },
+            {
+                question: "Quelle est la population mondiale estimée en 2015 selon le document ?",
+                options: ["5 milliards", "7,3 milliards", "10 milliards", "11 milliards"],
+                correct: 1,
+                explanation: "7,3 milliards en 2015, projeté à 10 milliards en 2050 (ONU). Croissance forte en Afrique subsaharienne. [file:1]"
+            },
+            {
+                question: "La transition démographique est caractérisée par :",
+                options: ["Baisse de la natalité seulement", "Baisse de la mortalité puis de la natalité", "Augmentation de la mortalité", "Stagnation démographique"],
+                correct: 1,
+                explanation: "Progrès médicaux réduisent la mortalité, natalité suit. Achevé au Nord, en cours au Sud. [file:1]"
+            },
+            {
+                question: "Quel défi majeur pour 9 milliards d'habitants ?",
+                options: ["Accès à l'eau potable", "Diminution des besoins alimentaires", "Réduction de l'urbanisation", "Baisse de la consommation énergétique"],
+                correct: 0,
+                explanation: "Consommation d'eau en hausse (humaine, agricole, industrielle). 9% sans accès amélioré. [file:1][web:7]"
+            },
+            {
+                question: "Les énergies fossiles représentent environ :",
+                options: ["50% de la consommation énergétique", "85% de la consommation énergétique", "20% de la consommation énergétique", "100% de la consommation énergétique"],
+                correct: 1,
+                explanation: "85% des énergies primaires, émettrices de gaz à effet de serre, contribuant au réchauffement. [file:1]"
+            },
+            {
+                question: "Le développement durable repose sur combien de piliers ?",
+                options: ["1", "2", "3", "4"],
+                correct: 2,
+                explanation: "Économique (croissance), social (lutte inégalités), environnemental (ressources futures). Rapport Brundtland 1987. [file:1][web:7]"
+            },
+            {
+                question: "Quel sommet a défini les Agendas 21 en 1992 ?",
+                options: ["Kyoto", "Rio", "Paris", "Johannesburg"],
+                correct: 1,
+                explanation: "Sommet de Rio : initiatives locales pour développement durable (pollutions, déchets, eau). [file:1]"
+            },
+            {
+                question: "Le Protocole de Kyoto concerne :",
+                options: ["L'eau", "Réduction des gaz à effet de serre", "La population", "Le commerce"],
+                correct: 1,
+                explanation: "Objectifs pour pays développés contre changement climatique (1997). [file:1]"
+            },
+            {
+                question: "L'Union Européenne est engagée dans :",
+                options: ["Rejet des énergies renouvelables", "Marché des émissions de CO2 et énergies renouvelables", "Augmentation des énergies fossiles", "Ignorer la biodiversité"],
+                correct: 1,
+                explanation: "Marché d'émissions, réduction pollutions, biodiversité. [file:1]"
+            },
+            {
+                question: "Les ODD (Objectifs de Développement Durable) visent une eau saine d'ici :",
+                options: ["2020", "2030", "2050", "2100"],
+                correct: 1,
+                explanation: "ONU ODD : eau saine et accessible à tous d'ici 2030. [web:8]"
+            },
+            {
+                question: "Selon le programme Eduscol, le thème introductif porte sur :",
+                options: ["Les risques uniquement", "Les enjeux du développement et sa durabilité", "L'urbanisation seule", "Les migrations"],
+                correct: 1,
+                explanation: "Enjeux économiques, sociaux, environnementaux, solidarités spatiales et temporelles. 7-8h. [web:2][web:4]"
+            }
+        ];
+
+        let currentQuestion = 0;
+        let answers = new Array(questions.length).fill(null);
+        let score = 0;
+
+        const questionNumEl = document.getElementById('questionNum');
+        const questionTitleEl = document.getElementById('questionTitle');
+        const optionsEl = document.getElementById('options');
+        const feedbackEl = document.getElementById('feedback');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const finishBtn = document.getElementById('finishBtn');
+        const progressFill = document.getElementById('progressFill');
+        const scoreLiveEl = document.getElementById('scoreLive');
+        const quizContainer = document.getElementById('quizContainer');
+        const summary = document.getElementById('summary');
+        const finalScoreEl = document.getElementById('finalScore');
+        const detailedFeedbackEl = document.getElementById('detailedFeedback');
+
+        function loadQuestion(index) {
+            const q = questions[index];
+            questionTitleEl.textContent = q.question;
+            optionsEl.innerHTML = '';
+            feedbackEl.style.display = 'none';
+
+            q.options.forEach((opt, i) => {
+                const div = document.createElement('div');
+                div.className = 'option';
+                div.textContent = opt;
+                div.onclick = () => selectOption(i);
+                if (answers[index] === i) div.classList.add('selected');
+                optionsEl.appendChild(div);
+            });
+
+            updateNav();
+            updateProgress();
+            updateScoreLive();
+        }
+
+        function selectOption(index) {
+            answers[currentQuestion] = index;
+            loadQuestion(currentQuestion); // Reload to show selection
+            updateScoreLive();
+
+            // Show feedback if answered
+            const q = questions[currentQuestion];
+            const divs = optionsEl.children;
+            Array.from(divs).forEach((div, i) => {
+                div.classList.remove('selected');
+                if (i === q.correct) {
+                    div.style.background = '#d4edda';
+                    div.style.borderColor = '#c3e6cb';
+                }
+            });
+            if (index === q.correct) {
+                if (!divs[index].classList.contains('selected')) divs[index].classList.add('selected');
+                feedbackEl.className = 'feedback correct';
+                feedbackEl.innerHTML = `<strong>Correct !</strong> ${q.explanation}`;
+            } else {
+                feedbackEl.className = 'feedback incorrect';
+                feedbackEl.innerHTML = `<strong>Incorrect.</strong> La bonne réponse est ${q.options[q.correct]}. ${q.explanation}`;
+            }
+            feedbackEl.style.display = 'block';
+        }
+
+        function updateNav() {
+            prevBtn.disabled = currentQuestion === 0;
+            nextBtn.disabled = false;
+            finishBtn.disabled = answers.filter(a => a !== null).length < questions.length / 2; // Enable if some answered
+        }
+
+        function updateProgress() {
+            const progress = ((currentQuestion + 1) / questions.length) * 100;
+            progressFill.style.width = progress + '%';
+            questionNumEl.textContent = `Question ${currentQuestion + 1} / ${questions.length}`;
+        }
+
+        function updateScoreLive() {
+            let currentScore = 0;
+            let answeredCount = 0;
+            answers.forEach((ans, i) => {
+                if (ans !== null) {
+                    answeredCount++;
+                    if (ans === questions[i].correct) currentScore++;
+                }
+            });
+            scoreLiveEl.textContent = `Score: ${currentScore}/${answeredCount}`;
+        }
+
+        prevBtn.onclick = () => {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                loadQuestion(currentQuestion);
+            }
+        };
+
+        nextBtn.onclick = () => {
+            if (currentQuestion < questions.length - 1) {
+                currentQuestion++;
+                loadQuestion(currentQuestion);
+            }
+        };
+
+        finishBtn.onclick = () => {
+            // Calculate final score
+            score = answers.reduce((s, ans, i) => ans === questions[i].correct ? s + 1 : s, 0);
+            finalScoreEl.innerHTML = `Score final: ${score} / ${questions.length} (${Math.round((score / questions.length) * 100)}%)`;
+
+            // Detailed feedback
+            detailedFeedbackEl.innerHTML = '<h2>Réponses détaillées :</h2>';
+            questions.forEach((q, i) => {
+                const correct = q.correct;
+                const userAns = answers[i] !== null ? q.options[answers[i]] : 'Non répondu';
+                const status = answers[i] === correct ? '✅ Correct' : answers[i] === null ? '❌ Non répondu' : '❌ Incorrect';
+                detailedFeedbackEl.innerHTML += `
+                    <div style="margin-bottom: 1rem; padding: 1rem; border-left: 4px solid ${answers[i] === correct ? '#28a745' : '#dc3545'}; background: #f8f9fa;">
+                        <strong>Q${i+1}:</strong> ${q.question}<br>
+                        <strong>Votre réponse:</strong> ${userAns}<br>
+                        <strong>Bonne réponse:</strong> ${q.options[correct]}<br>
+                        <em>${status}</em><br>
+                        <strong>Explication:</strong> ${q.explanation}
+                    </div>
+                `;
+            });
+
+            quizContainer.style.display = 'none';
+            summary.style.display = 'block';
+        };
+
+        // Init
+        loadQuestion(0);
+    </script>
+</body>
+</html>

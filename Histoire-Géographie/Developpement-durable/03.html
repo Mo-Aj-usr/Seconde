@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QCM Développement Durable - Seconde</title>
+<style>
+  body { font-family: Arial, sans-serif; margin: 0; background: #f4f6f8; }
+  header { background: #2c3e50; color: #fff; padding: 1rem; text-align: center; }
+  main { max-width: 800px; margin: 2rem auto; background: #fff; padding: 2rem; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+  h2 { color: #2c3e50; }
+  .question { margin-bottom: 1.5rem; }
+  .options { list-style: none; padding: 0; }
+  .options li { margin: 0.5rem 0; }
+  button { padding: 0.5rem 1rem; margin: 0.5rem; border: none; border-radius: 5px; cursor: pointer; }
+  button:disabled { opacity: 0.5; cursor: not-allowed; }
+  .dashboard { margin-bottom: 1rem; }
+  .dashboard span { margin-right: 1rem; font-weight: bold; }
+  .feedback { margin-top: 1rem; background: #ecf0f1; padding: 0.8rem; border-radius: 5px; }
+  .summary { margin-top: 2rem; background: #dff0d8; padding: 1rem; border-radius: 5px; }
+  @media(max-width: 600px) { main { padding: 1rem; } }
+</style>
+</head>
+<body>
+<header>
+  <h1>QCM - Développement Durable (Seconde)</h1>
+</header>
+<main>
+  <div class="dashboard">
+    <span id="progress">Question 1 / 15</span>
+    <span id="score">Score: 0</span>
+  </div>
+  <div id="quiz-container"></div>
+  <div>
+    <button id="prev-btn">Précédent</button>
+    <button id="next-btn">Suivant</button>
+    <button id="finish-btn">Terminer</button>
+  </div>
+  <div id="summary" class="summary" style="display:none;"></div>
+</main>
+<script>
+const questions = [
+  {
+    question: "1. Quel est l'objectif principal du développement durable ?",
+    options: ["Augmenter la production industrielle", "Répondre aux besoins du présent sans compromettre ceux des générations futures", "Réduire les impôts", "Favoriser uniquement le développement économique"],
+    answer: 1,
+    explanation: "Le développement durable vise à concilier besoins présents et futurs, en intégrant les dimensions environnementale, économique et sociale."
+  },
+  {
+    question: "2. Parmi ces piliers, lequel ne fait pas partie du développement durable ?",
+    options: ["Économie", "Écologie", "Social", "Militaire"],
+    answer: 3,
+    explanation: "Les trois piliers sont l'économie, le social et l'environnement ; le militaire n'est pas inclus."
+  },
+  {
+    question: "3. Qu'est-ce que l'empreinte écologique ?",
+    options: ["La surface nécessaire pour produire les ressources consommées et absorber les déchets", "La consommation de carburant par voiture", "La quantité de CO2 émise par un avion", "Le nombre d'espèces dans une forêt"],
+    answer: 0,
+    explanation: "L'empreinte écologique mesure la surface nécessaire pour soutenir un mode de vie donné, incluant ressources et déchets."
+  },
+  {
+    question: "4. Quel est l'objectif de la Conférence de Rio en 1992 ?",
+    options: ["Lutter contre la Seconde Guerre mondiale", "Mettre en place des accords pour un développement durable", "Créer l'Union Européenne", "Établir l'ONU"],
+    answer: 1,
+    explanation: "La Conférence de Rio a établi des principes pour un développement durable au niveau mondial."
+  },
+  {
+    question: "5. Quel gaz est principalement responsable du réchauffement climatique ?",
+    options: ["Oxygène", "Dioxyde de carbone (CO2)", "Azote", "Hélium"],
+    answer: 1,
+    explanation: "Le CO2 est un gaz à effet de serre majeur contribuant au réchauffement climatique."
+  },
+  {
+    question: "6. Qu'est-ce qu'une ressource renouvelable ?",
+    options: ["Une ressource qui se renouvelle naturellement à l'échelle humaine", "Une ressource non utilisée", "Une ressource minérale", "Une ressource illimitée"],
+    answer: 0,
+    explanation: "Les ressources renouvelables, comme le vent ou l'eau, se régénèrent naturellement et peuvent être utilisées durablement."
+  },
+  {
+    question: "7. Quel secteur est le plus consommateur d'énergie dans le monde ?",
+    options: ["Agriculture", "Industrie", "Transports", "Services"],
+    answer: 2,
+    explanation: "Les transports, notamment routiers et aériens, représentent une part importante de la consommation énergétique mondiale."
+  },
+  {
+    question: "8. Que signifie l'acronyme ODD ?",
+    options: ["Objectifs de Développement Durable", "Organisation pour le Développement Durable", "Objectif Durable Durable", "Ordre de Développement"],
+    answer: 0,
+    explanation: "Les ODD sont les 17 Objectifs de Développement Durable définis par l'ONU."
+  },
+  {
+    question: "9. Quel est un exemple de politique locale en faveur du développement durable ?",
+    options: ["Subventionner l'énergie solaire", "Construire une autoroute sans étude d'impact", "Interdire le tri des déchets", "Augmenter les émissions de CO2"],
+    answer: 0,
+    explanation: "Subventionner l'énergie solaire encourage l'utilisation d'énergies renouvelables au niveau local."
+  },
+  {
+    question: "10. Qu'appelle-t-on biodiversité ?",
+    options: ["La diversité des cultures humaines", "La diversité des espèces vivantes", "Le nombre de forêts", "La quantité d'eau"],
+    answer: 1,
+    explanation: "La biodiversité correspond à la variété des êtres vivants et des écosystèmes sur Terre."
+  },
+  {
+    question: "11. Quel est l'effet principal de la déforestation ?",
+    options: ["Augmenter la biodiversité", "Réduire le CO2 atmosphérique", "Contribuer au changement climatique et à la perte de biodiversité", "Produire plus d'oxygène"],
+    answer: 2,
+    explanation: "La déforestation libère du CO2 et détruit des habitats, affectant la biodiversité et le climat."
+  },
+  {
+    question: "12. Qu'est-ce qu'une ville durable ?",
+    options: ["Une ville qui consomme beaucoup d'énergie", "Une ville qui intègre l'écologie, le social et l'économie", "Une ville sans transports publics", "Une ville industrielle uniquement"],
+    answer: 1,
+    explanation: "Une ville durable minimise son impact environnemental tout en améliorant la qualité de vie de ses habitants."
+  },
+  {
+    question: "13. Qu'est-ce que le recyclage ?",
+    options: ["Réutiliser des matériaux pour fabriquer de nouveaux produits", "Jeter les déchets dans la nature", "Brûler les déchets", "Empiler les déchets"],
+    answer: 0,
+    explanation: "Le recyclage transforme des déchets en nouvelles ressources, limitant l'épuisement des ressources naturelles."
+  },
+  {
+    question: "14. Quel rôle jouent les citoyens dans le développement durable ?",
+    options: ["Aucun rôle", "Sensibiliser et agir par leurs choix de consommation", "Gouverner seul un pays", "Augmenter la production industrielle"],
+    answer: 1,
+    explanation: "Chaque citoyen contribue par ses choix et comportements, comme réduire les déchets ou consommer responsable."
+  },
+  {
+    question: "15. Quel est l'objectif de l'Accord de Paris sur le climat (2015) ?",
+    options: ["Réduire les inégalités mondiales", "Limiter le réchauffement climatique bien en dessous de 2°C", "Créer de nouvelles villes", "Augmenter la production de charbon"],
+    answer: 1,
+    explanation: "L'Accord de Paris vise à limiter le réchauffement climatique et encourager la transition énergétique."
+  }
+];
+
+let current = 0;
+let score = 0;
+const userAnswers = Array(questions.length).fill(null);
+
+const quizContainer = document.getElementById('quiz-container');
+const progress = document.getElementById('progress');
+const scoreDisplay = document.getElementById('score');
+const prevBtn = document.getElementById('prev-btn');
+const nextBtn = document.getElementById('next-btn');
+const finishBtn = document.getElementById('finish-btn');
+const summary = document.getElementById('summary');
+
+function renderQuestion() {
+  const q = questions[current];
+  let html = `<div class='question'><h2>${q.question}</h2><ul class='options'>`;
+  q.options.forEach((opt, index) => {
+    const checked = userAnswers[current] === index ? 'checked' : '';
+    html += `<li><label><input type='radio' name='option' value='${index}' ${checked}> ${opt}</label></li>`;
+  });
+  html += `</ul></div>`;
+  if(userAnswers[current] !== null){
+    html += `<div class='feedback'>Réponse : ${q.options[q.answer]}<br>${q.explanation}</div>`;
+  }
+  quizContainer.innerHTML = html;
+  progress.textContent = `Question ${current+1} / ${questions.length}`;
+  scoreDisplay.textContent = `Score: ${score}`;
+}
+
+function checkAnswer() {
+  const selected = document.querySelector('input[name="option"]:checked');
+  if(selected){
+    const answer = parseInt(selected.value);
+    userAnswers[current] = answer;
+    if(answer === questions[current].answer){
+      score++;
+    } else {
+      if(userAnswers[current] !== null && userAnswers[current] === questions[current].answer) score--;
+    }
+  }
+}
+
+prevBtn.addEventListener('click', () => {
+  checkAnswer();
+  if(current > 0) current--;
+  renderQuestion();
+});
+
+nextBtn.addEventListener('click', () => {
+  checkAnswer();
+  if(current < questions.length-1) current++;
+  renderQuestion();
+});
+
+finishBtn.addEventListener('click', () => {
+  checkAnswer();
+  let html = '<h2>Résumé du QCM</h2>';
+  questions.forEach((q, index) => {
+    html += `<p><strong>Q${index+1}:</strong> ${q.question}<br>`;
+    html += `Votre réponse: ${userAnswers[index] !== null ? q.options[userAnswers[index]] : 'Aucune'}<br>`;
+    html += `Réponse correcte: ${q.options[q.answer]}<br>`;
+    html += `Explication: ${q.explanation}</p>`;
+  });
+  html += `<h3>Score final: ${score} / ${questions.length}</h3>`;
+  quizContainer.style.display = 'none';
+  document.querySelector('.dashboard').style.display = 'none';
+  prevBtn.style.display = 'none';
+  nextBtn.style.display = 'none';
+  finishBtn.style.display = 'none';
+  summary.style.display = 'block';
+  summary.innerHTML = html;
+});
+
+renderQuestion();
+</script>
+</body>
+</html>
