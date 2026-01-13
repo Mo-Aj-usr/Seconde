@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>QCM Physique-Chimie 2nde – Modélisation de la matière</title>
+<style>
+:root{
+  --bg:#0f172a; --card:#111827; --accent:#38bdf8; --ok:#22c55e; --ko:#ef4444; --muted:#94a3b8;
+}
+*{box-sizing:border-box;font-family:system-ui,-apple-system,Segoe UI,Roboto}
+body{margin:0;background:linear-gradient(135deg,#020617,#0f172a);color:#e5e7eb}
+.container{max-width:980px;margin:auto;padding:16px}
+.header{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center}
+.title{font-size:clamp(20px,3vw,28px);font-weight:800}
+.dashboard{display:flex;gap:12px;align-items:center;background:#020617aa;border:1px solid #1f2933;border-radius:14px;padding:10px 14px}
+.badge{padding:6px 10px;border-radius:999px;background:#020617;border:1px solid #1f2933;color:var(--muted)}
+.progress{height:10px;background:#020617;border-radius:999px;overflow:hidden;border:1px solid #1f2933}
+.bar{height:100%;width:0;background:linear-gradient(90deg,#38bdf8,#22c55e)}
+.card{margin-top:16px;background:linear-gradient(180deg,#020617,#0b1220);border:1px solid #1f2933;border-radius:18px;padding:16px}
+.qhead{display:flex;justify-content:space-between;gap:12px;align-items:center}
+.qtitle{font-size:18px;font-weight:700}
+.answers{display:grid;gap:10px;margin-top:12px}
+.btnA{padding:12px 14px;border-radius:12px;border:1px solid #1f2933;background:#020617;color:#e5e7eb;cursor:pointer;text-align:left}
+.btnA:hover{border-color:var(--accent)}
+.btnA.correct{border-color:var(--ok);background:#052e1a}
+.btnA.wrong{border-color:var(--ko);background:#2a0a0a}
+.feedback{margin-top:12px;padding:12px;border-radius:12px;border:1px dashed #1f2933;color:#d1d5db}
+.controls{display:flex;gap:10px;justify-content:space-between;margin-top:14px;flex-wrap:wrap}
+.ctrl{padding:10px 14px;border-radius:12px;border:1px solid #1f2933;background:#020617;color:#e5e7eb;cursor:pointer}
+.ctrl.primary{background:linear-gradient(90deg,#38bdf8,#22c55e);color:#020617;border:none}
+.ctrl:disabled{opacity:.5;cursor:not-allowed}
+.footer{color:var(--muted);font-size:12px;margin-top:8px}
+.result{display:none}
+.table{width:100%;border-collapse:collapse;margin-top:8px}
+.table th,.table td{border:1px solid #1f2933;padding:8px}
+.ok{color:var(--ok)} .ko{color:var(--ko)}
+@media (max-width:640px){
+  .header{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <div class="title">QCM Physique–Chimie 2nde — Modélisation de la matière</div>
+    <div class="dashboard">
+      <span class="badge" id="pos">Q1/10</span>
+      <span class="badge" id="score">Score: 0</span>
+      <div class="progress" style="width:160px"><div class="bar" id="bar"></div></div>
+    </div>
+  </div>
+
+  <div class="card" id="quiz">
+    <div class="qhead">
+      <div class="qtitle" id="qtext"></div>
+    </div>
+    <div class="answers" id="answers"></div>
+    <div class="feedback" id="feedback" hidden></div>
+    <div class="controls">
+      <button class="ctrl" id="prev">◀ Précédent</button>
+      <div style="flex:1"></div>
+      <button class="ctrl" id="next">Suivant ▶</button>
+      <button class="ctrl primary" id="finish">Terminer</button>
+    </div>
+    <div class="footer">Réponse expliquée après chaque choix. Navigation libre.</div>
+  </div>
+
+  <div class="card result" id="result">
+    <h2>Résultats finaux</h2>
+    <p id="finalScore"></p>
+    <table class="table" id="table"></table>
+    <button class="ctrl" onclick="location.reload()">Recommencer</button>
+  </div>
+</div>
+
+<script>
+const Q = [
+{q:"Une espèce chimique est…",
+ a:["une seule entité chimique","une collection d’un très grand nombre d’entités identiques","un mélange de substances différentes"],
+ ok:1,
+ exp:"Définition du programme : une espèce chimique correspond à un ensemble très nombreux d’entités identiques (atomes, ions ou molécules)."},
+{q:"Parmi les écritures suivantes, laquelle désigne un ion ?",
+ a:["Na","Na+","Na2"],
+ ok:1,
+ exp:"Na est un atome neutre. Na+ est un cation : c’est un ion."},
+{q:"Dans NaCl solide, la matière est électriquement…",
+ a:["positive","négative","neutre"],
+ ok:2,
+ exp:"Principe d’électroneutralité : les charges des ions se compensent, la matière est globalement neutre."},
+{q:"Le noyau d’un atome contient…",
+ a:["des électrons et des protons","des protons et des neutrons","uniquement des électrons"],
+ ok:1,
+ exp:"Le noyau est constitué de nucléons : protons (+) et neutrons (0)."},
+{q:"La quasi-totalité de la masse d’un atome est située…",
+ a:["dans le cortège électronique","dans le noyau","dans l’espace vide autour du noyau"],
+ ok:1,
+ exp:"La masse des électrons est négligeable : presque toute la masse est dans le noyau."},
+{q:"L’ordre de grandeur de la taille d’un atome est :",
+ a:["10⁻² m","10⁻⁶ m","10⁻¹⁰ m"],
+ ok:2,
+ exp:"Au lycée, on retient ~10⁻¹⁰ m pour la taille d’un atome."},
+{q:"Un atome neutre possède…",
+ a:["plus de protons que d’électrons","autant de protons que d’électrons","plus d’électrons que de protons"],
+ ok:1,
+ exp:"Neutralité de l’atome : nombre de protons = nombre d’électrons."},
+{q:"La formule correcte du bromure de magnésium est :",
+ a:["MgBr","MgBr2","Mg2Br"],
+ ok:1,
+ exp:"Mg²⁺ nécessite deux Br⁻ pour compenser les charges : MgBr₂."},
+{q:"L’écriture scientifique de 0,000 01 est :",
+ a:["1×10⁻⁵","1×10⁵","10×10⁻⁶"],
+ ok:0,
+ exp:"0,00001 = 1×10⁻⁵."},
+{q:"Une molécule est constituée…",
+ a:["d’ions uniquement","d’atomes liés entre eux","d’un seul proton"],
+ ok:1,
+ exp:"Une molécule est un assemblage d’atomes liés par des liaisons chimiques."}
+];
+
+let i=0, answers=new Array(Q.length).fill(null), score=0;
+
+const qtext=document.getElementById('qtext');
+const box=document.getElementById('answers');
+const fb=document.getElementById('feedback');
+const pos=document.getElementById('pos');
+const sc=document.getElementById('score');
+const bar=document.getElementById('bar');
+
+function render(){
+  const q=Q[i];
+  pos.textContent=`Q${i+1}/${Q.length}`;
+  bar.style.width=`${(i/Q.length)*100}%`;
+  qtext.textContent=q.q;
+  box.innerHTML="";
+  fb.hidden=true;
+  q.a.forEach((t,idx)=>{
+    const b=document.createElement('button');
+    b.className='btnA';
+    b.textContent=String.fromCharCode(65+idx)+". "+t;
+    if(answers[i]!==null){
+      if(idx===q.ok) b.classList.add('correct');
+      if(idx===answers[i] && idx!==q.ok) b.classList.add('wrong');
+    }
+    b.onclick=()=>choose(idx);
+    box.appendChild(b);
+  });
+  document.getElementById('prev').disabled=i===0;
+  document.getElementById('next').disabled=i===Q.length-1;
+}
+function choose(idx){
+  if(answers[i]!==null) return;
+  answers[i]=idx;
+  if(idx===Q[i].ok) score++;
+  sc.textContent=`Score: ${score}`;
+  fb.hidden=false;
+  fb.innerHTML=(idx===Q[i].ok? "<b class='ok'>Bonne réponse.</b> ":"<b class='ko'>Réponse incorrecte.</b> ")+Q[i].exp;
+  render();
+}
+document.getElementById('prev').onclick=()=>{i--;render();}
+document.getElementById('next').onclick=()=>{i++;render();}
+document.getElementById('finish').onclick=showResult;
+
+function showResult(){
+  document.getElementById('quiz').style.display='none';
+  const r=document.getElementById('result'); r.style.display='block';
+  document.getElementById('finalScore').textContent=`Score final : ${score} / ${Q.length}`;
+  const t=document.getElementById('table');
+  t.innerHTML="<tr><th>#</th><th>Question</th><th>Votre réponse</th><th>Correction</th></tr>";
+  Q.forEach((q,idx)=>{
+    const tr=document.createElement('tr');
+    const ur=answers[idx]===null?"—":q.a[answers[idx]];
+    const ok=q.a[q.ok];
+    tr.innerHTML=`<td>${idx+1}</td><td>${q.q}</td><td class="${answers[idx]===q.ok?'ok':'ko'}">${ur}</td><td>${ok}<br><small>${q.exp}</small></td>`;
+    t.appendChild(tr);
+  });
+}
+
+render();
+</script>
+</body>
+</html>
