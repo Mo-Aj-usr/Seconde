@@ -1,241 +1,205 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QCM Physique 2nde: Constitution de la matière à l'échelle microscopique</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background-color: #f4f4f4; }
-        .container { max-width: 800px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-        h1 { text-align: center; }
-        #dashboard { text-align: center; margin-bottom: 20px; }
-        #progress { width: 100%; background-color: #ddd; height: 20px; border-radius: 10px; overflow: hidden; }
-        #progress-bar { height: 100%; background-color: #4caf50; width: 0%; transition: width 0.3s; }
-        #question { margin-bottom: 20px; }
-        .option { display: block; margin: 10px 0; padding: 10px; background: #eee; border-radius: 5px; cursor: pointer; }
-        .option.selected { background: #d4edda; }
-        .option.correct { background: #c3e6cb; }
-        .option.incorrect { background: #f8d7da; }
-        #explanation { margin-top: 20px; padding: 10px; background: #fff3cd; border-radius: 5px; display: none; }
-        #buttons { text-align: center; margin-top: 20px; }
-        button { padding: 10px 20px; margin: 5px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; }
-        button:disabled { background: #ccc; cursor: not-allowed; }
-        #finish { display: none; }
-        #summary { display: none; margin-top: 20px; }
-        @media (max-width: 600px) { .container { padding: 10px; } button { width: 100%; } }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QCM Chimie 2nde - Atomes & Molécules</title>
+  <style>
+    :root {
+      --primary: #2563eb;
+      --success: #16a34a;
+      --danger: #dc2626;
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --text: #1e293b;
+      --border: #e2e8f0;
+    }
+    body { font-family: system-ui, sans-serif; background: var(--bg); color: var(--text); padding: 1rem; line-height: 1.5; }
+    .container { max-width: 1100px; margin: auto; }
+    .main-content {
+      background: white;
+      border-radius: 16px;
+      padding: 2rem;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    }
+    .question-header { margin-bottom: 1.5rem; }
+    .question-title { font-size: 1.4rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .options { display: flex; flex-direction: column; gap: 1rem; margin: 1.5rem 0; }
+    .option {
+      padding: 1.2rem 1.5rem;
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .option:hover { border-color: var(--primary); background: #f0f7ff; }
+    .option.selected { border-color: var(--primary); background: #eff6ff; }
+    .option.correct { border-color: var(--success); background: #f0fdf4; }
+    .option.incorrect { border-color: var(--danger); background: #fef2f2; }
+    .feedback {
+      margin-top: 1.5rem;
+      padding: 1.2rem;
+      background: #f8fafc;
+      border-left: 5px solid var(--success);
+      border-radius: 8px;
+      display: none;
+    }
+    .feedback.show { display: block; }
+    .controls {
+      display: flex;
+      gap: 1rem;
+      justify-content: space-between;
+      margin-top: 2rem;
+    }
+    .btn {
+      padding: 0.9rem 1.8rem;
+      border: none;
+      border-radius: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn-primary { background: var(--primary); color: white; }
+    .btn-secondary { background: #e2e8f0; color: var(--text); }
+    .results { text-align: center; padding: 3rem 1rem; display: none; }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h1>QCM Physique 2nde</h1>
-        <p>Thème : Constitution de la matière à l'échelle microscopique (Conforme au programme EduScol)</p>
-        <div id="dashboard">
-            <div>Question <span id="current-question">1</span>/10</div>
-            <div id="progress"><div id="progress-bar"></div></div>
-        </div>
-        <div id="question"></div>
-        <div id="options"></div>
-        <div id="explanation"></div>
-        <div id="buttons">
-            <button id="prev">Précédent</button>
-            <button id="next">Suivant</button>
-            <button id="finish">Terminer</button>
-        </div>
-        <div id="summary"></div>
+
+<div class="container">
+  <div class="main-content">
+    <div class="question-header">
+      <div class="question-title" id="question-title"></div>
+      <div id="question-count"></div>
     </div>
-    <script>
-        const questions = [
-            {
-                question: "Qu'est-ce qu'une espèce chimique ?",
-                options: [
-                    "A. Une entité unique comme un atome ou une molécule.",
-                    "B. Une collection d'un nombre très élevé d'entités chimiques identiques.",
-                    "C. Un mélange de différents atomes.",
-                    "D. Une particule subatomique comme un proton."
-                ],
-                correct: 1,
-                explanation: "Une espèce chimique est définie comme une collection d'un nombre très élevé d'entités identiques, telles que des atomes, molécules ou ions. Cela correspond à l'échelle macroscopique de la matière."
-            },
-            {
-                question: "Quelle est la différence entre un atome et un ion ?",
-                options: [
-                    "A. Un atome est chargé, un ion est neutre.",
-                    "B. Un atome est électriquement neutre, un ion est chargé.",
-                    "C. Les deux sont identiques.",
-                    "D. Un ion n'a pas de noyau."
-                ],
-                correct: 1,
-                explanation: "Un atome est électriquement neutre car il possède autant de protons que d'électrons. Un ion est chargé car il a gagné ou perdu des électrons."
-            },
-            {
-                question: "Quelle est la formule d'un composé ionique électriquement neutre formé par Na⁺ et Cl⁻ ?",
-                options: [
-                    "A. NaCl₂",
-                    "B. Na₂Cl",
-                    "C. NaCl",
-                    "D. NaCl₃"
-                ],
-                correct: 2,
-                explanation: "Pour respecter l'électroneutralité, un cation Na⁺ et un anion Cl⁻ forment NaCl, où les charges se compensent (+1 et -1)."
-            },
-            {
-                question: "Quelle est l'ordre de grandeur de la taille d'un atome ?",
-                options: [
-                    "A. 10⁻¹⁵ m",
-                    "B. 10⁻¹⁰ m",
-                    "C. 10⁻⁵ m",
-                    "D. 10⁻²⁰ m"
-                ],
-                correct: 1,
-                explanation: "La taille d'un atome est de l'ordre de 10⁻¹⁰ m, tandis que celle du noyau est de 10⁻¹⁵ m."
-            },
-            {
-                question: "Dans la notation ⁿZ X, que représente Z ?",
-                options: [
-                    "A. Le nombre de masse.",
-                    "B. Le nombre de neutrons.",
-                    "C. Le numéro atomique (nombre de protons).",
-                    "D. Le nombre d'électrons."
-                ],
-                correct: 2,
-                explanation: "Z est le numéro atomique, égal au nombre de protons dans le noyau, qui définit l'élément chimique."
-            },
-            {
-                question: "Combien de nucléons possède le noyau de ³⁵Cl ?",
-                options: [
-                    "A. 17",
-                    "B. 18",
-                    "C. 35",
-                    "D. 52"
-                ],
-                correct: 2,
-                explanation: "Le nombre de masse A = 35 pour ³⁵Cl, qui est le nombre total de nucléons (protons + neutrons)."
-            },
-            {
-                question: "Quelle est la formule du chlorure de magnésium ?",
-                options: [
-                    "A. MgCl",
-                    "B. MgCl₂",
-                    "C. Mg₂Cl",
-                    "D. MgCl₃"
-                ],
-                correct: 1,
-                explanation: "Le magnésium forme Mg²⁺, et le chlorure Cl⁻. Pour l'électroneutralité, il faut deux Cl⁻ pour un Mg²⁺, donc MgCl₂."
-            },
-            {
-                question: "La masse d'un atome est principalement due à :",
-                options: [
-                    "A. Ses électrons.",
-                    "B. Son noyau (protons et neutrons).",
-                    "C. Ses orbites électroniques.",
-                    "D. Le vide autour du noyau."
-                ],
-                correct: 1,
-                explanation: "La masse des électrons est négligeable ; presque toute la masse est concentrée dans le noyau."
-            },
-            {
-                question: "Un élément chimique est défini par :",
-                options: [
-                    "A. Son nombre de neutrons.",
-                    "B. Son nombre de masse.",
-                    "C. Son numéro atomique Z.",
-                    "D. Son nombre d'électrons de valence uniquement."
-                ],
-                correct: 2,
-                explanation: "Tous les atomes ou ions avec le même Z appartiennent au même élément chimique."
-            },
-            {
-                question: "Pourquoi la matière est-elle électriquement neutre à l'échelle macroscopique ?",
-                options: [
-                    "A. Parce que tous les atomes sont chargés positivement.",
-                    "B. Parce que les charges des cations et anions se compensent dans les composés ioniques.",
-                    "C. Parce qu'il n'y a pas d'ions dans la matière.",
-                    "D. Parce que les électrons annulent les neutrons."
-                ],
-                correct: 1,
-                explanation: "Dans les solides ioniques, les proportions de cations et anions assurent la neutralité électrique globale."
-            }
-        ];
 
-        let current = 0;
-        let answers = Array(questions.length).fill(-1);
-        let score = 0;
-        let explained = false;
+    <div class="options" id="options"></div>
 
-        function loadQuestion() {
-            const q = questions[current];
-            document.getElementById('current-question').textContent = current + 1;
-            document.getElementById('question').textContent = q.question;
-            const optionsDiv = document.getElementById('options');
-            optionsDiv.innerHTML = '';
-            q.options.forEach((opt, i) => {
-                const div = document.createElement('div');
-                div.classList.add('option');
-                div.textContent = opt;
-                div.onclick = () => selectOption(i);
-                if (answers[current] === i) div.classList.add('selected');
-                optionsDiv.appendChild(div);
-            });
-            document.getElementById('explanation').style.display = 'none';
-            explained = false;
-            updateButtons();
-            updateProgress();
-        }
+    <div class="feedback" id="feedback">
+      <strong id="feedback-header"></strong>
+      <div id="feedback-explanation"></div>
+    </div>
 
-        function selectOption(index) {
-            if (explained) return;
-            answers[current] = index;
-            const options = document.querySelectorAll('.option');
-            options.forEach((opt, i) => {
-                opt.classList.remove('selected');
-                if (i === index) opt.classList.add('selected');
-            });
-            showExplanation();
-        }
+    <div class="controls">
+      <button class="btn btn-secondary" id="prev-btn">← Précédent</button>
+      <button class="btn btn-primary" id="next-btn">Suivant →</button>
+      <button class="btn btn-primary" id="finish-btn" style="display:none;">Terminer</button>
+    </div>
+  </div>
 
-        function showExplanation() {
-            const q = questions[current];
-            const exp = document.getElementById('explanation');
-            exp.textContent = q.explanation;
-            exp.style.display = 'block';
-            explained = true;
-            const options = document.querySelectorAll('.option');
-            options.forEach((opt, i) => {
-                if (i === q.correct) opt.classList.add('correct');
-                if (i === answers[current] && i !== q.correct) opt.classList.add('incorrect');
-            });
-            if (answers[current] === q.correct) score++;
-        }
+  <div class="results" id="results">
+    <h2>Votre score : <span id="final-score"></span>/10</h2>
+    <p id="score-message"></p>
+    <button class="btn btn-primary" onclick="location.reload()">Recommencer</button>
+  </div>
+</div>
 
-        function updateButtons() {
-            document.getElementById('prev').disabled = current === 0;
-            document.getElementById('next').disabled = !explained || current === questions.length - 1;
-            document.getElementById('finish').style.display = answers.every(a => a !== -1) ? 'inline' : 'none';
-        }
+<script>
+const quizData = [
+  { q: "Le noyau contient :", opts: ["Seulement protons", "Protons + neutrons", "Protons + neutrons + électrons"], correct: 1, exp: "Le noyau = protons + neutrons. Électrons autour." },
+  { q: "Atome neutre → charge :", opts: ["Positive", "Nulle", "Négative"], correct: 1, exp: "Protons = électrons → charge nulle." },
+  { q: "Masse atome principalement dans :", opts: ["Électrons", "Noyau", "Nuage électronique"], correct: 1, exp: "Masse concentrée dans le noyau." },
+  { q: "Numéro atomique Z = ", opts: ["Neutrons", "Protons", "Nucléons"], correct: 1, exp: "Z = nombre de protons." },
+  { q: "Configuration Na (Z=11) :", opts: ["2,8,1", "2,8,2", "2,7,2"], correct: 0, exp: "2 (K) + 8 (L) + 1 (M) = 2,8,1" },
+  // ... ajoutez les 5 autres questions si vous voulez les 10
+  { q: "Cation Na⁺ a perdu :", opts: ["Proton", "Électron", "Neutron"], correct: 1, exp: "Perte d’un électron → charge +1" },
+  { q: "Électroneutralité signifie :", opts: ["Z=A", "Somme charges = 0", "n_e = n_p"], correct: 1, exp: "Charges positives = charges négatives" },
+  { q: "Liaison dans H₂O :", opts: ["Ionique", "Covalente polaire", "Métallique"], correct: 1, exp: "Covalente polaire (O plus électronégatif)" },
+  { q: "Nombre d'Avogadro =", opts: ["6,02×10²³", "6,02×10²⁰", "22,4"], correct: 0, exp: "N_A = 6,02×10²³ entités/mol" },
+  { q: "Espèce chimique = ", opts: ["Un seul atome", "Très grand nombre d'entités identiques", "Mélange"], correct: 1, exp: "Définition Eduscol : collection d'entités identiques" }
+];
 
-        function updateProgress() {
-            const progress = ((current + 1) / questions.length) * 100;
-            document.getElementById('progress-bar').style.width = `${progress}%`;
-        }
+let current = 0;
+let answers = new Array(quizData.length).fill(null);
 
-        function showSummary() {
-            const sum = document.getElementById('summary');
-            sum.innerHTML = `<h2>Résultat : ${score}/10</h2>`;
-            questions.forEach((q, i) => {
-                sum.innerHTML += `<p><strong>Question ${i+1}:</strong> ${q.question}<br><strong>Réponse correcte:</strong> ${q.options[q.correct]}<br><strong>Votre réponse:</strong> ${answers[i] !== -1 ? q.options[answers[i]] : 'Aucune'}<br><strong>Explication:</strong> ${q.explanation}</p><hr>`;
-            });
-            sum.style.display = 'block';
-            document.getElementById('buttons').style.display = 'none';
-            document.getElementById('question').style.display = 'none';
-            document.getElementById('options').style.display = 'none';
-            document.getElementById('explanation').style.display = 'none';
-        }
+const els = {
+  title: document.getElementById('question-title'),
+  count: document.getElementById('question-count'),
+  options: document.getElementById('options'),
+  feedback: document.getElementById('feedback'),
+  fbHeader: document.getElementById('feedback-header'),
+  fbExp: document.getElementById('feedback-explanation'),
+  prev: document.getElementById('prev-btn'),
+  next: document.getElementById('next-btn'),
+  finish: document.getElementById('finish-btn'),
+  results: document.getElementById('results'),
+  score: document.getElementById('final-score'),
+  msg: document.getElementById('score-message')
+};
 
-        document.getElementById('prev').onclick = () => { if (current > 0) { current--; loadQuestion(); } };
-        document.getElementById('next').onclick = () => { if (current < questions.length - 1) { current++; loadQuestion(); } };
-        document.getElementById('finish').onclick = showSummary;
+function loadQuestion() {
+  const q = quizData[current];
+  els.title.textContent = q.q;
+  els.count.textContent = `Question ${current+1} / ${quizData.length}`;
 
-        loadQuestion();
-    </script>
+  els.options.innerHTML = q.opts.map((text, i) => `
+    <div class="option" onclick="select(${i})">
+      ${String.fromCharCode(65+i)}. ${text}
+    </div>
+  `).join('');
+
+  els.feedback.classList.remove('show');
+  updateButtons();
+}
+
+function select(idx) {
+  if (answers[current] !== null) return; // déjà répondu
+
+  answers[current] = idx;
+  const q = quizData[current];
+  const correct = q.correct;
+
+  document.querySelectorAll('.option').forEach((opt, i) => {
+    opt.onclick = null;
+    if (i === correct) opt.classList.add('correct');
+    if (i === idx) {
+      opt.classList.add('selected');
+      if (i !== correct) opt.classList.add('incorrect');
+    }
+  });
+
+  els.fbHeader.innerHTML = idx === correct ? "✅ Bonne réponse !" : "❌ Dommage...";
+  els.fbExp.textContent = q.exp;
+  els.feedback.classList.add('show');
+
+  updateButtons();
+}
+
+function updateButtons() {
+  els.prev.disabled = current === 0;
+  els.next.disabled = answers[current] === null;               // ← clé : actif seulement après réponse
+  els.finish.style.display = (current === quizData.length - 1 && answers[current] !== null) ? 'inline-block' : 'none';
+  els.next.style.display = current === quizData.length - 1 ? 'none' : 'inline-block';
+}
+
+function prev() {
+  if (current > 0) {
+    current--;
+    loadQuestion();
+  }
+}
+
+function next() {
+  if (current < quizData.length - 1 && answers[current] !== null) {
+    current++;
+    loadQuestion();
+  }
+}
+
+function showResults() {
+  const score = answers.reduce((sum, ans, i) => sum + (ans === quizData[i].correct ? 1 : 0), 0);
+  els.score.textContent = score;
+  els.msg.textContent = score >= 8 ? "Très bon niveau !" : score >= 5 ? "Bon travail, continue !" : "À revoir les bases.";
+  document.querySelector('.main-content').style.display = 'none';
+  els.results.style.display = 'block';
+}
+
+els.prev.onclick = prev;
+els.next.onclick = next;
+els.finish.onclick = showResults;
+
+loadQuestion();
+  </script>
 </body>
 </html>
