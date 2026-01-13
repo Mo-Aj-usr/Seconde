@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QCM Chimie Seconde - Atomes & Molécules - Eduscol</title>
+  <style>
+    :root {
+      --primary: #2563eb;
+      --success: #16a34a;
+      --danger: #dc2626;
+      --warning: #facc15;
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --text: #1e293b;
+      --border: #e2e8f0;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding: 1rem;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 2rem;
+      min-height: 100vh;
+    }
+
+    .dashboard {
+      background: var(--card);
+      border-radius: 16px;
+      padding: 1.5rem;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+      position: sticky;
+      top: 1rem;
+      height: fit-content;
+    }
+
+    .progress-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 8px;
+      background: #f1f5f9;
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 0.5rem;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--success), var(--primary));
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    .question-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin: 1rem 0;
+    }
+
+    .q-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      background: white;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+    }
+
+    .q-btn.current { background: var(--primary); color: white; border-color: var(--primary); }
+    .q-btn.answered { background: var(--success); color: white; border-color: var(--success); }
+    .q-btn.review { background: var(--warning); color: #854d0d; border-color: var(--warning); }
+
+    .main-content {
+      background: var(--card);
+      border-radius: 16px;
+      padding: 2rem;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+      overflow-y: auto;
+    }
+
+    .question-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 2px solid var(--border);
+    }
+
+    .question-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+    }
+
+    .question-count {
+      background: var(--primary);
+      color: white;
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.85rem;
+    }
+
+    .theme-tag {
+      background: #eff6ff;
+      color: #1e40af;
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      margin-left: 1rem;
+    }
+
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .option {
+      padding: 1.25rem 1.5rem;
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+      background: white;
+      position: relative;
+    }
+
+    .option:hover { 
+      border-color: var(--primary); 
+      transform: translateY(-2px); 
+      box-shadow: 0 8px 25px rgba(37,99,235,0.15); 
+    }
+    
+    .option.selected { border-color: var(--primary); background: #eff6ff; }
+    .option.correct { border-color: var(--success); background: #f0fdf4; }
+    .option.incorrect { border-color: var(--danger); background: #fef2f2; }
+
+    .option-letter {
+      display: inline-flex;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: white;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 16px;
+      margin-right: 1rem;
+      flex-shrink: 0;
+    }
+
+    .feedback {
+      margin-top: 1.5rem;
+      padding: 1.5rem;
+      border-radius: 12px;
+      background: #f8fafc;
+      border-left: 4px solid var(--success);
+      display: none;
+      animation: slideIn 0.3s ease;
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .feedback.show { display: block; }
+
+    .feedback-header {
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+      font-size: 1.1rem;
+    }
+
+    .feedback-explanation {
+      background: white;
+      padding: 1.25rem;
+      border-radius: 8px;
+      border-left: 3px solid var(--success);
+      line-height: 1.6;
+    }
+
+    .controls {
+      display: flex;
+      gap: 1rem;
+      justify-content: space-between;
+      margin-top: 2.5rem;
+      padding-top: 2rem;
+      border-top: 2px solid var(--border);
+    }
+
+    .btn {
+      padding: 0.875rem 1.75rem;
+      border: none;
+      border-radius: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-size: 1rem;
+      flex: 1;
+      max-width: 140px;
+    }
+
+    .btn-primary { background: var(--primary); color: white; }
+    .btn-primary:hover { background: #1d4ed8; transform: translateY(-1px); }
+    .btn-secondary { background: #f1f5f9; color: var(--text); border: 2px solid var(--border); }
+    .btn-secondary:hover { background: #e2e8f0; }
+    .btn-danger { background: var(--danger); color: white; }
+    .btn-danger:hover { background: #b91c1c; }
+
+    .results {
+      text-align: center;
+      padding: 3rem 2rem;
+      display: none;
+    }
+
+    .score {
+      font-size: 4.5rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--success), var(--primary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 1.5rem;
+    }
+
+    @media (max-width: 768px) {
+      .container { 
+        grid-template-columns: 1fr; 
+        gap: 1.5rem; 
+        padding: 0.5rem; 
+      }
+      .dashboard { order: 2; position: static; }
+      .main-content { order: 1; }
+      .controls { flex-direction: column; }
+      .btn { max-width: none; }
+    }
+
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- DASHBOARD -->
+    <div class="dashboard">
+      <div class="progress-header">
+        <div>
+          <div style="font-size: 0.95rem; font-weight: 700; margin-bottom: 0.25rem;">Chimie Seconde</div>
+          <div style="font-size: 0.8rem; color: #64748b;">Atome & Molécules</div>
+        </div>
+        <div id="progress-text" style="font-size: 0.95rem; font-weight: 700;">0/10</div>
+      </div>
+      
+      <div class="progress-bar">
+        <div class="progress-fill" id="progress-fill"></div>
+      </div>
+
+      <div style="margin: 1.5rem 0;">
+        <div style="font-size: 0.85rem; color: #64748b; margin-bottom: 0.5rem; font-weight: 600;">Navigation rapide</div>
+        <div class="question-nav" id="question-nav"></div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; font-size: 0.85rem; margin-top: 1rem;">
+        <div style="text-align: center; padding: 0.75rem; background: #f0fdf4; border-radius: 8px;">
+          <div id="answered-count" style="font-weight: 700; color: var(--success);">0</div>
+          <div style="color: #64748b; font-size: 0.75rem;">Répondues</div>
+        </div>
+        <div style="text-align: center; padding: 0.75rem; background: #fef9c3; border-radius: 8px;">
+          <div id="review-count" style="font-weight: 700; color: #b45309;">0</div>
+          <div style="color: #64748b; font-size: 0.75rem;">À revoir</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
+      <div id="quiz-container">
+        <div class="question-header">
+          <div>
+            <div class="question-title" id="question-title"></div>
+            <span class="theme-tag" id="theme-tag"></span>
+          </div>
+          <div class="question-count" id="question-count"></div>
+        </div>
+
+        <div class="options" id="options"></div>
+        <div class="feedback" id="feedback">
+          <div class="feedback-header" id="feedback-header"></div>
+          <div class="feedback-explanation" id="feedback-explanation"></div>
+        </div>
+
+        <div class="controls">
+          <button class="btn btn-secondary" id="prev-btn">← Précédent</button>
+          <div style="flex: 1;"></div>
+          <button class="btn btn-primary" id="next-btn">Suivant →</button>
+          <button class="btn btn-danger" id="finish-btn" style="display: none;">Terminer le QCM</button>
+        </div>
+      </div>
+
+      <div class="results" id="results">
+        <div class="score" id="final-score"></div>
+        <div id="score-message" style="font-size: 1.6rem; font-weight: 700; margin-bottom: 2rem;"></div>
+        <div style="max-width: 700px; margin: 0 auto 3rem;">
+          <h3 style="text-align: left; margin-bottom: 1.5rem; font-size: 1.3rem;">📋 Synthèse détaillée des réponses :</h3>
+          <div id="detailed-results"></div>
+        </div>
+        <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+          <button class="btn btn-primary" onclick="restartQuiz()">🔄 Refaire le QCM</button>
+          <a class="btn btn-secondary" href="#" onclick="printResults(); return false;">🖨️ Imprimer</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const quizData = [
+      {
+        question: "Le noyau d'un atome contient :",
+        options: [
+          "Seulement des protons",
+          "Protons et neutrons",
+          "Protons, neutrons et électrons"
+        ],
+        correct: 1,
+        explanation: "Noyau = protons (+) + neutrons (neutres). Électrons orbitent autour [Eduscol Chimie Seconde I.1].",
+        theme: "I. L'atome - Noyau"
+      },
+      {
+        question: "La charge électrique d'un atome neutre est :",
+        options: ["Positive", "Nulle", "Négative"],
+        correct: 1,
+        explanation: "Z protons (+) = Z électrons (-) → q = 0 [Eduscol Chimie Seconde I.2].",
+        theme: "I. L'atome - Charge"
+      },
+      {
+        question: "La masse d'un atome est principalement dans :",
+        options: ["Le cortège électronique", "Le noyau", "Les orbitales"],
+        correct: 1,
+        explanation: "99,9% masse dans noyau (protons + neutrons). Électron : 1/1836 proton [Eduscol I.3].",
+        theme: "I. L'atome - Masse"
+      },
+      {
+        question: "Le numéro atomique Z représente :",
+        options: ["Nombre de neutrons", "Nombre de protons", "Nombre d'électrons + protons"],
+        correct: 1,
+        explanation: "Z = nombre protons = charge nucléaire = nombre électrons (atome neutre) [Eduscol I].",
+        theme: "I. L'atome - Z"
+      },
+      {
+        question: "Dans le cortège électronique du sodium (Z=11) :",
+        options: ["Configuration 2,8,1", "Configuration 2,8,2", "Configuration 2,8,3"],
+        correct: 0,
+        explanation: "Na : [Ne]3s¹ → 2(1s) + 8(2s2p) + 1(3s) = 2,8,1 [Eduscol II].",
+        theme: "II. Cortège électronique"
+      },
+      {
+        question: "Dans le tableau périodique, les éléments de même groupe ont :",
+        options: ["Même Z", "Même configuration externe", "Même masse"],
+        correct: 1,
+        explanation: "Même groupe = même couche de valence → propriétés chimiques similaires [Eduscol III].",
+        theme: "III. Tableau périodique"
+      },
+      {
+        question: "Un cation Na⁺ a perdu :",
+        options: ["Un proton", "Un électron", "Un neutron"],
+        correct: 1,
+        explanation: "Na (11p,11e) → Na⁺ (11p,10e) : perdu 1e⁻ → charge +1 [Eduscol IV.1].",
+        theme: "IV. Ions"
+      },
+      {
+        question: "L'électroneutralité de la matière implique :",
+        options: ["Z = A", "∑q_i = 0", "n_e = n_p + n_n"],
+        correct: 1,
+        explanation: "Dans toute matière : total charges + = total charges - [Eduscol IV.2].",
+        theme: "IV. Électroneutralité"
+      },
+      {
+        question: "Dans la molécule H₂O :",
+        options: ["Liaison covalente polaire", "Liaison ionique", "Métallique"],
+        correct: 0,
+        explanation: "O-H : électrons délocalisés, pôles δ⁺/δ⁻ → covalente polaire [Eduscol IV.2].",
+        theme: "IV. Molécules"
+      },
+      {
+        question: "Pour compter les entités chimiques dans 1 mol :",
+        options: ["6,02×10²³", "1 g", "22,4 L"],
+        correct: 0,
+        explanation: "Nombre d'Avogadro N_A = 6,02×10²³ entités/mol [Eduscol V].",
+        theme: "V. Compter entités"
+      }
+    ];
+
+    let currentQuestion = 0;
+    let answers = new Array(quizData.length).fill(null);
+    let showFeedback = false;
+
+    const elements = {
+      questionTitle: document.getElementById('question-title'),
+      themeTag: document.getElementById('theme-tag'),
+      questionCount: document.getElementById('question-count'),
+      options: document.getElementById('options'),
+      feedback: document.getElementById('feedback'),
+      feedbackHeader: document.getElementById('feedback-header'),
+      feedbackExplanation: document.getElementById('feedback-explanation'),
+      prevBtn: document.getElementById('prev-btn'),
+      nextBtn: document.getElementById('next-btn'),
+      finishBtn: document.getElementById('finish-btn'),
+      progressFill: document.getElementById('progress-fill'),
+      progressText: document.getElementById('progress-text'),
+      questionNav: document.getElementById('question-nav'),
+      quizContainer: document.getElementById('quiz-container'),
+      results: document.getElementById('results'),
+      finalScore: document.getElementById('final-score'),
+      scoreMessage: document.getElementById('score-message'),
+      answeredCount: document.getElementById('answered-count'),
+      reviewCount: document.getElementById('review-count'),
+      detailedResults: document.getElementById('detailed-results')
+    };
+
+    function init() {
+      renderQuestionNav();
+      showQuestion(currentQuestion);
+      updateProgress();
+    }
+
+    function renderQuestionNav() {
+      elements.questionNav.innerHTML = quizData.map((_, i) => 
+        `<button class="q-btn" onclick="goToQuestion(${i})">${i+1}</button>`
+      ).join('');
+      updateNav();
+    }
+
+    function updateNav() {
+      document.querySelectorAll('.q-btn').forEach((btn, i) => {
+        btn.className = 'q-btn';
+        if (i === currentQuestion) btn.classList.add('current');
+        else if (answers[i] !== null) btn.classList.add('answered');
+        else if (shouldReview(i)) btn.classList.add('review');
+      });
+    }
+
+    function shouldReview(i) {
+      return answers[i] !== null && answers[i] !== quizData[i].correct;
+    }
+
+    function showQuestion(index) {
+      currentQuestion = index;
+      const q = quizData[index];
+      
+      elements.questionTitle.textContent = q.question;
+      elements.themeTag.textContent = q.theme;
+      elements.questionCount.textContent = `Question ${index + 1}/10`;
+      
+      // Reset options
+      elements.options.innerHTML = q.options.map((opt, i) => 
+        `<div class="option" onclick="selectAnswer(${i})">
+          <div class="option-letter">${String.fromCharCode(65 + i)}</div>
+          ${opt}
+        </div>`
+      ).join('');
+
+      // Hide feedback
+      elements.feedback.classList.remove('show');
+      showFeedback = false;
+
+      updateButtons();
+      updateNav();
+    }
+
+    function selectAnswer(index) {
+      if (showFeedback) return;
+      
+      answers[currentQuestion] = index;
+      updateProgress();
+      
+      // Show feedback after short delay
+      setTimeout(() => showFeedbackForCurrent(), 200);
+    }
+
+    function showFeedbackForCurrent() {
+      const q = quizData[currentQuestion];
+      const userAnswer = answers[currentQuestion];
+      const isCorrect = userAnswer === q.correct;
+      
+      // Visual feedback on options
+      document.querySelectorAll('.option').forEach((optEl, i) => {
+        const opt = optEl;
+        if (i === q.correct) opt.classList.add('correct');
+        if (i === userAnswer && !isCorrect) opt.classList.add('incorrect');
+        if (i === userAnswer) opt.classList.add('selected');
+        opt.style.pointerEvents = 'none';
+      });
+
+      // Show detailed feedback
+      elements.feedbackHeader.innerHTML = isCorrect ? 
+        '<span style="color: var(--success);">✅ Réponse correcte !</span>' : 
+        '<span style="color: var(--danger);">❌ Réponse incorrecte</span>';
+      
+      elements.feedbackExplanation.innerHTML = q.explanation;
+      elements.feedback.classList.add('show');
+      
+      showFeedback = true;
+    }
+
+    function goToQuestion(index) {
+      showQuestion(index);
+    }
+
+    function prevQuestion() {
+      if (currentQuestion > 0) goToQuestion(currentQuestion - 1);
+    }
+
+    function nextQuestion() {
+      if (currentQuestion < quizData.length - 1) {
+        goToQuestion(currentQuestion + 1);
+      } else {
+        showResults();
+      }
+    }
+
+    function updateButtons() {
+      elements.prevBtn.disabled = currentQuestion === 0;
+      elements.nextBtn.style.display = currentQuestion === quizData.length - 1 ? 'none' : 'block';
+      elements.finishBtn.style.display = currentQuestion === quizData.length - 1 ? 'block' : 'none';
+    }
+
+    function updateProgress() {
+      const answered = answers.filter(Boolean).length;
+      const percent = (answered / 10) * 100;
+      
+      elements.progressFill.style.width = percent + '%';
+      elements.progressText.textContent = `${answered}/10`;
+      elements.answeredCount.textContent = answered;
+      
+      const reviews = answers.reduce((count, ans, i) => 
+        ans !== null && ans !== quizData[i].correct ? count + 1 : count, 0
+      );
+      elements.reviewCount.textContent = reviews;
+    }
+
+    function showResults() {
+      const score = answers.reduce((correct, ans, i) => 
+        ans === quizData[i].correct ? correct + 1 : correct, 0
+      );
+      
+      const messages = [
+        score >= 9 ? "🎉 Excellent ! Maîtrise parfaite du chapitre." :
+        score >= 8 ? "👏 Très bien ! Excellent niveau." :
+        score >= 7 ? "👍 Bon travail ! Quelques points à revoir." :
+        score >= 5 ? "📚 Satisfaisant. Continuez vos révisions." :
+        "💪 De bonnes bases à consolider."
+      ];
+      
+      elements.finalScore.textContent = `${score}/10`;
+      elements.scoreMessage.innerHTML = messages[score];
+      
+      // Detailed results
+      let detailsHTML = quizData.map((q, i) => {
+        const userAns = answers[i];
+        const isCorrect = userAns === q.correct;
+        const letter = String.fromCharCode(65 + (userAns ?? -1));
+        return `
+          <div style="margin-bottom: 1.5rem; padding: 1.5rem; background: ${isCorrect ? '#f0fdf4' : '#fef2f2'}; border-radius: 12px; border-left: 5px solid ${isCorrect ? 'var(--success)' : 'var(--danger)'};">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+              <span style="font-weight: 700; font-size: 1.1rem;">Q${i+1} - ${q.theme}</span>
+              <span style="padding: 0.25rem 0.75rem; border-radius: 20px; background: ${isCorrect ? '#dcfce7' : '#fecaca'}; color: ${isCorrect ? '#166534' : '#991b1b'}; font-weight: 600; font-size: 0.85rem;">
+                ${isCorrect ? '✅ Correct' : '❌ Faux'} ${letter}
+              </span>
+            </div>
+            <div style="font-size: 0.95rem; margin-bottom: 0.75rem;">${q.question}</div>
+            <div style="background: white; padding: 1rem; border-radius: 8px; border-left: 3px solid ${isCorrect ? 'var(--success)' : '#f87171'}; font-size: 0.9rem; line-height: 1.6;">
+              ${q.explanation}
+            </div>
+          </div>
+        `;
+      }).join('');
+      
+      elements.detailedResults.innerHTML = detailsHTML;
+      
+      elements.quizContainer.classList.add('hidden');
+      elements.results.classList.remove('hidden');
+    }
+
+    function restartQuiz() {
+      currentQuestion = 0;
+      answers.fill(null);
+      showFeedback = false;
+      elements.quizContainer.classList.remove('hidden');
+      elements.results.classList.add('hidden');
+      init();
+    }
+
+    function printResults() {
+      window.print();
+    }
+
+    // Event Listeners
+    elements.prevBtn.onclick = prevQuestion;
+    elements.nextBtn.onclick = nextQuestion;
+    elements.finishBtn.onclick = showResults;
+
+    // Keyboard shortcuts
+    document.addEventListener('keydown', (e) => {
+      if (e.target.tagName === 'INPUT') return;
+      switch(e.key) {
+        case 'ArrowLeft': prevQuestion(); break;
+        case 'ArrowRight': nextQuestion(); break;
+        case 'Enter': 
+          if (showFeedback) nextQuestion();
+          break;
+      }
+    });
+
+    init();
+  </script>
+</body>
+</html>

@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QCM Physique 2nde: Constitution de la matière à l'échelle microscopique</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background-color: #f4f4f4; }
+        .container { max-width: 800px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        h1 { text-align: center; }
+        #dashboard { text-align: center; margin-bottom: 20px; }
+        #progress { width: 100%; background-color: #ddd; height: 20px; border-radius: 10px; overflow: hidden; }
+        #progress-bar { height: 100%; background-color: #4caf50; width: 0%; transition: width 0.3s; }
+        #question { margin-bottom: 20px; }
+        .option { display: block; margin: 10px 0; padding: 10px; background: #eee; border-radius: 5px; cursor: pointer; }
+        .option.selected { background: #d4edda; }
+        .option.correct { background: #c3e6cb; }
+        .option.incorrect { background: #f8d7da; }
+        #explanation { margin-top: 20px; padding: 10px; background: #fff3cd; border-radius: 5px; display: none; }
+        #buttons { text-align: center; margin-top: 20px; }
+        button { padding: 10px 20px; margin: 5px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        button:disabled { background: #ccc; cursor: not-allowed; }
+        #finish { display: none; }
+        #summary { display: none; margin-top: 20px; }
+        @media (max-width: 600px) { .container { padding: 10px; } button { width: 100%; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>QCM Physique 2nde</h1>
+        <p>Thème : Constitution de la matière à l'échelle microscopique (Conforme au programme EduScol)</p>
+        <div id="dashboard">
+            <div>Question <span id="current-question">1</span>/10</div>
+            <div id="progress"><div id="progress-bar"></div></div>
+        </div>
+        <div id="question"></div>
+        <div id="options"></div>
+        <div id="explanation"></div>
+        <div id="buttons">
+            <button id="prev">Précédent</button>
+            <button id="next">Suivant</button>
+            <button id="finish">Terminer</button>
+        </div>
+        <div id="summary"></div>
+    </div>
+    <script>
+        const questions = [
+            {
+                question: "Qu'est-ce qu'une espèce chimique ?",
+                options: [
+                    "A. Une entité unique comme un atome ou une molécule.",
+                    "B. Une collection d'un nombre très élevé d'entités chimiques identiques.",
+                    "C. Un mélange de différents atomes.",
+                    "D. Une particule subatomique comme un proton."
+                ],
+                correct: 1,
+                explanation: "Une espèce chimique est définie comme une collection d'un nombre très élevé d'entités identiques, telles que des atomes, molécules ou ions. Cela correspond à l'échelle macroscopique de la matière."
+            },
+            {
+                question: "Quelle est la différence entre un atome et un ion ?",
+                options: [
+                    "A. Un atome est chargé, un ion est neutre.",
+                    "B. Un atome est électriquement neutre, un ion est chargé.",
+                    "C. Les deux sont identiques.",
+                    "D. Un ion n'a pas de noyau."
+                ],
+                correct: 1,
+                explanation: "Un atome est électriquement neutre car il possède autant de protons que d'électrons. Un ion est chargé car il a gagné ou perdu des électrons."
+            },
+            {
+                question: "Quelle est la formule d'un composé ionique électriquement neutre formé par Na⁺ et Cl⁻ ?",
+                options: [
+                    "A. NaCl₂",
+                    "B. Na₂Cl",
+                    "C. NaCl",
+                    "D. NaCl₃"
+                ],
+                correct: 2,
+                explanation: "Pour respecter l'électroneutralité, un cation Na⁺ et un anion Cl⁻ forment NaCl, où les charges se compensent (+1 et -1)."
+            },
+            {
+                question: "Quelle est l'ordre de grandeur de la taille d'un atome ?",
+                options: [
+                    "A. 10⁻¹⁵ m",
+                    "B. 10⁻¹⁰ m",
+                    "C. 10⁻⁵ m",
+                    "D. 10⁻²⁰ m"
+                ],
+                correct: 1,
+                explanation: "La taille d'un atome est de l'ordre de 10⁻¹⁰ m, tandis que celle du noyau est de 10⁻¹⁵ m."
+            },
+            {
+                question: "Dans la notation ⁿZ X, que représente Z ?",
+                options: [
+                    "A. Le nombre de masse.",
+                    "B. Le nombre de neutrons.",
+                    "C. Le numéro atomique (nombre de protons).",
+                    "D. Le nombre d'électrons."
+                ],
+                correct: 2,
+                explanation: "Z est le numéro atomique, égal au nombre de protons dans le noyau, qui définit l'élément chimique."
+            },
+            {
+                question: "Combien de nucléons possède le noyau de ³⁵Cl ?",
+                options: [
+                    "A. 17",
+                    "B. 18",
+                    "C. 35",
+                    "D. 52"
+                ],
+                correct: 2,
+                explanation: "Le nombre de masse A = 35 pour ³⁵Cl, qui est le nombre total de nucléons (protons + neutrons)."
+            },
+            {
+                question: "Quelle est la formule du chlorure de magnésium ?",
+                options: [
+                    "A. MgCl",
+                    "B. MgCl₂",
+                    "C. Mg₂Cl",
+                    "D. MgCl₃"
+                ],
+                correct: 1,
+                explanation: "Le magnésium forme Mg²⁺, et le chlorure Cl⁻. Pour l'électroneutralité, il faut deux Cl⁻ pour un Mg²⁺, donc MgCl₂."
+            },
+            {
+                question: "La masse d'un atome est principalement due à :",
+                options: [
+                    "A. Ses électrons.",
+                    "B. Son noyau (protons et neutrons).",
+                    "C. Ses orbites électroniques.",
+                    "D. Le vide autour du noyau."
+                ],
+                correct: 1,
+                explanation: "La masse des électrons est négligeable ; presque toute la masse est concentrée dans le noyau."
+            },
+            {
+                question: "Un élément chimique est défini par :",
+                options: [
+                    "A. Son nombre de neutrons.",
+                    "B. Son nombre de masse.",
+                    "C. Son numéro atomique Z.",
+                    "D. Son nombre d'électrons de valence uniquement."
+                ],
+                correct: 2,
+                explanation: "Tous les atomes ou ions avec le même Z appartiennent au même élément chimique."
+            },
+            {
+                question: "Pourquoi la matière est-elle électriquement neutre à l'échelle macroscopique ?",
+                options: [
+                    "A. Parce que tous les atomes sont chargés positivement.",
+                    "B. Parce que les charges des cations et anions se compensent dans les composés ioniques.",
+                    "C. Parce qu'il n'y a pas d'ions dans la matière.",
+                    "D. Parce que les électrons annulent les neutrons."
+                ],
+                correct: 1,
+                explanation: "Dans les solides ioniques, les proportions de cations et anions assurent la neutralité électrique globale."
+            }
+        ];
+
+        let current = 0;
+        let answers = Array(questions.length).fill(-1);
+        let score = 0;
+        let explained = false;
+
+        function loadQuestion() {
+            const q = questions[current];
+            document.getElementById('current-question').textContent = current + 1;
+            document.getElementById('question').textContent = q.question;
+            const optionsDiv = document.getElementById('options');
+            optionsDiv.innerHTML = '';
+            q.options.forEach((opt, i) => {
+                const div = document.createElement('div');
+                div.classList.add('option');
+                div.textContent = opt;
+                div.onclick = () => selectOption(i);
+                if (answers[current] === i) div.classList.add('selected');
+                optionsDiv.appendChild(div);
+            });
+            document.getElementById('explanation').style.display = 'none';
+            explained = false;
+            updateButtons();
+            updateProgress();
+        }
+
+        function selectOption(index) {
+            if (explained) return;
+            answers[current] = index;
+            const options = document.querySelectorAll('.option');
+            options.forEach((opt, i) => {
+                opt.classList.remove('selected');
+                if (i === index) opt.classList.add('selected');
+            });
+            showExplanation();
+        }
+
+        function showExplanation() {
+            const q = questions[current];
+            const exp = document.getElementById('explanation');
+            exp.textContent = q.explanation;
+            exp.style.display = 'block';
+            explained = true;
+            const options = document.querySelectorAll('.option');
+            options.forEach((opt, i) => {
+                if (i === q.correct) opt.classList.add('correct');
+                if (i === answers[current] && i !== q.correct) opt.classList.add('incorrect');
+            });
+            if (answers[current] === q.correct) score++;
+        }
+
+        function updateButtons() {
+            document.getElementById('prev').disabled = current === 0;
+            document.getElementById('next').disabled = !explained || current === questions.length - 1;
+            document.getElementById('finish').style.display = answers.every(a => a !== -1) ? 'inline' : 'none';
+        }
+
+        function updateProgress() {
+            const progress = ((current + 1) / questions.length) * 100;
+            document.getElementById('progress-bar').style.width = `${progress}%`;
+        }
+
+        function showSummary() {
+            const sum = document.getElementById('summary');
+            sum.innerHTML = `<h2>Résultat : ${score}/10</h2>`;
+            questions.forEach((q, i) => {
+                sum.innerHTML += `<p><strong>Question ${i+1}:</strong> ${q.question}<br><strong>Réponse correcte:</strong> ${q.options[q.correct]}<br><strong>Votre réponse:</strong> ${answers[i] !== -1 ? q.options[answers[i]] : 'Aucune'}<br><strong>Explication:</strong> ${q.explanation}</p><hr>`;
+            });
+            sum.style.display = 'block';
+            document.getElementById('buttons').style.display = 'none';
+            document.getElementById('question').style.display = 'none';
+            document.getElementById('options').style.display = 'none';
+            document.getElementById('explanation').style.display = 'none';
+        }
+
+        document.getElementById('prev').onclick = () => { if (current > 0) { current--; loadQuestion(); } };
+        document.getElementById('next').onclick = () => { if (current < questions.length - 1) { current++; loadQuestion(); } };
+        document.getElementById('finish').onclick = showSummary;
+
+        loadQuestion();
+    </script>
+</body>
+</html>
