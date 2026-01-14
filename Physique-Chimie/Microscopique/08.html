@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QCM Chimie 2nde</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background-color: #f4f4f4; }
+        #dashboard { text-align: center; }
+        #dashboard button { margin: 10px; padding: 10px 20px; font-size: 16px; cursor: pointer; }
+        #quiz-container { max-width: 800px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        #question { font-size: 18px; margin-bottom: 20px; }
+        .option { display: block; margin: 10px 0; }
+        #prev, #next, #finish { margin: 10px; padding: 10px 20px; cursor: pointer; }
+        #result { max-width: 800px; margin: 20px auto; background: white; padding: 20px; border-radius: 8px; }
+        @media (max-width: 600px) {
+            body { padding: 10px; }
+            #quiz-container { padding: 10px; }
+            button { width: 100%; margin: 5px 0; }
+        }
+    </style>
+</head>
+<body>
+    <div id="dashboard">
+        <h1>Dashboard QCM Chimie 2nde</h1>
+        <p>Sélectionnez un QCM pour commencer. Chaque QCM porte sur des thèmes variés du programme officiel de Chimie en 2nde.</p>
+        <button onclick="startQuiz(1)">QCM 1 : Structure Atomique Basique</button>
+        <button onclick="startQuiz(2)">QCM 2 : Ions et Éléments Spécifiques</button>
+        <button onclick="startQuiz(3)">QCM 3 : Configuration Électronique et Valence</button>
+        <button onclick="startQuiz(4)">QCM 4 : Liaisons Chimiques et Modèles</button>
+    </div>
+    <div id="quiz-container" style="display: none;">
+        <h2 id="quiz-title"></h2>
+        <div id="question"></div>
+        <div id="options"></div>
+        <button id="prev" onclick="prevQuestion()">Précédent</button>
+        <button id="next" onclick="nextQuestion()">Suivant</button>
+        <button id="finish" onclick="finishQuiz()">Terminer</button>
+    </div>
+    <div id="result" style="display: none;"></div>
+
+    <script>
+        const quizzes = {
+            1: {
+                title: "QCM 1 : Structure Atomique Basique",
+                questions: [
+                    { q: "L'atome est une entité électriquement :", options: ["chargée positivement", "neutre", "chargée négativement", "variable"], correct: 1 },
+                    { q: "Les protons et les neutrons sont appelés :", options: ["électrons", "nucléons", "ions", "molécules"], correct: 1 },
+                    { q: "Définition d'un isotope :", options: ["Même Z, différent A", "Même A, différent Z", "Éléments différents", "Même masse"], correct: 0 },
+                    { q: "Dans la notation ^A_Z X, Z représente :", options: ["Le nombre de masse", "Le numéro atomique (protons)", "Le nombre de neutrons", "Le nombre d'électrons"], correct: 1 },
+                    { q: "Pour l'oxygène avec Z=8 et A=16, le nombre de neutrons est :", options: ["8", "16", "24", "0"], correct: 0 },
+                    { q: "La masse de l'atome est pratiquement égale à celle de son :", options: ["cortège électronique", "noyau", "vide", "orbites"], correct: 1 },
+                    { q: "Quelle est la charge du noyau de l'oxygène (Z=8) ?", options: ["+8e", "-8e", "0", "+16e"], correct: 0 },
+                    { q: "La charge électrique globale des électrons dans un atome neutre est :", options: ["+Ze", "-Ze", "0", "Variable"], correct: 1 },
+                    { q: "Ordre de grandeur du rayon d'un atome :", options: ["10^{-10} m", "10^{-15} m", "10^{-6} m", "10^{0} m"], correct: 0 },
+                    { q: "Ordre de grandeur du rayon du noyau :", options: ["10^{-10} m", "10^{-15} m", "10^{-6} m", "10^{0} m"], correct: 1 },
+                    { q: "Dans le modèle de Bohr, les électrons se déplacent sur des :", options: ["orbites circulaires", "nuages probabilistes", "noyau", "trajectoires libres"], correct: 0 },
+                    { q: "Comparaison de la taille de l'atome par rapport au noyau :", options: ["Même taille", "Environ 10^5 fois plus grand", "Plus petit", "Variable"], correct: 1 },
+                    { q: "Le nombre massique A représente :", options: ["Nombre de protons", "Nombre de protons + neutrons", "Nombre d'électrons", "Numéro atomique Z"], correct: 1 },
+                    { q: "La charge d'un proton est :", options: ["+e", "-e", "0", "Variable"], correct: 0 },
+                    { q: "La masse de l'atome est concentrée dans le :", options: ["Cortège électronique", "Noyau", "Vide", "Orbites"], correct: 1 }
+                ]
+            },
+            2: {
+                title: "QCM 2 : Ions et Éléments Spécifiques",
+                questions: [
+                    { q: "Un ion est un atome ou une molécule :", options: ["Neutre", "Électriquement chargé", "Toujours positif", "Toujours négatif"], correct: 1 },
+                    { q: "Un cation se forme par :", options: ["Gain d'électrons", "Perte d'électrons", "Partage d'électrons", "Neutre"], correct: 1 },
+                    { q: "Un anion se forme par :", options: ["Perte d'électrons", "Gain d'électrons", "Partage d'électrons", "Neutre"], correct: 1 },
+                    { q: "Charge de l'ion sodium (Na) :", options: ["+1", "-1", "+2", "-2"], correct: 0 },
+                    { q: "Charge de l'ion chlorure (Cl) :", options: ["+1", "-1", "+7", "0"], correct: 1 },
+                    { q: "Charge de l'ion calcium (Ca) :", options: ["+1", "+2", "-2", "+3"], correct: 1 },
+                    { q: "Charge de l'ion oxygène (O) :", options: ["-1", "-2", "+2", "0"], correct: 1 },
+                    { q: "Charge de l'ion ferreux (Fe) :", options: ["+2", "+3", "-2", "+1"], correct: 0 },
+                    { q: "Charge de l'ion ferrique (Fe) :", options: ["+2", "+3", "-3", "+1"], correct: 1 },
+                    { q: "Charge de l'ion aluminium (Al) :", options: ["+1", "+2", "+3", "-3"], correct: 2 },
+                    { q: "Charge de l'ion fluorure (F) :", options: ["-1", "+1", "-7", "0"], correct: 0 },
+                    { q: "Charge de l'ion potassium (K) :", options: ["+1", "+2", "-1", "0"], correct: 0 },
+                    { q: "Charge de l'ion magnésium (Mg) :", options: ["+1", "+2", "-2", "+3"], correct: 1 },
+                    { q: "Charge de l'ion argent (Ag) :", options: ["+1", "+2", "+3", "-1"], correct: 0 },
+                    { q: "Charge de l'ion zinc (Zn) :", options: ["+1", "+2", "+3", "-2"], correct: 1 }
+                ]
+            },
+            3: {
+                title: "QCM 3 : Configuration Électronique et Valence",
+                questions: [
+                    { q: "La règle de Klechkowski détermine l'ordre de remplissage par :", options: ["n + l croissant", "n croissant seulement", "l croissant seulement", "Aléatoire"], correct: 0 },
+                    { q: "Les couches électroniques principales sont notées :", options: ["K, L, M, N", "s, p, d, f", "1, 2, 3, 4", "A et C"], correct: 0 },
+                    { q: "Les sous-couches sont :", options: ["K, L, M", "s, p, d, f", "1s, 2s", "B et C"], correct: 1 },
+                    { q: "Configuration électronique de l'hydrogène (H) :", options: ["1s¹", "1s²", "2s¹", "1p¹"], correct: 0 },
+                    { q: "Configuration de l'hélium (He, gaz noble) :", options: ["1s¹", "1s²", "2s²", "2p⁶"], correct: 1 },
+                    { q: "Configuration du lithium (Li) :", options: ["1s² 2s¹", "1s² 2s²", "1s¹ 2s²", "2p³"], correct: 0 },
+                    { q: "Configuration du carbone (C) :", options: ["1s² 2s² 2p²", "1s² 2s² 2p⁶", "1s² 2p⁴", "2s² 2p²"], correct: 0 },
+                    { q: "Configuration de l'oxygène (O) :", options: ["1s² 2s² 2p⁴", "1s² 2s² 2p⁶", "1s² 2p⁶", "2s² 2p⁴"], correct: 0 },
+                    { q: "Configuration du sodium (Na) :", options: ["[Ne] 3s²", "[Ne] 3s¹", "[Ar] 3s¹", "1s² 2s² 2p⁶ 3s¹"], correct: 3 },
+                    { q: "Configuration de l'argon (Ar, gaz noble) :", options: ["1s² 2s² 2p⁶ 3s² 3p⁶", "[Ne] 3s² 3p⁶", "A et B", "4s²"], correct: 2 },
+                    { q: "Valence des gaz nobles :", options: ["0 (stables)", "1", "8", "Variable"], correct: 0 },
+                    { q: "Nombre d'électrons de valence pour les alcalins (Na, K) :", options: ["1", "2", "7", "0"], correct: 0 },
+                    { q: "Nombre d'électrons de valence pour les halogènes (F, Cl) :", options: ["1", "2", "7", "0"], correct: 2 },
+                    { q: "Configuration du silicium (Si) :", options: ["[Ne] 3s² 3p²", "[Ne] 3s² 3p⁶", "1s² 2s² 2p⁶ 3s² 3p²", "A et C"], correct: 3 },
+                    { q: "Configuration du cuivre (Cu, exception) :", options: ["[Ar] 4s¹ 3d¹⁰", "[Ar] 4s² 3d⁹", "[Kr] 4s¹", "Normale"], correct: 0 }
+                ]
+            },
+            4: {
+                title: "QCM 4 : Liaisons Chimiques et Modèles",
+                questions: [
+                    { q: "La liaison covalente implique :", options: ["Partage d'électrons", "Transfert d'électrons", "Attraction ionique", "Forces de dispersion"], correct: 0 },
+                    { q: "Le modèle de Lewis représente les :", options: ["Doublets liants et non liants", "Orbites de Bohr", "Charges nucléaires", "Masses atomiques"], correct: 0 },
+                    { q: "Un doublet liant est :", options: ["Partagé entre deux atomes", "Non partagé (paire libre)", "Libre", "Ionique"], correct: 0 },
+                    { q: "Un doublet non liant est :", options: ["Partagé", "Paire libre sur un atome", "Lié à un ion", "Absent"], correct: 1 },
+                    { q: "Une molécule est formée d'atomes :", options: ["Liés chimiquement", "Isolés", "Ionisés uniquement", "Noyaux seuls"], correct: 0 },
+                    { q: "L'énergie de liaison est l'énergie :", options: ["Nécessaire pour rompre la liaison", "Libérée lors de la formation", "Zéro", "Négative"], correct: 0 },
+                    { q: "La structure électronique désigne la :", options: ["Configuration des électrons", "Masse de l'atome", "Charge totale", "Taille nucléaire"], correct: 0 },
+                    { q: "La classification périodique est basée sur :", options: ["Le numéro atomique Z", "Le nombre de masse A", "La masse molaire", "La densité"], correct: 0 },
+                    { q: "Dans H₂, la liaison est :", options: ["Simple covalente", "Double", "Triple", "Ionique"], correct: 0 },
+                    { q: "Dans O₂, la liaison est :", options: ["Simple", "Double", "Triple", "Quadruple"], correct: 1 },
+                    { q: "Valence du carbone (C) :", options: ["1", "2", "4", "6"], correct: 2 },
+                    { q: "Charge de l'ion sulfure (S) :", options: ["-1", "-2", "+2", "0"], correct: 1 },
+                    { q: "Charge de l'ion bromure (Br) :", options: ["-1", "+1", "-7", "0"], correct: 0 },
+                    { q: "L'ion ferreux a une charge :", options: ["+2", "+3", "-2", "0"], correct: 0 },
+                    { q: "Ordre de grandeur de la masse d'un électron par rapport à un nucléon :", options: ["10^{-3} à 10^{-4}", "10^{0}", "10^{4}", "1"], correct: 0 }
+                ]
+            }
+        };
+
+        let currentQuizId = null;
+        let currentQuestionIndex = 0;
+        let userAnswers = [];
+
+        function startQuiz(id) {
+            currentQuizId = id;
+            currentQuestionIndex = 0;
+            userAnswers = new Array(quizzes[id].questions.length).fill(null);
+            document.getElementById('dashboard').style.display = 'none';
+            document.getElementById('quiz-container').style.display = 'block';
+            document.getElementById('quiz-title').innerText = quizzes[id].title;
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            const quiz = quizzes[currentQuizId];
+            const q = quiz.questions[currentQuestionIndex];
+            document.getElementById('question').innerHTML = `<p>Question ${currentQuestionIndex + 1}/15 : ${q.q}</p>`;
+            let optionsHtml = '';
+            q.options.forEach((opt, i) => {
+                const checked = userAnswers[currentQuestionIndex] === i ? 'checked' : '';
+                optionsHtml += `<label class="option"><input type="radio" name="option" value="${i}" ${checked} onchange="saveAnswer(this.value)"> ${opt}</label>`;
+            });
+            document.getElementById('options').innerHTML = optionsHtml;
+            document.getElementById('prev').disabled = currentQuestionIndex === 0;
+            document.getElementById('next').disabled = currentQuestionIndex === quiz.questions.length - 1;
+        }
+
+        function saveAnswer(value) {
+            userAnswers[currentQuestionIndex] = parseInt(value);
+        }
+
+        function prevQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                loadQuestion();
+            }
+        }
+
+        function nextQuestion() {
+            if (currentQuestionIndex < quizzes[currentQuizId].questions.length - 1) {
+                currentQuestionIndex++;
+                loadQuestion();
+            }
+        }
+
+        function finishQuiz() {
+            let score = 0;
+            quizzes[currentQuizId].questions.forEach((q, i) => {
+                if (userAnswers[i] === q.correct) score++;
+            });
+            document.getElementById('quiz-container').style.display = 'none';
+            const resultDiv = document.getElementById('result');
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = `<h2>Résultat pour ${quizzes[currentQuizId].title}</h2><p>Score : ${score}/15</p><button onclick="reset()">Retour au Dashboard</button>`;
+        }
+
+        function reset() {
+            document.getElementById('result').style.display = 'none';
+            document.getElementById('dashboard').style.display = 'block';
+        }
+    </script>
+</body>
+</html>

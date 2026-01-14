@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Chimie 2nde - Atomes et Électrons</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 15px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); overflow: hidden; }
+        .header { background: #2c3e50; color: white; padding: 20px; text-align: center; }
+        .dashboard { display: flex; justify-content: space-around; padding: 15px; background: #34495e; color: white; flex-wrap: wrap; }
+        .stat { text-align: center; font-weight: bold; }
+        .quiz-container { padding: 30px; }
+        .question { margin-bottom: 25px; font-size: 1.1em; font-weight: bold; }
+        .options { display: flex; flex-direction: column; gap: 12px; }
+        .option { padding: 15px; border: 2px solid #ddd; border-radius: 10px; cursor: pointer; transition: all 0.3s; background: #f8f9fa; }
+        .option:hover { background: #e9ecef; border-color: #007bff; }
+        .option.selected { background: #007bff; color: white; border-color: #0056b3; }
+        .option.correct { background: #28a745; color: white; border-color: #1e7e34; }
+        .option.incorrect { background: #dc3545; color: white; border-color: #c82333; }
+        .progress { width: 100%; height: 8px; background: #e9ecef; border-radius: 4px; margin: 20px 0; overflow: hidden; }
+        .progress-bar { height: 100%; background: #007bff; width: 0%; transition: width 0.3s; }
+        .nav-buttons { display: flex; justify-content: space-between; margin-top: 30px; }
+        .btn { padding: 12px 30px; border: none; border-radius: 25px; font-size: 1em; cursor: pointer; transition: all 0.3s; font-weight: bold; }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .btn-prev { background: #6c757d; color: white; }
+        .btn-next { background: #007bff; color: white; }
+        .btn-finish { background: #28a745; color: white; }
+        .results { text-align: center; padding: 40px; }
+        .score { font-size: 2.5em; color: #007bff; margin-bottom: 20px; }
+        .quiz-selector { display: flex; gap: 10px; justify-content: center; margin-bottom: 20px; flex-wrap: wrap; }
+        .quiz-btn { padding: 10px 20px; background: #495057; color: white; border: none; border-radius: 20px; cursor: pointer; transition: background 0.3s; }
+        .quiz-btn.active { background: #007bff; }
+        @media (max-width: 600px) { .dashboard { flex-direction: column; gap: 10px; } .nav-buttons { flex-direction: column; gap: 10px; } .btn { width: 100%; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Quiz Chimie 2nde - Atomes et Électrons</h1>
+            <p>Conforme au programme officiel Éduscol[page:0]</p>
+        </div>
+        <div class="dashboard">
+            <div class="stat">Quiz: <span id="quiz-title">Sélectionnez un quiz</span></div>
+            <div class="stat">Question: <span id="current-q">1</span>/15</div>
+            <div class="stat">Score: <span id="score">0</span></div>
+            <div class="stat">Temps: <span id="timer">00:00</span></div>
+        </div>
+        <div class="quiz-selector">
+            <button class="quiz-btn active" data-quiz="1">Quiz 1: Structure atomique</button>
+            <button class="quiz-btn" data-quiz="2">Quiz 2: Config. Électronique</button>
+            <button class="quiz-btn" data-quiz="3">Quiz 3: Ions & Lewis</button>
+            <button class="quiz-btn" data-quiz="4">Quiz 4: Ordres grandeur</button>
+        </div>
+        <div class="quiz-container" id="quiz-container">
+            <!-- Questions générées par JS -->
+        </div>
+        <div class="progress"><div class="progress-bar" id="progress-bar"></div></div>
+        <div class="nav-buttons">
+            <button class="btn btn-prev" id="prev-btn" disabled>Précédent</button>
+            <button class="btn btn-next" id="next-btn">Suivant</button>
+            <button class="btn btn-finish" id="finish-btn" style="display:none;">Terminer</button>
+        </div>
+        <div class="results" id="results" style="display:none;">
+            <div class="score" id="final-score"></div>
+            <p id="final-message"></p>
+            <button class="btn btn-next" onclick="resetQuiz()">Nouveau Quiz</button>
+        </div>
+    </div>
+
+    <script>
+        // Quizzes conformes au programme 2nde : atomes, électrons, ions monoatomiques, Lewis, ordres grandeur[page:0]
+        const quizzes = {
+            1: [ // Quiz 1: Structure atomique
+                { q: "Combien de protons dans un noyau d'oxygène-16 ?", options: ["6", "8", "16", "24"], ans: 1 },
+                { q: "Notation symbolique de l'atome : Z=8, A=16 ?", options: ["¹⁶₈O", "⁸₁⁶O", "O¹⁶", "O₈"], ans: 0 },
+                { q: "Nombre de neutrons dans ¹⁶₈O ?", options: ["8", "16", "24", "0"], ans: 0 },
+                { q: "Charge du noyau d'un atome ?", options: ["Neutre", "Négative", "Positive égale à Z", "Z e"], ans: 2 },
+                { q: "Modèle de Bohr : électrons sur...", options: ["Trajectoires circulaires", "Nuage probabiliste", "Orbite elliptique", "Anneaux quantiques"], ans: 0 },
+                { q: "Comparaison taille atome/noyau ?", options: ["Atome 10⁴ fois plus grand", "Même taille", "Noyau 10⁴ fois plus grand", "Noyau 10¹² fois plus grand"], ans: 0 },
+                { q: "Masse atome ≈ ?", options: ["Masse électrons", "Masse noyau", "Masse protons + neutrons", "Charge Z"], ans: 2 },
+                { q: "Isotope : même...", options: ["Z, différent A", "A, différent Z", "Neutrons identiques", "Électrons identiques"], ans: 0 },
+                { q: "Numéro atomique Z = ?", options: ["Protons", "Neutrons", "Électrons", "A"], ans: 0 },
+                { q: "Charge élémentaire proton ?", options: ["+e", "-e", "0", "+2e"], ans: 0 },
+                { q: "Hydrogène : Z= ?", options: ["1", "2", "8", "6"], ans: 0 },
+                { q: "Sodium Na : Z= ?", options: ["11", "12", "10", "19"], ans: 0 },
+                { q: "Calcium Ca : notation ?", options: ["⁴⁰₂₀Ca", "Ca⁴⁰", "²⁰Ca", "Ca₂₀"], ans: 0 },
+                { q: "Potassium K isotope courant ?", options: ["³⁹₁₉K", "⁴⁰₁₉K", "³⁷₁₉K", "K³⁹"], ans: 0 },
+                { q: "Modèle atomique avec protons/neutrons ?", options: ["Thomson", "Rutherford", "Bohr", "Dalton"], ans: 1 }
+            ],
+            2: [ // Quiz 2: Configuration électronique
+                { q: "Règle de Klechkowski ?", options: ["1s → 2s 2p → 3s 3p → 4s...", "s p d f croissant", "Orbite par Z", "Couche par couche"], ans: 0 },
+                { q: "Config. fluor F (Z=9) ?", options: ["1s² 2s² 2p⁵", "1s² 2s² 2p³", "2s² 2p⁷", "1s² 2p⁹"], ans: 0 },
+                { q: "Électrons valence Na ?", options: ["11", "1", "10", "3"], ans: 1 },
+                { q: "Gaz noble stable ?", options: ["H", "He", "Li", "Be"], ans: 1 },
+                { q: "Argon config. ?", options: ["1s² 2s² 2p⁶ 3s² 3p⁶", "[Ne] 3s² 3p³", "1s² 2p⁸", "3p⁸"], ans: 0 },
+                { q: "Couche = ?", options: ["n principal", "Sous-couche l", "Spin", "Orbite"], ans: 0 },
+                { q: "Sous-couche 2p : capacité ?", options: ["2", "6", "10", "14"], ans: 1 },
+                { q: "Silicium Z=14 config. ?", options: ["[Ne] 3s² 3p²", "[Ne] 3s² 3p⁴", "[Ar] 4s²", "[Ne] 3p²"], ans: 0 },
+                { q: "Zinc Zn Z=30 ?", options: ["[Ar] 4s¹ 3d¹⁰", "[Ar] 3d¹⁰ 4s²", "[Ar] 4s² 3d⁸", "[Kr]"], ans: 1 },
+                { q: "Argent Ag anomalie ?", options: ["[Kr] 5s¹ 4d¹⁰", "[Kr] 5s² 4d⁹", "[Kr] 4d¹⁰", "5s²"], ans: 0 },
+                { q: "Fer Fe²⁺ perd ?", options: ["2 électrons 4s", "2 électrons 3d", "1s et 4s", "3d seulement"], ans: 0 },
+                { q: "Aluminium valence ?", options: ["1", "2", "3", "13"], ans: 2 },
+                { q: "Cuivre Cu config. ?", options: ["[Ar] 4s¹ 3d¹⁰", "[Ar] 4s² 3d⁹", "[Ar] 3d¹⁰", "4s²"], ans: 0 },
+                { q: "Cortonège électronique ?", options: ["Électrons total", "Électrons valence", "Noyau", "Protons"], ans: 1 },
+                { q: "Lithium config. ?", options: ["1s² 2s¹", "1s¹ 2s²", "2s³", "He 2s¹"], ans: 0 }
+            ],
+            3: [ // Quiz 3: Ions, Lewis, Liaisons
+                { q: "Charge ion Na⁺ ?", options: ["+1", "-1", "0", "+11"], ans: 0 },
+                { q: "Ion Ca²⁺ ?", options: ["Perd 2e⁻", "Gagne 2e⁻", "Gagne 1e⁻", "Neutre"], ans: 0 },
+                { q: "Chlorure Cl⁻ ?", options: ["Gagne 1e⁻", "Perd 1e⁻", "Gagne 7e⁻", "Perd 7e⁻"], ans: 0 },
+                {```html
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Chimie 2nde - Atomes et Électrons</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; }
+        .dashboard { background: white; border-radius: 15px; padding: 20px; margin-bottom: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); text-align: center; }
+        .quiz-container { background: white; border-radius: 15px; padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); max-width: 800px; margin: 0 auto; }
+        h1 { color: #333; margin-bottom: 10px; }
+        h2 { color: #667eea; margin-bottom: 20px; }
+        select { padding: 10px; font-size: 16px; border: 2px solid #ddd; border-radius: 8px; width: 100%; max-width: 300px; margin-bottom: 20px; }
+        button { background: #667eea; color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-size: 16px; margin: 5px; transition: background 0.3s; }
+        button:hover { background: #5a67d8; }
+        button:disabled { background: #ccc; cursor: not-allowed; }
+        .question { margin-bottom: 25px; }
+        .question h3 { color: #333; margin-bottom: 15px; font-size: 18px; }
+        label { display: block; margin: 10px 0; padding: 12px; background: #f8f9ff; border-radius: 8px; cursor: pointer; transition: background 0.3s; }
+        label:hover { background: #e6e6ff; }
+        input[type="radio"] { margin-right: 10px; }
+        .progress { background: #eee; height: 10px; border-radius: 5px; margin: 20px 0; overflow: hidden; }
+        .progress-bar { background: #667eea; height: 100%; transition: width 0.3s; border-radius: 5px; }
+        .score { font-size: 24px; color: #28a745; font-weight: bold; margin-top: 20px; }
+        .results { display: none; text-align: center; }
+        @media (max-width: 768px) { .quiz-container { padding: 20px; } button { width: 100%; margin: 10px 0; } }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <h1>🎓 Quiz Chimie 2nde - Atomes & Électrons</h1>
+        <p>Choisissez un QCM (15 questions chacun) conforme au programme Éduscol</p>
+        <select id="quizSelect">
+            <option value="0">Quiz 1: Structure atomique & Noyau</option>
+            <option value="1">Quiz 2: Configuration électronique</option>
+            <option value="2">Quiz 3: Ions & Gaz nobles</option>
+            <option value="4">Quiz 4: Liaisons & Modèle de Lewis</option>
+        </select>
+        <button onclick="loadQuiz()">Démarrer le Quiz</button>
+    </div>
+
+    <div id="quizContainer" class="quiz-container" style="display: none;">
+        <div class="progress"><div id="progressBar" class="progress-bar"></div></div>
+        <div id="quizContent"></div>
+        <div style="text-align: center; margin-top: 30px;">
+            <button id="prevBtn" onclick="prevQuestion()" disabled>Précédent</button>
+            <button id="nextBtn" onclick="nextQuestion()">Suivant</button>
+            <button id="finishBtn" onclick="finishQuiz()" style="background: #28a745;">Terminer</button>
+        </div>
+        <div id="results" class="results">
+            <h2>Résultats</h2>
+            <div id="score" class="score"></div>
+            <button onclick="loadQuiz()" style="background: #667eea;">Refaire ce Quiz</button>
+            <button onclick="changeQuiz()">Changer de Quiz</button>
+        </div>
+    </div>
+
+    <script>
+        const quizzes = [
+            // Quiz 1: Structure atomique & Noyau (15 Q)
+            [
+                {q: "Quel est le numéro atomique Z de l'oxygène ?", a: ["8", "16", "10", "6"], c: 0},
+                {q: "Dans la notation \(^{A}_{Z}\mathrm{X}\), que représente A ?", a: ["Nombre de neutrons", "Nombre de protons", "Nombre d'électrons", "Charge du noyau"], c: 0},
+                {q: "Combien de protons dans le noyau de \(^{16}_{8}\mathrm{O}\) ?", a: ["8", "16", "24", "8+8"], c: 0},
+                {q: "Combien de neutrons dans \(^{16}_{8}\mathrm{O}\) ?", a: ["8", "16", "24", "0"], c: 0},
+                {q: "Charge électrique du noyau d'un atome neutre ?", a: ["+Ze", "0", "-Ze", "+e"], c: 0},
+                {q: "Charge élémentaire du proton ?", a: ["+e", "-e", "0", "+2e"], c: 0},
+                {q: "Masse approximative d'un proton ?", a: ["1 u", "0 u", "1836 u", "1/1836 u"], c: 0},
+                {q: "Comparaison taille atome/noyau ?", a: ["Atome 10^{-10} m, noyau 10^{-15} m", "Même taille", "Noyau plus grand", "Atome 10^{-15} m"], c: 0},
+                {q: "Ordre de grandeur masse atome ?", a: ["10^{-27} kg", "10^{-15} kg", "1 kg", "10^{-10} kg"], c: 0},
+                {q: "Qu'est-ce qu'un isotope ?", a: ["Même Z, A différent", "Même A, Z différent", "Même tout", "Ions différents"], c: 0},
+                {q: "Modèle de Bohr ?", a: ["Électrons sur orbites", "Électrons nuage", "Pas de noyau", "Seul noyau"], c: 0},
+                {q: "Neutrons dans le noyau ?", a: ["Oui, sauf H-1", "Tous les atomes", "Aucun", "Seulement ions"], c: 0},
+                {q: "Masse du noyau de O-16 ?", a: ["≈16 u", "8 u", "24 u", "0 u"], c: 0},
+                {q: "Représentation symbolique oxygène ?", a: "\(^{16}_{8}\mathrm{O}\)", "O", "\( \mathrm{O}^{8+} \)", "16O"], c: 0},
+                {q: "Composition atomique oxygène ?", a: ["8p, 8n, 8e", "16p, 0n, 0e", "8p, 8e seulement", "Variable"], c: 0}
+            ],
+            // Quiz 2: Configuration électronique (15 Q)
+            [
+                {q: "Configuration 1s de H ?", a: ["1", "0", "2", "8"], c: 0},
+                {q: "Règle de Klechkowski ?", a: ["1s 2s 2p 3s 3p..."], "1s 2p 2s...", "s p d f", "Aléatoire"], c: 0},
+                {q: "Couche pour n=2 ?", a: ["2s 2p", "1s", "3s", "2d"], c: 0},
+                {q: "Sous-couche 2p capacité ?", a: ["6 électrons", "2", "8", "10"], c: 0},
+                {q: "Numéro atomique Na ?", a: ["11", "10", "12", "23"], c: 0},
+                {q: "Configuration Na ?", a: ["1s²2s²2p⁶3s¹", "1s²2s²2p⁶", "3s¹ seulement", "11s¹"], c: 0},
+                {q: "Cortège électronique ?", a: ["Électrons de valence", "Tous électrons", "Protons", "Neutrons"], c: 0},
+                {q: "Configuration He ?", a: ["1s²", "2s²", "1s¹", "Vide"], c: 0},
+                {q: "Position carbone tableau périodique ?", a: ["2ème période, groupe 14", "1ère, 6", "3ème, 14", "Gaz noble"], c: 0},
+                {q: "Électrons valence C ?", a: ["4", "6", "2", "8"], c: 0},
+                {q: "Configuration Al ?", a: ["1s²2s²2p⁶3s²3p¹", "3s²3p¹", "13 électrons", "2,8,3"], c: 0},
+                {q: "Famille fluor ?", a: ["Halogènes", "Alcalins", "Gaz nobles", "Métaux"], c: 0},
+                {q: "Configuration Ar ?", a: ["1s²2s²2p⁶3s²3p⁶", "18 électrons", "Gaz noble", "Tous"], c: 0},
+                {q: "Silicium Z=14 config ?", a: ["[Ne]3s²3p²", "2,8,4", "14s²", "3p⁴"], c: 0},
+                {q: "Zinc config ?", a: ["[Ar]4s²3d¹⁰", "30 électrons valence 2", "Transition", "Tous"], c: 0}
+            ],
+            // Quiz 3: Ions & Gaz nobles (15 Q)
+            [
+                {q: "Configuration stable gaz noble ?", a: ["Couche valence complète", "1 seul e-", "Pair seulement", "Impair"], c: 0},
+                {q: "Charge ion Na ?", a: ["Na⁺", "Na⁻", "Na²⁺", "Neutre"], c: 0},
+                {q: "Charge Ca ?", a: ["Ca²⁺", "Ca⁺", "Ca³⁺", "Ca⁻"], c: 0},
+                {q: "K⁺ ?", a: ["[Ar]", "18e-", "[Ar]4s¹", "19e-"], c: 0},
+                {q: "Mg²⁺ ?", a: ["[Ne]", "10e-", "12e-", "[He]"], c: 0},
+                {q: "F⁻ ?", a: ["[Ne]", "10e-", "9e-", "F"], c: 0},
+                {q: "Cl⁻ ?", a: ["[Ar]", "18e-", "17e-", "Cl"], c: 0},
+                {q: "Li⁺ ?", a: ["[He]", "2e-", "3e-", "Li"], c: 0},
+                {q: "Argon ?", a: ["Gaz noble stable", "Réactif", "Ion +", "Métal"], c: 0},
+                {q: "O²⁻ ?", a: ["[Ne]", "10e-", "8e-", "O"], c: 0},
+                {q: "S²⁻ ?", a: ["[Ar]", "18e-", "16e-", "S"], c: 0},
+                {q: "Fe²⁺ ?", a: ["Perte 2 valence", "[Ar]3d⁶", "26e- total 24", "Tous"], c: 1},
+                {q: "Fe³⁺ ?", a: ["[Ar]3d⁵", "23e-", "Perte 3", "Tous"], c: 0},
+                {q: "Ag⁺ ?", a: ["[Kr]4d¹⁰", "46e- 47?", "Perte 1s¹", "Tous"], c: 0},
+                {q: "Al³⁺ ?", a: ["[Ne]", "10e-", "13e-", "Al"], c: 0}
+            ],
+            // Quiz 4: Liaisons & Modèle de Lewis (15 Q)
+            [
+                {q: "Liaison covalente ?", a: ["Partage électrons", "Transfert", "Ionique", "Métallique"], c: 0},
+                {q: "Modèle de Lewis ?", a: ["Doublets liants/non liants", "Orbites", "Noyau seul", "Protons"], c: 0},
+                {q: "Doublet liant ?", a: ["Paire partagée", "Paire libre", "Seul e-", "Proton"], c: 0},
+                {q: "Doublet non liant ?", a: ["Paire libre atome", "Partagée", "Liante", "Ion"], c: 0},
+                {q: "Énergie liaison ?", a: ["Énergie rompre liaison", "Créer", "Transfert", "Chaleur"], c: 0},
+                {q: "Structure électronique ?", a: ["Configuration e-", "Noyau", "Isotopes", "Masse"], c: 0},
+                {q: "Classification périodique ?", a: ["Périodes groupes propriétés", "Aléatoire", "Masse croissante", "Seul Z"], c: 0},
+                {q: "Molécule vs atome ?", a: ["Plusieurs atomes", "Un seul", "Ion", "Noyau"], c: 0},
+                {q: "Anion ?", a: ["Charge négative", "Positive", "Neutre", "Gaz"], c: 0},
+                {q: "Cation ?", a: ["Charge positive", "Négative", "Neutre", "Molécule"], c: 0},
+                {q: "Cu (cuivre) ion courant ?", a: ["Cu⁺ Cu²⁺", "Cu³⁺", "Cu⁻", "Neutre"], c: 0},
+                {q: "Br⁻ ?", a: ["Bromure [Ar]4s²4p⁶? [Kr]?", "[Ar]3d¹⁰4s²4p⁶", "35e- 36e-", "Tous"], c: 0},
+                {q: "C dans Lewis CO₂ ?", a: ["4 liaisons", "2 doubles O=C=O", "Simple", "Ion"], c: 1},
+                {q: "H₂O Lewis ?", a: ["2 liants 2 non-liants O", "4 liants", "Ion", "Linéaire"], c: 0},
+                {q: "CH₄ ?", a: ["4 liaisons covalentes C-H", "Ions", "Doublets libres C", "Plan"], c: 0}
+            ]
+        ];
+
+        let currentQuiz = 0;
+        let currentQuestion = 0;
+        let answers = [];
+        let score = 0;
+
+        function loadQuiz() {
+            currentQuiz = parseInt(document.getElementById('quizSelect').value);
+            currentQuestion = 0;
+            answers = new Array(15).fill(null);
+            score = 0;
+            document.getElementById('quizContainer').style.display = 'block';
+            document.getElementById('quizSelect').style.display = 'none'; // Hide after start
+            showQuestion();
+        }
+
+        function showQuestion() {
+            const quiz = quizzes[currentQuiz];
+            const q = quiz[currentQuestion];
+            let html = `<div class="question">
+                <h3>Q${currentQuestion + 1}/15: ${q.q}</h3>`;
+            q.a.forEach((option, i) => {
+                const checked = answers[currentQuestion] === i ? 'checked' : '';
+                html += `<label><input type="radio" name="q${currentQuestion}" value="${i}" ${checked} onchange="selectAnswer(${currentQuestion}, ${i})"> ${option}</label>`;
+            });
+            html += '</div>';
+            document.getElementById('quizContent').innerHTML = html;
+            updateProgress();
+            updateButtons();
+        }
+
+        function selectAnswer(qIdx, choice) {
+            answers[qIdx] = choice;
+            updateProgress();
+        }
+
+        function nextQuestion() {
+            if (currentQuestion < 14) {
+                currentQuestion++;
+                showQuestion();
+            }
+        }
+
+        function prevQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                showQuestion();
+            }
+        }
+
+        function updateButtons() {
+            document.getElementById('prevBtn').disabled = currentQuestion === 0;
+            document.getElementById('nextBtn').disabled = currentQuestion === 14 && answers === null;[3]
+            document.getElementById('finishBtn').disabled = answers.some(a => a === null);
+        }
+
+        function updateProgress() {
+            const answered = answers.filter(a => a !== null).length;
+            document.getElementById('progressBar').style.width = `${(answered / 15) * 100}%`;
+        }
+
+        function finishQuiz() {
+            score = answers.reduce((s, ans, i) => s + (ans === quizzes[currentQuiz][i].c ? 1 : 0), 0);
+            document.getElementById('quizContent').style.display = 'none';
+            document.getElementById('results').style.display = 'block';
+            document.getElementById('score').innerHTML = `Score: ${score}/15 (${Math.round(score/15*100)}%)`;
+        }
+
+        function changeQuiz() {
+            document.getElementById('quizContainer').style.display = 'none';
+            document.getElementById('quizSelect').style.display = 'block';
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Devoir de Chimie 2nde</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        #dashboard {
+            background-color: #333;
+            color: white;
+            padding: 10px;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+        #dashboard nav ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+        #dashboard nav ul li {
+            margin: 5px;
+        }
+        #dashboard nav ul li a {
+            color: white;
+            text-decoration: none;
+            padding: 10px;
+            display: block;
+        }
+        #dashboard nav ul li a:hover {
+            background-color: #555;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 60px auto 20px;
+            padding: 20px;
+            background: white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        section {
+            margin-bottom: 40px;
+        }
+        h1, h2, h3 {
+            color: #007bff;
+        }
+        .question {
+            margin-bottom: 20px;
+        }
+        .answer {
+            display: none;
+            background-color: #e9ecef;
+            padding: 10px;
+            border-left: 4px solid #007bff;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        sup {
+            vertical-align: super;
+            font-size: smaller;
+        }
+        sub {
+            vertical-align: sub;
+            font-size: smaller;
+        }
+        /* Responsive design */
+        @media (max-width: 768px) {
+            #dashboard nav ul {
+                flex-direction: column;
+            }
+            .container {
+                padding: 10px;
+            }
+            table {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="dashboard">
+        <nav>
+            <ul>
+                <li><a href="#competences">Compétences Évaluées</a></li>
+                <li><a href="#completion">Compléter le Texte</a></li>
+                <li><a href="#questions">Questions de Cours</a></li>
+                <li><a href="#ex1">Exercice 1</a></li>
+                <li><a href="#ex2">Exercice 2</a></li>
+            </ul>
+        </nav>
+    </div>
+    <div class="container">
+        <h1>Devoir de Chimie 2nde</h1>
+
+        <section id="competences">
+            <h2>COMPÉTENCES ÉVALUÉES</h2>
+            <p>Maîtriser les compétences associées et maîtriser l'information utile.</p>
+            <p>Exploiter des données, calculer, représenter.</p>
+            <p>Communiquer à l'écrit de manière structurée, raisonnée et argumentée en utilisant un langage rigoureux et des modèles de représentation appropriés.</p>
+        </section>
+
+        <section id="completion">
+            <h2>Compléter le texte ci-dessous : (2 points)</h2>
+            <p class="question">L'atome est une entité électriquement ... Les protons et les neutrons sont appelés ... Les électrons se déplacent autour du ... La masse de l'atome est pratiquement égale à celle de son ... L'atome est essentiellement constitué de ... Sa structure est ...</p>
+            <button onclick="toggleAnswer('completion-answer')">Voir la réponse</button>
+            <div id="completion-answer" class="answer">
+                <p>L'atome est une entité électriquement <strong>neutre</strong>. Les protons et les neutrons sont appelés <strong>nucléons</strong>. Les électrons se déplacent autour du <strong>noyau</strong>. La masse de l'atome est pratiquement égale à celle de son <strong>noyau</strong>. L'atome est essentiellement constitué de <strong>vide</strong>. Sa structure est <strong>nucléaire</strong>.</p>
+            </div>
+        </section>
+
+        <section id="questions">
+            <h2>Question de cours : (3 points)</h2>
+            <div class="question">
+                <p>1) Donner la définition d'un isotope.</p>
+                <button onclick="toggleAnswer('q1-answer')">Voir la réponse</button>
+                <div id="q1-answer" class="answer">
+                    <p>Les isotopes sont des atomes ayant le même nombre de protons mais d'un nombre de neutrons différents.</p>
+                </div>
+            </div>
+            <div class="question">
+                <p>2) La notation symbolique d'un atome est AX. Que représente A, Z et X ?</p>
+                <button onclick="toggleAnswer('q2-answer')">Voir la réponse</button>
+                <div id="q2-answer" class="answer">
+                    <p>La notation symbolique d'un atome est <sup>A</sup>X<sub>Z</sub>. A représente le nombre de nucléons (nombre de masse), Z le nombre de protons (numéro atomique), X le symbole de l'élément.</p>
+                </div>
+            </div>
+            <div class="question">
+                <p>3) Donner la définition d'un ion ?</p>
+                <button onclick="toggleAnswer('q3-answer')">Voir la réponse</button>
+                <div id="q3-answer" class="answer">
+                    <p>Un ion est un atome ou groupe d'atomes électriquement chargé par gain ou perte d'électrons.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="ex1">
+            <h2>Exercice 1 : L'atome d'oxygène (9 points)</h2>
+            <p>Le numéro atomique du noyau d'oxygène, de symbole O, est 8 et le nombre de nucléons est 16.</p>
+            <div class="question">
+                <p>1. Donner la représentation symbolique du noyau.</p>
+                <button onclick="toggleAnswer('ex1-1-answer')">Voir la réponse</button>
+                <div id="ex1-1-answer" class="answer">
+                    <p><sup>16</sup>O<sub>8</sub></p>
+                </div>
+            </div>
+            <div class="question">
+                <p>2. Donner la composition de l'atome d'oxygène.</p>
+                <button onclick="toggleAnswer('ex1-2-answer')">Voir la réponse</button>
+                <div id="ex1-2-answer" class="answer">
+                    <p>8 protons, 8 neutrons (16 - 8 = 8), 8 électrons.</p>
+                </div>
+            </div>
+            <div class="question">
+                <p>3. Calculer la masse m du noyau.</p>
+                <button onclick="toggleAnswer('ex1-3-answer')">Voir la réponse</button>
+                <div id="ex1-3-answer" class="answer">
+                    <p>m = 16 × 1.67 × 10<sup>-27</sup> kg = 2.67 × 10<sup>-26</sup> kg</p>
+                </div>
+            </div>
+            <div class="question">
+                <p>4. Calculer la masse m<sub>e</sub> de l'atome.</p>
+                <button onclick="toggleAnswer('ex1-4-answer')">Voir la réponse</button>
+                <div id="ex1-4-answer" class="answer">
+                    <p>m<sub>a</sub> = m (noyau) + 8 × m<sub>e</sub> = 2.67 × 10<sup>-26</sup> + 8 × 9.1 × 10<sup>-31</sup> ≈ 2.67 × 10<sup>-26</sup> kg</p>
+                </div>
+            </div>
+            <div class="question">
+                <p>5. Comparer ces deux valeurs numériques et commenter.</p>
+                <button onclick="toggleAnswer('ex1-5-answer')">Voir la réponse</button>
+                <div id="ex1-5-answer" class="answer">
+                    <p>Les deux masses sont pratiquement égales. La masse des électrons est négligeable par rapport à celle du noyau.</p>
+                </div>
+            </div>
+            <div class="question">
+                <p>6. Quelle est la charge du noyau ?</p>
+                <button onclick="toggleAnswer('ex1-6-answer')">Voir la réponse</button>
+                <div id="ex1-6-answer" class="answer">
+                    <p>+8e (puisque 8 protons, chacun +e)</p>
+                </div>
+            </div>
+            <div class="question">
+                <p>7. Sachant que la valeur de la charge élémentaire d'un proton est notée e<sub>e</sub>, donner, en fonction de e<sub>e</sub>, la charge électrique globale des électrons. Justifier.</p>
+                <button onclick="toggleAnswer('ex1-7-answer')">Voir la réponse</button>
+                <div id="ex1-7-answer" class="answer">
+                    <p>-8 e<sub>e</sub>, car l'atome est neutre, donc la charge totale des électrons doit équilibrer celle du noyau (+8 e<sub>e</sub>).</p>
+                </div>
+            </div>
+            <p><strong>Données :</strong></p>
+            <p>Masse d'un nucléon : m<sub>n</sub> = 1.67 × 10<sup>-27</sup> kg</p>
+            <p>Masse d'un électron : m<sub>e</sub> = 9.1 × 10<sup>-31</sup> kg</p>
+            <p>Charge élémentaire : e = 1.6 × 10<sup>-19</sup> C</p>
+        </section>
+
+        <section id="ex2">
+            <h2>Exercice 2 : Compléter le tableau suivant (6 points)</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>distance</th>
+                        <th>distance en mètre (notation scientifique)</th>
+                        <th>ordre de grandeur en mètre</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Fil d'une toile d'araignée</td>
+                        <td>6690 nm</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Nanobactérie</td>
+                        <td>50 × 10<sup>-6</sup> m</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Particule de fumée de tabac</td>
+                        <td>0.27 µm</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Planète terre</td>
+                        <td>13 × 10<sup>6</sup> km</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Cellule humaine</td>
+                        <td>0.016 mm</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Rayon d'un atome d'argent</td>
+                        <td>165 pm</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+            <button onclick="toggleAnswer('ex2-answer')">Voir les réponses</button>
+            <div id="ex2-answer" class="answer">
+                <table>
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>distance</th>
+                            <th>distance en mètre (notation scientifique)</th>
+                            <th>ordre de grandeur en mètre</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Fil d'une toile d'araignée</td>
+                            <td>6690 nm</td>
+                            <td>6.69 × 10<sup>-6</sup></td>
+                            <td>10<sup>-6</sup></td>
+                        </tr>
+                        <tr>
+                            <td>Nanobactérie</td>
+                            <td>50 × 10<sup>-6</sup> m</td>
+                            <td>5.0 × 10<sup>-5</sup></td>
+                            <td>10<sup>-5</sup></td>
+                        </tr>
+                        <tr>
+                            <td>Particule de fumée de tabac</td>
+                            <td>0.27 µm</td>
+                            <td>2.7 × 10<sup>-7</sup></td>
+                            <td>10<sup>-7</sup></td>
+                        </tr>
+                        <tr>
+                            <td>Planète terre</td>
+                            <td>13 × 10<sup>6</sup> km</td>
+                            <td>1.3 × 10<sup>10</sup></td>
+                            <td>10<sup>10</sup></td>
+                        </tr>
+                        <tr>
+                            <td>Cellule humaine</td>
+                            <td>0.016 mm</td>
+                            <td>1.6 × 10<sup>-5</sup></td>
+                            <td>10<sup>-5</sup></td>
+                        </tr>
+                        <tr>
+                            <td>Rayon d'un atome d'argent</td>
+                            <td>165 pm</td>
+                            <td>1.65 × 10<sup>-10</sup></td>
+                            <td>10<sup>-10</sup></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        function toggleAnswer(id) {
+            var element = document.getElementById(id);
+            if (element.style.display === "none" || element.style.display === "") {
+                element.style.display = "block";
+            } else {
+                element.style.display = "none";
+            }
+        }
+    </script>
+</body>
+</html>
