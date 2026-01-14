@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QCM Mathématiques 2nde</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        #dashboard {
+            background-color: #333;
+            color: white;
+            padding: 10px;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        #dashboard nav ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+        #dashboard nav ul li {
+            margin: 5px;
+        }
+        #dashboard nav ul li a {
+            color: white;
+            text-decoration: none;
+            padding: 10px;
+            display: block;
+        }
+        #dashboard nav ul li a:hover {
+            background-color: #555;
+        }
+        #score {
+            margin-right: 20px;
+            font-weight: bold;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 60px auto 20px;
+            padding: 20px;
+            background: white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        section {
+            margin-bottom: 40px;
+        }
+        h1, h2, h3 {
+            color: #007bff;
+        }
+        .question {
+            margin-bottom: 20px;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            margin: 5px 0;
+        }
+        .feedback {
+            display: none;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 5px;
+        }
+        .correct {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .incorrect {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #detailed-answers {
+            display: none;
+        }
+        sup {
+            vertical-align: super;
+            font-size: smaller;
+        }
+        sub {
+            vertical-align: sub;
+            font-size: smaller;
+        }
+        /* Responsive design */
+        @media (max-width: 768px) {
+            #dashboard nav ul {
+                flex-direction: column;
+            }
+            .container {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="dashboard">
+        <nav>
+            <ul>
+                <li><a href="#part1">Partie 1</a></li>
+                <li><a href="#part2">Partie 2</a></li>
+                <li><a href="#part3">Partie 3</a></li>
+                <li><a href="#detailed-answers">Corrections Détaillées</a></li>
+            </ul>
+        </nav>
+        <div id="score">Score: 0 / 20</div>
+    </div>
+    <div class="container">
+        <h1>QCM : Devoir Surveillé de Mathématiques 2nde (20 points)</h1>
+        <p>Pour chaque question, choisissez la réponse correcte parmi les options proposées (a, b, c, d). Chaque question vaut 1 point, sauf indication contraire.</p>
+
+        <section id="part1">
+            <h2>Partie 1 : Ensembles des Nombres (5 points)</h2>
+            <div class="question" id="q1">
+                <p>1. À quel ensemble appartient le nombre √(2) ?</p>
+                <div class="options">
+                    <label><input type="radio" name="q1" value="a"> a) ℕ</label>
+                    <label><input type="radio" name="q1" value="b"> b) ℤ</label>
+                    <label><input type="radio" name="q1" value="c"> c) ℚ</label>
+                    <label><input type="radio" name="q1" value="d"> d) ℝ mais pas ℚ</label>
+                </div>
+                <button onclick="checkAnswer('q1', 'd')">Valider</button>
+                <button onclick="showAnswer('q1')">Montrer la Réponse</button>
+                <div class="feedback" id="feedback-q1"></div>
+            </div>
+            <div class="question" id="q2">
+                <p>2. Quel est l'encadrement de π à 10<sup>-2</sup> près ?</p>
+                <div class="options">
+                    <label><input type="radio" name="q2" value="a"> a) 3,13 < π < 3,15</label>
+                    <label><input type="radio" name="q2" value="b"> b) 3,14 < π < 3,15</label>
+                    <label><input type="radio" name="q2" value="c"> c) 3,14 < π < 3,16</label>
+                    <label><input type="radio" name="q2" value="d"> d) 3,13 < π < 3,14</label>
+                </div>
+                <button onclick="checkAnswer('q2', 'b')">Valider</button>
+                <button onclick="showAnswer('q2')">Montrer la Réponse</button>
+                <div class="feedback" id="feedback-q2"></div>
+            </div>
+            <div class="question" id="q3">
+                <p>3. L'arrondi de 7,856 à l'unité près est :</p>
+                <div class="options">
+                    <label><input type="radio" name="q3" value="a"> a) 7</label>
+                    <label><input type="radio" name="q3" value="b"> b) 8</label>
+                    <label><input type="radio" name="q3" value="c"> c) 7,9</label>
+                    <label><input type="radio" name="q3" value="d"> d) 7,86</label>
+                </div>
+                <button onclick="checkAnswer('q3', 'b')">Valider</button>
+                <button onclick="showAnswer('q3')">Montrer la Réponse</button>
+                <div class="feedback" id="feedback-q3"></div>
+            </div>
+            <div class="question" id="q4">
+                <p>4. Traduisez l'inégalité -2 ≤ x < 5 en intervalle.</p>
+                <div class="options">
+                    <label><input type="radio" name="q4" value="a"> a) ]-2, 5[</label>
+                    <label><input type="radio" name="q4" value="b"> b) [-2, 5[</label>
+                    <label><input type="radio" name="q4" value="c"> c) [-2, 5]</label>
+                    <label><input type="radio" name="q4" value="d"> d) ]-2, 5]</label>
+                </div>
+                <button onclick="checkAnswer('q4', 'b')">Valider</button>
+                <button onclick="showAnswer('q4')">Montrer la Réponse</button>
+                <div class="feedback" id="feedback-q4"></div>
+            </div>
+            <div class="question" id="q5">
+                <p>5. Soient A = [-3, 1] et B = [0, 4]. Quelle est l'union A ∪ B ?</p>
+                <div class="options">
+                    <label><input type="radio" name="q5" value="a"> a) [-3, 4]</label>
+                    <label><input type="radio" name="q5" value="b"> b) [0, 1]</label>
+                    <label><input type="radio" name="q5" value="c"> c) [-3, 0] ∪ [1, 4]</label>
+                    <label><input type="radio" name="q5" value="d"> d) [-3, 1] ∪ [0, 4]</label>
+                </div>
+                <button onclick="checkAnswer('q5', 'a')">Valider</button>
+                <button onclick="showAnswer('q5')">Montrer la Réponse</button>
+                <div class="feedback" id="feedback-q5"></div>
+            </div>
+        </section>
+
+        <section id="part2">
+            <h2>Partie 2 : Valeurs Absolues (5 points)</h2>
+            <div class="question" id="q6">
+                <p>6. Résolvez l'équation |x - 3| = 2.</p>
+                <div class="options">
+                    <label><input type="radio" name="q6" value="a"> a) x = 1 ou x = 5</label>
+                    <label><input type="radio" name="q6" value="b"> b) x = 3 ou x = -2</label>
+                    <label><input type="radio" name="q6" value="c"> c) x = 1 ou x = -5</label>
+                    <label><input type="radio" name="q6" value="d"> d) x = 5 ou x = -1</label>
+                </div>
+                <button onclick="checkAnswer('q6', 'a')">Valider</button>
+                <button onclick="showAnswer('q6')">Montrer la Réponse</button>
+                <div class="feedback" id="feedback-q6"></div>
+            </div>
+            <div class="question" id="q7">
+                <p>7. Résolvez l'inéquation |x + 1| ≤ 4.</p>
+                <div class="options">
+                    <label><input type="radio" name="q7" value="a"> a) x ∈ [-5, 3]</label>
+                    <label><input type="radio" name="q7" value="b"> b) x ∈ [-3, 5]</label>
+                    <label><input type="radio" name="q7" value="c"> c) x ∈ [-5, -3]</label>
+                    <label><input type="radio" name="q7" value="d"> d) x ∈ [3, 5]</label>
+                </div>
+                <button onclick="checkAnswer('q7', 'a')">Valider</button>
+                <button onclick="showAnswer('q7')">Montrer la Réponse</button>
+                <div class="feedback" id="feedback-q7"></div>
+            </div>
+            <div class="question" id="q8">
+                <p>8. Interprétez |x - 2| < 1 comme un intervalle.</p>
+                <div class="options">
+                    <label><input type="radio" name="q8" value="a"> a) x ∈ [1, 3]</label>
+                    <label><input type="radio" name="q8" value="b"> b) x ∈ ]1, 3[</label>
+                    <label><input type="radio" name="q8" value="c"> c) x ∈ [2, 3]</label>
+                    <label><input type="radio" name="q8" value="d"> d) x ∈ ]-1, 1[</label>
+                </div>
+                <button onclick="checkAnswer('q8', 'b')">Valider</button>
+                <button onclick="showAnswer('q8')">Montrer la Réponse</button>
+                <div class="feedback" id="feedback-q8"></div>
+            </div>
+            <div class="question" id="q9">
+                <p>9. Soit l'inéquation |2x - 4| > 6. Quelle est la solution ?</p>
+                <div class="options">
+                    <label><input type="radio" name="q9" value="a"> a) x < -1 ou x > 5</label>
+                    <label><input type="radio" name="q9" value="b"> b) x < 1 ou x > 5</label>
+                    <label><input type="radio" name="q9" value="c"> c) -1 < x < 5</label>
+                    <label><input type="radio" name="q9" value="d"> d) x < -5 ou x > 1</label>
+                </div>
+                <button onclick="checkAnswer('q9', 'a')">Valider</button>
+                <button onclick="showAnswer('q9')">Montrer la Réponse</button>
+                <div class="feedback" id="feedback-q9"></div>
+            </div>
+            <div class="question" id="q10">
+                <p>10. Traduisez l'intervalle ]-∞, -2[ ∪ ]3, +∞[ en inégalité avec valeur absolue.</p>
+                <div class="options">
+                    <label><input type="radio" name="q10" value="a"> a) |x - 0.5| > 2.5</label>
+                    <label><input type="radio" name="q10" value="b"> b) |x + 0.5| < 2.5</label>
+                    <label><input type="radio" name="q10" value="c"> c) |x - 0.5| < 2.5</label>
+                    <label><input type="radio" name="q10" value="d"> d) |x - 0.5| ≥ 2.5</label>
+                </div>
+                <button onclick="checkAnswer('q10', 'd')">Valider</button>
+                <button onclick="showAnswer('q10')">Montrer la Réponse</button>
+                <div class="feedback" id="feedback-q10"></div>
+            </div>
+        </section>
+
+        <section id="part3">
+            <h2>Partie 3 : Fonctions (10 points)</h2>
+            <div class="question" id="q11">
+                <p>11. Quelle est le domaine de définition de f(x) = √(x - 1) ? (2 points)</p>
+                <div class="options">
+                    <label><input type="radio" name="q11" value="a"> a) x ∈ ℝ</label>
+                    <label><input type="radio" name="q11" value="b"> b) x ∈ [1, +∞[</label>
+                    <label><input type="radio" name="q11" value="c"> c) x ∈ ]-∞, 1]</label>
+                    <label><input type="radio" name="q11" value="d"> d) x ∈ [0, +∞[</label>
+                </div>
+                <button onclick="checkAnswer('q11', 'b', 2)">Valider</button>
+                <button onclick="showAnswer('q11')">Montrer la Réponse</button>
+                <div class="feedback" id="feedback-q11"></div>
+            </div>
+            <div class="question" id="q12">
+                <p>12. Pour f(x) = 2x + 3, calculez l'image de x = -1.</p>
+                <div class="options">
+                    <label><input type="radio" name="q12" value="a"> a) 1</label>
+                    <label><input type="radio" name="q12" value="b"> b) 5</label>
+                    <label><input type="radio" name="q12" value="c"> c) -5</label>
+                    <label><input type="radio" name="q12" value="d"> d) 0</label>
+                </div>
+                <button onclick="checkAnswer('q12', 'a')">Valider</button>
+                <button onclick="showAnswer('q12')">Montrer la Réponse</button>
+                <div class="feedback" id="feedback-q12"></div>
+            </div>
+            <div class="question" id="q13">
+                <p>13. Pour la même fonction, trouvez l'antécédent de 7.</p>
+                <div class="options">
+                    <label><input type="radio" name="q13" value="a"> a) x = 2</label>
+                    <label><input type="radio" name="q13" value="b"> b) x = 5</label>
+                    <label><input type="radio" name="q13" value="c"> c) x = 7/2</label>
+                    <label><input type="radio" name="q13" value="d"> d) x = 4</label>
+                </div>
+                <button onclick="checkAnswer('q13', 'a')">Valider</button>
+                <button onclick="showAnswer('q13')">Montrer la Réponse</button>
+                <div class="feedback" id="feedback-q13"></div>
+            </div>
+            <div class="question" id="q14">
+                <p>14. Sur la courbe de f(x) = x², le point (2, 4) appartient-il à la courbe ?</p>
+                <div class="options">
+                    <label><input type="radio" name="q14" value="a"> a) Oui</label>
+                    <label><input type="radio" name="q14" value="b"> b) Non</label>
+                    <label><input type="radio" name="q14" value="c"> c) Seulement si x > 0</label>
+                    <label><input type="radio" name="q14" value="d"> d) Impossible à dire</label>
+                </div>
+                <button onclick="checkAnswer('q14', 'a')">Valider</button>
+                <button onclick="showAnswer('q14')">Montrer la Réponse</button>
+                <div class="feedback" id="feedback-q14"></div>
+            </div>
+            <div class="question" id="q15">
+                <p>15. À partir d'une calculatrice, pour f(x) = 3x - 1, dressez un extrait de tableau de valeurs pour x = 0, 1, 2. (2 points)</p>
+                <div class="options">
+                    <label><input type="radio" name="q15" value="a"> a) f(0) = -1, f(1) = 2, f(2) = 5</label>
+                    <label><input type="radio" name="q15" value="b"> b) f(0) = 0, f(1) = 3, f(2) = 6</label>
+                    <label><input type="radio" name="q15" value="c"> c) f(0) = 1, f(1) = 4, f(2) = 7</label>
+                    <label><input type="radio" name="q15" value="d"> d) f(0) = -3, f(1) = 0, f(2) = 3</label>
+                </div>
+                <button onclick="checkAnswer('q15', 'a', 2)">Valider</button>
+                <button onclick="showAnswer('q15')">Montrer la Réponse</button>
+                <div class="feedback" id="feedback-q15"></div>
+            </div>
+            <div class="question" id="q16">
+                <p>16. Pour résoudre graphiquement x² - 4 = 0, on cherche les intersections de y = x² avec :</p>
+                <div class="options">
+                    <label><input type="radio" name="q16" value="a"> a) y = 0</label>
+                    <label><input type="radio" name="q16" value="b"> b) y = 4</label>
+                    <label><input type="radio" name="q16" value="c"> c) y = -4</label>
+                    <label><input type="radio" name="q16" value="d"> d) y = x</label>
+                </div>
+                <button onclick="checkAnswer('q16', 'b')">Valider</button>
+                <button onclick="showAnswer('q16')">Montrer la Réponse</button>
+                <div class="feedback" id="feedback-q16"></div>
+            </div>
+            <div class="question" id="q17">
+                <p>17. Sur le graphique de f(x) = 1/x, l'image de x = 2 est :</p>
+                <div class="options">
+                    <label><input type="radio" name="q17" value="a"> a) 1/2</label>
+                    <label><input type="radio" name="q17" value="b"> b) 2</label>
+                    <label><input type="radio" name="q17" value="c"> c) -1/2</label>
+                    <label><input type="radio" name="q17" value="d"> d) Indéfinie</label>
+                </div>
+                <button onclick="checkAnswer('q17', 'a')">Valider</button>
+                <button onclick="showAnswer('q17')">Montrer la Réponse</button>
+                <div class="feedback" id="feedback-q17"></div>
+            </div>
+            <div class="question" id="q18">
+                <p>18. Le domaine de définition de g(x) = 1/(x - 2) est :</p>
+                <div class="options">
+                    <label><input type="radio" name="q18" value="a"> a) ℝ</label>
+                    <label><input type="radio" name="q18" value="b"> b) ℝ \ {2}</label>
+                    <label><input type="radio" name="q18" value="c"> c) [2, +∞[</label>
+                    <label><input type="radio" name="q18" value="d"> d) ]-∞, 2]</label>
+                </div>
+                <button onclick="checkAnswer('q18', 'b')">Valider</button>
+                <button onclick="showAnswer('q18')">Montrer la Réponse</button>
+                <div class="feedback" id="feedback-q18"></div>
+            </div>
+            <div class="question" id="q19">
+                <p>19. Intersection de A = ]-1, 3[ et B = [2, 5[. (2 points)</p>
+                <div class="options">
+                    <label><input type="radio" name="q19" value="a"> a) [2, 3[</label>
+                    <label><input type="radio" name="q19" value="b"> b) ]-1, 5[</label>
+                    <label><input type="radio" name="q19" value="c"> c) ]2, 3[</label>
+                    <label><input type="radio" name="q19" value="d"> d) Vide</label>
+                </div>
+                <button onclick="checkAnswer('q19', 'a', 2)">Valider</button>
+                <button onclick="showAnswer('q19')">Montrer la Réponse</button>
+                <div class="feedback" id="feedback-q19"></div>
+            </div>
+            <div class="question" id="q20">
+                <p>20. Pour h(x) = |x|, l'antécédent de 3 est :</p>
+                <div class="options">
+                    <label><input type="radio" name="q20" value="a"> a) x = 3</label>
+                    <label><input type="radio" name="q20" value="b"> b) x = -3</label>
+                    <label><input type="radio" name="q20" value="c"> c) x = 3 ou x = -3</label>
+                    <label><input type="radio" name="q20" value="d"> d) Aucun</label>
+                </div>
+                <button onclick="checkAnswer('q20', 'c')">Valider</button>
+                <button onclick="showAnswer('q20')">Montrer la Réponse</button>
+                <div class="feedback" id="feedback-q20"></div>
+            </div>
+        </section>
+
+        <section id="detailed-answers">
+            <h2>Corrections Détaillées</h2>
+            <button onclick="toggleDetailedAnswers()">Afficher/Masquer les Corrections</button>
+            <div id="detailed-content" style="display: none;">
+                <div class="question">
+                    <p>1. À quel ensemble appartient le nombre √(2) ?</p>
+                    <p>Réponse : d) ℝ mais pas ℚ</p>
+                    <p>Explication : √2 est irrationnel car il ne peut pas être exprimé comme un rapport de deux entiers. Il appartient à ℝ mais pas à ℚ.</p>
+                </div>
+                <div class="question">
+                    <p>2. Quel est l'encadrement de π à 10<sup>-2</sup> près ?</p>
+                    <p>Réponse : b) 3,14 < π < 3,15</p>
+                    <p>Explication : π ≈ 3.14159, donc à 10^{-2} près (au centième), l'encadrement est 3.14 < π < 3.15.</p>
+                </div>
+                <div class="question">
+                    <p>3. L'arrondi de 7,856 à l'unité près est :</p>
+                    <p>Réponse : b) 8</p>
+                    <p>Explication : Le chiffre des dixièmes est 8 ≥ 5, donc on arrondit à l'unité supérieure : 8.</p>
+                </div>
+                <div class="question">
+                    <p>4. Traduisez l'inégalité -2 ≤ x < 5 en intervalle.</p>
+                    <p>Réponse : b) [-2, 5[</p>
+                    <p>Explication : Inclus -2 (crochet [), exclu 5 (crochet [ inversé).</p>
+                </div>
+                <div class="question">
+                    <p>5. Soient A = [-3, 1] et B = [0, 4]. Quelle est l'union A ∪ B ?</p>
+                    <p>Réponse : a) [-3, 4]</p>
+                    <p>Explication : L'union couvre de -3 à 4 sans trou car les intervalles se chevauchent.</p>
+                </div>
+                <div class="question">
+                    <p>6. Résolvez l'équation |x - 3| = 2.</p>
+                    <p>Réponse : a) x = 1 ou x = 5</p>
+                    <p>Explication : |x - 3| = 2 ⇒ x - 3 = 2 ou x - 3 = -2 ⇒ x = 5 ou x = 1.</p>
+                </div>
+                <div class="question">
+                    <p>7. Résolvez l'inéquation |x + 1| ≤ 4.</p>
+                    <p>Réponse : a) x ∈ [-5, 3]</p>
+                    <p>Explication : -4 ≤ x + 1 ≤ 4 ⇒ -5 ≤ x ≤ 3.</p>
+                </div>
+                <div class="question">
+                    <p>8. Interprétez |x - 2| < 1 comme un intervalle.</p>
+                    <p>Réponse : b) x ∈ ]1, 3[</p>
+                    <p>Explication : -1 < x - 2 < 1 ⇒ 1 < x < 3.</p>
+                </div>
+                <div class="question">
+                    <p>9. Soit l'inéquation |2x - 4| > 6.</p>
+                    <p>Réponse : a) x < -1 ou x > 5</p>
+                    <p>Explication : |2x - 4| > 6 ⇒ 2x - 4 > 6 ou 2x - 4 < -6 ⇒ 2x > 10 ou 2x < -2 ⇒ x > 5 ou x < -1.</p>
+                </div>
+                <div class="question">
+                    <p>10. Traduisez l'intervalle ]-∞, -2[ ∪ ]3, +∞[ en inégalité avec valeur absolue.</p>
+                    <p>Réponse : d) |x - 0.5| ≥ 2.5</p>
+                    <p>Explication : Le centre est ( -2 + 3 ) / 2 = 0.5, distance 2.5, et ≥ pour l'extérieur.</p>
+                </div>
+                <div class="question">
+                    <p>11. Quelle est le domaine de définition de f(x) = √(x - 1) ? (2 points)</p>
+                    <p>Réponse : b) x ∈ [1, +∞[</p>
+                    <p>Explication : Pour que la racine soit définie, x - 1 ≥ 0 ⇒ x ≥ 1.</p>
+                </div>
+                <div class="question">
+                    <p>12. Pour f(x) = 2x + 3, calculez l'image de x = -1.</p>
+                    <p>Réponse : a) 1</p>
+                    <p>Explication : f(-1) = 2*(-1) + 3 = -2 + 3 = 1.</p>
+                </div>
+                <div class="question">
+                    <p>13. Pour la même fonction, trouvez l'antécédent de 7.</p>
+                    <p>Réponse : a) x = 2</p>
+                    <p>Explication : 2x + 3 = 7 ⇒ 2x = 4 ⇒ x = 2.</p>
+                </div>
+                <div class="question">
+                    <p>14. Sur la courbe de f(x) = x², le point (2, 4) appartient-il à la courbe ?</p>
+                    <p>Réponse : a) Oui</p>
+                    <p>Explication : f(2) = 4, donc le point (2, 4) est sur la courbe.</p>
+                </div>
+                <div class="question">
+                    <p>15. À partir d'une calculatrice, pour f(x) = 3x - 1, dressez un extrait de tableau de valeurs pour x = 0, 1, 2. (2 points)</p>
+                    <p>Réponse : a) f(0) = -1, f(1) = 2, f(2) = 5</p>
+                    <p>Explication : f(0) = -1, f(1) = 3*1 - 1 = 2, f(2) = 3*2 - 1 = 5.</p>
+                </div>
+                <div class="question">
+                    <p>16. Pour résoudre graphiquement x² - 4 = 0, on cherche les intersections de y = x² avec :</p>
+                    <p>Réponse : b) y = 4</p>
+                    <p>Explication : x² = 4, donc intersection avec la droite y = 4.</p>
+                </div>
+                <div class="question">
+                    <p>17. Sur le graphique de f(x) = 1/x, l'image de x = 2 est :</p>
+                    <p>Réponse : a) 1/2</p>
+                    <p>Explication : f(2) = 1/2.</p>
+                </div>
+                <div class="question">
+                    <p>18. Le domaine de définition de g(x) = 1/(x - 2) est :</p>
+                    <p>Réponse : b) ℝ \ {2}</p>
+                    <p>Explication : Indéfinie en x = 2 (division par zéro).</p>
+                </div>
+                <div class="question">
+                    <p>19. Intersection de A = ]-1, 3[ et B = [2, 5[. (2 points)</p>
+                    <p>Réponse : a) [2, 3[</p>
+                    <p>Explication : Chevauchement de 2 (inclus de B) à 3 (exclu de A).</p>
+                </div>
+                <div class="question">
+                    <p>20. Pour h(x) = |x|, l'antécédent de 3 est :</p>
+                    <p>Réponse : c) x = 3 ou x = -3</p>
+                    <p>Explication : |x| = 3 ⇒ x = 3 ou x = -3.</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        let score = 0;
+        const totalPoints = 20;
+        const answered = new Set();
+
+        function checkAnswer(qid, correct, points = 1) {
+            if (answered.has(qid)) return;
+            const selected = document.querySelector(`input[name="${qid}"]:checked`);
+            const feedback = document.getElementById(`feedback-${qid}`);
+            if (selected) {
+                if (selected.value === correct) {
+                    feedback.textContent = 'Correct !';
+                    feedback.classList.add('correct');
+                    score += points;
+                } else {
+                    feedback.textContent = 'Incorrect. Essayez encore ou montrez la réponse.';
+                    feedback.classList.add('incorrect');
+                }
+                feedback.style.display = 'block';
+                updateScore();
+                answered.add(qid);
+            } else {
+                alert('Sélectionnez une option !');
+            }
+        }
+
+        function showAnswer(qid) {
+            const feedback = document.getElementById(`feedback-${qid}`);
+            feedback.textContent = `La réponse correcte est ${correctAnswers[qid]}.`;
+            feedback.classList.add('correct');
+            feedback.style.display = 'block';
+        }
+
+        function updateScore() {
+            document.getElementById('score').textContent = `Score: ${score} / ${totalPoints}`;
+        }
+
+        function toggleDetailedAnswers() {
+            const content = document.getElementById('detailed-content');
+            content.style.display = content.style.display === 'none' ? 'block' : 'none';
+        }
+
+        const correctAnswers = {
+            q1: 'd',
+            q2: 'b',
+            q3: 'b',
+            q4: 'b',
+            q5: 'a',
+            q6: 'a',
+            q7: 'a',
+            q8: 'b',
+            q9: 'a',
+            q10: 'd',
+            q11: 'b',
+            q12: 'a',
+            q13: 'a',
+            q14: 'a',
+            q15: 'a',
+            q16: 'b',
+            q17: 'a',
+            q18: 'b',
+            q19: 'a',
+            q20: 'c'
+        };
+    </script>
+</body>
+</html>

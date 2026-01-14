@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>QCM 2 – Fonctions Seconde (Graphiques & Tableaux)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    :root {
+      --bg-primary: #0a0f1e;
+      --bg-card: #1a2332;
+      --accent: #f59e0b;
+      --text-primary: #f8fafc;
+      --text-secondary: #cbd5e1;
+      --success: #10b981;
+      --error: #ef4444;
+      --border-light: rgba(255,255,255,0.1);
+      --border-hover: rgba(245,158,11,0.3);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      font-family: 'Segoe UI', -apple-system, sans-serif;
+      background: linear-gradient(135deg, var(--bg-primary), #1e293b);
+      color: var(--text-primary);
+      min-height: 100vh;
+      padding: 20px;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 950px;
+      margin: 0 auto;
+      background: var(--bg-card);
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+      border: 1px solid var(--border-light);
+      overflow: hidden;
+    }
+
+    .header {
+      background: linear-gradient(135deg, var(--accent), #d97706);
+      padding: 25px;
+      text-align: center;
+    }
+
+    .title {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: white;
+      margin-bottom: 5px;
+    }
+
+    .subtitle {
+      color: rgba(255,255,255,0.9);
+      font-size: 1.1rem;
+    }
+
+    .dashboard {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 15px;
+      padding: 20px 25px;
+      background: rgba(255,255,255,0.05);
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .stat {
+      text-align: center;
+      padding: 10px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 12px;
+    }
+
+    .stat-value {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .stat-label {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      margin-top: 2px;
+    }
+
+    .question-container {
+      padding: 30px;
+      min-height: 500px;
+    }
+
+    .question-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+      padding-bottom: 15px;
+      border-bottom: 2px solid var(--border-light);
+    }
+
+    .question-num {
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .progress-container {
+      flex: 1;
+      margin: 0 20px;
+    }
+
+    .progress-bar {
+      height: 8px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), #fbbf24);
+      width: 0%;
+      transition: width 0.4s ease;
+      border-radius: 4px;
+    }
+
+    .question-main {
+      margin-bottom: 25px;
+      font-size: 1.15rem;
+    }
+
+    .tableau-graph {
+      background: rgba(255,255,255,0.05);
+      border-radius: 12px;
+      padding: 20px;
+      margin: 20px 0;
+      border: 1px solid var(--border-light);
+    }
+
+    .tableau {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      font-family: 'Courier New', monospace;
+      font-size: 1rem;
+    }
+
+    .tableau-label {
+      background: rgba(245,158,11,0.2);
+      padding: 8px 12px;
+      border-radius: 6px;
+      text-align: center;
+      font-weight: 600;
+      color: var(--accent);
+    }
+
+    .tableau-valeurs {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .valeur-ligne {
+      display: flex;
+      justify-content: space-between;
+      padding: 6px 12px;
+      background: rgba(255,255,255,0.03);
+      border-radius: 6px;
+    }
+
+    .graphique {
+      position: relative;
+      height: 200px;
+      background: rgba(0,0,0,0.3);
+      border-radius: 12px;
+      margin: 15px 0;
+      overflow: hidden;
+    }
+
+    .axes {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+      right: 20px;
+      height: 140px;
+    }
+
+    .axe-x, .axe-y {
+      position: absolute;
+      background: rgba(255,255,255,0.2);
+    }
+
+    .axe-x { bottom: 0; left: 20px; right: 20px; height: 2px; }
+    .axe-y { left: 0; bottom: 0; width: 2px; height: 140px; }
+
+    .graduations {
+      position: absolute;
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+    }
+
+    .graduations-x { bottom: -25px; left: 20px; right: 20px; display: flex; justify-content: space-between; }
+    .graduations-y { left: -35px; bottom: 0; width: 30px; height: 140px; display: flex; flex-direction: column-reverse; justify-content: space-between; align-items: flex-end; }
+
+    .courbe {
+      position: absolute;
+      height: 4px;
+      background: linear-gradient(90deg, var(--accent), #fbbf24);
+      border-radius: 2px;
+      box-shadow: 0 0 8px var(--accent);
+    }
+
+    .point {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background: var(--accent);
+      border-radius: 50%;
+      border: 3px solid white;
+      box-shadow: 0 0 12px var(--accent);
+    }
+
+    .answers {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin: 25px 0;
+    }
+
+    .answer-btn {
+      padding: 18px 22px;
+      background: rgba(255,255,255,0.08);
+      border: 2px solid var(--border-light);
+      border-radius: 14px;
+      color: var(--text-primary);
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .answer-btn:hover:not(.correct):not(.wrong) {
+      border-color: var(--border-hover);
+      background: rgba(245,158,11,0.15);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(245,158,11,0.2);
+    }
+
+    .answer-btn.selected {
+      border-color: var(--accent);
+      background: rgba(245,158,11,0.25);
+      box-shadow: 0 0 0 4px rgba(245,158,11,0.15);
+    }
+
+    .answer-btn.correct {
+      border-color: var(--success);
+      background: rgba(16,185,129,0.2);
+      color: var(--text-primary);
+    }
+
+    .answer-btn.wrong {
+      border-color: var(--error);
+      background: rgba(239,68,68,0.2);
+      color: var(--text-primary);
+    }
+
+    .radio-circle {
+      width: 22px;
+      height: 22px;
+      border: 3px solid var(--border-light);
+      border-radius: 50%;
+      flex-shrink: 0;
+      position: relative;
+      transition: all 0.3s ease;
+    }
+
+    .answer-btn.selected .radio-circle {
+      border-color: var(--accent);
+      background: rgba(245,158,11,0.3);
+    }
+
+    .answer-btn.selected .radio-circle::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 10px;
+      height: 10px;
+      background: var(--accent);
+      border-radius: 50%;
+    }
+
+    .feedback {
+      margin: 20px 0;
+      padding: 15px 20px;
+      border-radius: 12px;
+      font-size: 1rem;
+      min-height: 24px;
+    }
+
+    .feedback.correct {
+      background: rgba(16,185,129,0.15);
+      border: 1px solid var(--success);
+      color: var(--success);
+    }
+
+    .feedback.wrong {
+      background: rgba(239,68,68,0.15);
+      border: 1px solid var(--error);
+      color: var(--error);
+    }
+
+    .nav-buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 15px;
+      margin-top: 30px;
+      padding-top: 25px;
+      border-top: 2px solid var(--border-light);
+    }
+
+    .btn {
+      padding: 15px 20px;
+      border: 2px solid var(--border-light);
+      background: rgba(255,255,255,0.08);
+      color: var(--text-primary);
+      border-radius: 12px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .btn:hover:not(:disabled) {
+      border-color: var(--accent);
+      background: rgba(245,158,11,0.2);
+      transform: translateY(-2px);
+    }
+
+    .btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent), #d97706);
+      border-color: var(--accent);
+      color: white;
+    }
+
+    .results {
+      display: none;
+      padding: 40px;
+      text-align: center;
+    }
+
+    .results.show {
+      display: block;
+    }
+
+    .final-score {
+      font-size: 4rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--success), #059669);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 20px;
+    }
+
+    .results-text {
+      font-size: 1.4rem;
+      margin-bottom: 30px;
+      color: var(--text-secondary);
+    }
+
+    @media (max-width: 768px) {
+      body { padding: 15px; }
+      .question-container { padding: 20px; }
+      .dashboard { grid-template-columns: 1fr; }
+      .nav-buttons { grid-template-columns: 1fr; }
+      .question-main { font-size: 1rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1 class="title">QCM 2 – Fonctions Seconde</h1>
+      <p class="subtitle">Graphiques, tableaux et calculs (15 questions)</p>
+    </div>
+
+    <div class="dashboard">
+      <div class="stat">
+        <div class="stat-value" id="statQuestion">1 / 15</div>
+        <div class="stat-label">Question actuelle</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value" id="statAnswered">0 / 15</div>
+        <div class="stat-label">Répondues</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value" id="statScore">0 / 15</div>
+        <div class="stat-label">Score</div>
+      </div>
+    </div>
+
+    <div class="question-container">
+      <div class="question-header">
+        <div class="question-num" id="questionNum">Question 1</div>
+        <div class="progress-container">
+          <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="question-main" id="questionText"></div>
+      <div id="visualisation"></div>
+      
+      <div class="feedback" id="feedback"></div>
+
+      <div class="answers" id="answers"></div>
+
+      <div class="nav-buttons">
+        <button class="btn" id="prevBtn">◀ Précédent</button>
+        <button class="btn btn-primary" id="nextBtn">Suivant ▶</button>
+        <button class="btn btn-primary" id="finishBtn">Terminer ✓</button>
+      </div>
+    </div>
+
+    <div class="results" id="results">
+      <div class="final-score" id="finalScore">0/15</div>
+      <div class="results-text" id="resultsText"></div>
+      <button class="btn btn-primary" onclick="location.reload()">Refaire le QCM</button>
+    </div>
+  </div>
+
+  <script>
+    const questions = [
+      {
+        text: "Dans le tableau suivant, quelle est la valeur de f(2) ?",
+        visualisation: `
+          <div class="tableau-graph">
+            <div class="tableau">
+              <div class="tableau-label">x</div>
+              <div class="tableau-label">f(x)</div>
+              <div class="tableau-valeurs">
+                <div class="valeur-ligne"><span>0</span><span>3</span></div>
+                <div class="valeur-ligne"><span>1</span><span>1</span></div>
+                <div class="valeur-ligne"><span>2</span><span>?</span></div>
+                <div class="valeur-ligne"><span>3</span><span>-1</span></div>
+              </div>
+            </div>
+          </div>
+        `,
+        choices: ["1", "0", "-1", "2"],
+        correct: 2,
+        explanation: "On lit directement dans le tableau : à x = 2 correspond f(2) = -1"
+      },
+      {
+        text: "Sur ce graphique, quelle est l'image de x = 1 ?",
+        visualisation: `
+          <div class="tableau-graph">
+            <div class="graphique">
+              <div class="axes">
+                <div class="axe-x"></div>
+                <div class="axe-y"></div>
+                <div class="graduations graduations-x">
+                  <span>-1</span><span>0</span><span>1</span><span>2</span><span>3</span>
+                </div>
+                <div class="graduations graduations-y">
+                  <span>3</span><span>2</span><span>1</span><span>0</span>
+                </div>
+                <div class="courbe" style="bottom:20px; left:20%; width:20%;"></div>
+                <div class="courbe" style="bottom:60px; left:40%; width:20%;"></div>
+                <div class="point" style="bottom:20px; left:20%;"></div>
+                <div class="point" style="bottom:60px; left:40%;"></div>
+                <div class="point" style="bottom:10px; left:60%;"></div>
+              </div>
+            </div>
+          </div>
+        `,
+        choices: ["0", "1", "2", "3"],
+        correct: 2,
+        explanation: "Le point au-dessus de x = 1 (à 40% du graphique) a pour ordonnée 2."
+      },
+      {
+        text: "Pour f(x) = 1/(x+2), quel est le domaine de définition ?",
+        choices: ["Tous les réels", "x ≥ -2", "x ≠ -2", "x > 0"],
+        correct: 2,
+        explanation: "Le dénominateur x+2 ne doit jamais être nul → x ≠ -2"
+      },
+      {
+        text: "Dans ce tableau, quels sont les antécédents de 0 ?",
+        visualisation: `
+          <div class="tableau-graph">
+            <div class="tableau">
+              <div class="tableau-label">x</div>
+              <div class="tableau-label">f(x)</div>
+              <div class="tableau-valeurs">
+                <div class="valeur-ligne"><span>-1</span><span>2</span></div>
+                <div class="valeur-ligne"><span>0</span><span>0</span></div>
+                <div class="valeur-ligne"><span>1</span><span>0</span></div>
+                <div class="valeur-ligne"><span>2</span><span>-2</span></div>
+              </div>
+            </div>
+          </div>
+        `,
+        choices: ["x = 0 seulement", "x = 1 seulement", "x = 0 et x = 1", "Aucun"],
+        correct: 2,
+        explanation: "Les antécédents de 0 sont les x tels que f(x) = 0 : x = 0 et x = 1"
+      },
+      {
+        text: "Sur ce graphique, où la fonction vaut-elle 0 ?",
+        visualisation: `
+          <div class="tableau-graph">
+           
