@@ -18,454 +18,104 @@
       --border: #e5e7eb;
     }
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { 
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; 
       background: radial-gradient(circle at top, #e0f2fe 0, #f3f4f6 45%, #e5e7eb 100%);
-      min-height: 100vh;
-      padding: 1rem;
-      color: var(--text);
+      min-height: 100vh; padding: 1rem; color: var(--text);
     }
-
-    .app {
-      max-width: 960px;
-      margin: 0 auto;
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
-
+    .app { max-width: 960px; margin: 0 auto; display: flex; flex-direction: column; gap: 1rem; }
+    
     .dashboard {
-      background: rgba(15, 23, 42, 0.95);
-      color: #e5e7eb;
-      padding: 1rem 1.25rem;
-      border-radius: 1rem;
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-      gap: 0.75rem;
+      background: rgba(15, 23, 42, 0.95); color: #e5e7eb; padding: 1rem 1.25rem; border-radius: 1rem;
+      display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.75rem;
       box-shadow: 0 12px 30px rgba(15, 23, 42, 0.4);
     }
-
-    .dash-title {
-      font-weight: 700;
-      font-size: 1.1rem;
-    }
-
-    .dash-sub {
-      font-size: 0.85rem;
-      color: #9ca3af;
-    }
-
-    .dash-stats {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.75rem;
-      font-size: 0.9rem;
-    }
-
-    .stat-pill {
-      padding: 0.4rem 0.9rem;
-      border-radius: 999px;
-      border: 1px solid rgba(148, 163, 184, 0.7);
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-      backdrop-filter: blur(6px);
-      background: rgba(15, 23, 42, 0.7);
-    }
-
-    .stat-label {
-      color: #9ca3af;
-      font-size: 0.8rem;
-    }
-
-    .stat-value {
-      font-weight: 600;
-    }
-
-    .timer-ok {
-      color: #bbf7d0;
-    }
-
-    .timer-medium {
-      color: #facc15;
-    }
-
-    .timer-high {
-      color: #fecaca;
-    }
-
-    .card {
-      background: var(--card);
-      border-radius: 1rem;
-      padding: 1.25rem 1.5rem;
-      box-shadow: 0 10px 25px rgba(15, 23, 42, 0.15);
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
-
-    .progress-wrapper {
-      display: flex;
-      flex-direction: column;
-      gap: 0.35rem;
-    }
-
-    .progress-label-row {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.85rem;
-      color: var(--muted);
-    }
-
-    .progress-bar {
-      width: 100%;
-      height: 0.55rem;
-      background: #e5e7eb;
-      border-radius: 999px;
-      overflow: hidden;
-    }
-
-    .progress-inner {
-      height: 100%;
-      width: 0%;
-      background: linear-gradient(to right, #34d399, #22c55e, #16a34a);
-      transition: width 0.25s ease-out;
-    }
-
-    .question-meta {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-      justify-content: space-between;
-      align-items: baseline;
-    }
-
-    .question-index {
-      font-weight: 600;
-      color: var(--primary-dark);
-      font-size: 0.95rem;
-    }
-
-    .question-theme {
-      font-size: 0.8rem;
-      color: var(--muted);
-      padding: 0.1rem 0.6rem;
-      border-radius: 999px;
-      background: #e0f2fe;
-    }
-
-    .question-text {
-      font-size: 1.02rem;
-      line-height: 1.5;
-    }
-
-    .options {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-    }
-
-    .option {
-      border-radius: 0.75rem;
-      border: 1px solid var(--border);
-      padding: 0.6rem 0.75rem;
-      display: flex;
-      gap: 0.6rem;
-      align-items: flex-start;
-      cursor: pointer;
-      background: #f9fafb;
-      transition: background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease, transform 0.1s ease;
-      position: relative;
-    }
-
-    .option:hover {
-      background: #eff6ff;
-      border-color: var(--primary);
-      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);
-      transform: translateY(-1px);
-    }
-
-    .option.selected {
-      border-color: var(--primary);
-      background: #dbeafe;
-    }
-
-    .option.correct {
-      border-color: var(--success);
-      background: #dcfce7;
-    }
-
-    .option.incorrect {
-      border-color: var(--danger);
-      background: #fee2e2;
-    }
-
-    .option input {
-      margin-top: 0.25rem;
-    }
-
-    .option-text {
-      font-size: 0.95rem;
-    }
-
-    .letters {
-      font-weight: 700;
-      color: var(--primary-dark);
-      min-width: 1.2rem;
-    }
-
-    .feedback {
-      border-radius: 0.75rem;
-      padding: 0.6rem 0.75rem;
-      font-size: 0.9rem;
-      line-height: 1.4;
-      display: none;
-    }
-
-    .feedback.visible {
-      display: block;
-    }
-
-    .feedback.correct {
-      background: #ecfdf3;
-      border: 1px solid #bbf7d0;
-      color: #166534;
-    }
-
-    .feedback.incorrect {
-      background: #fef2f2;
-      border: 1px solid #fecaca;
-      color: #991b1b;
-    }
-
-    .nav-row {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      gap: 0.75rem;
-      align-items: center;
-    }
-
-    .nav-buttons {
-      display: flex;
-      gap: 0.5rem;
-      flex-wrap: wrap;
-    }
-
-    button {
-      border: none;
-      cursor: pointer;
-      font-family: inherit;
-    }
-
-    .btn {
-      padding: 0.55rem 1.1rem;
-      border-radius: 999px;
-      font-size: 0.9rem;
-      font-weight: 600;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.35rem;
-      transition: background 0.15s ease, transform 0.1s ease, box-shadow 0.15s ease, opacity 0.15s ease;
-    }
-
-    .btn:active {
-      transform: translateY(1px);
-      box-shadow: none;
-    }
-
-    .btn-primary {
-      background: var(--primary);
-      color: #eff6ff;
-      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
-    }
-
-    .btn-primary:hover {
-      background: var(--primary-dark);
-    }
-
-    .btn-secondary {
-      background: #e5e7eb;
-      color: #111827;
-    }
-
-    .btn-secondary:hover {
-      background: #d1d5db;
-    }
-
-    .btn-outline {
-      background: transparent;
-      border: 1px solid #d1d5db;
-      color: #4b5563;
-    }
-
-    .btn-outline:hover {
-      background: #e5e7eb;
-    }
-
-    .btn[disabled] {
-      opacity: 0.5;
-      cursor: not-allowed;
-      box-shadow: none;
-    }
-
-    .summary {
-      margin-top: 0.5rem;
-      font-size: 0.85rem;
-      color: var(--muted);
-    }
-
-    /* Résultats finaux */
-    .results {
-      display: none;
-      flex-direction: column;
-      gap: 1rem;
-    }
-
-    .results.visible {
-      display: flex;
-    }
-
-    .score-main {
-      font-size: 1.6rem;
-      font-weight: 700;
-      color: var(--primary-dark);
-    }
-
-    .score-detail {
-      font-size: 0.95rem;
-      color: var(--muted);
-    }
-
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.35rem;
-      font-size: 0.8rem;
-      padding: 0.25rem 0.6rem;
-      border-radius: 999px;
-    }
-
-    .badge-success {
-      background: #dcfce7;
-      color: #166534;
-    }
-
-    .badge-warning {
-      background: #fef3c7;
-      color: #92400e;
-    }
-
-    .badge-danger {
-      background: #fee2e2;
-      color: #991b1b;
-    }
-
-    .answers-list {
-      margin-top: 0.5rem;
-      border-top: 1px dashed #e5e7eb;
-      padding-top: 0.75rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.7rem;
-      max-height: 340px;
-      overflow-y: auto;
-    }
-
-    .answer-item {
-      font-size: 0.9rem;
-      padding: 0.4rem 0.45rem;
-      border-radius: 0.5rem;
-      background: #f9fafb;
-    }
-
-    .answer-item.correct {
-      border-left: 3px solid var(--success);
-    }
-
-    .answer-item.incorrect {
-      border-left: 3px solid var(--danger);
-    }
-
-    .answer-q {
-      font-weight: 600;
-      margin-bottom: 0.2rem;
-    }
-
-    .answer-user,
-    .answer-corr,
-    .answer-exp {
-      font-size: 0.85rem;
-      color: #4b5563;
-    }
-
-    .answer-user strong {
-      color: #111827;
-    }
-
-    .answer-corr strong {
-      color: #16a34a;
-    }
-
-    .answer-exp {
-      margin-top: 0.1rem;
-    }
-
-    .pill {
-      display: inline-block;
-      padding: 0.15rem 0.45rem;
-      border-radius: 999px;
-      font-size: 0.78rem;
-      background: #e5e7eb;
-      color: #374151;
-    }
-
-    .pill-theme {
-      background: #e0f2fe;
-      color: #1d4ed8;
-    }
-
-    .pill-bad {
-      background: #fee2e2;
-      color: #b91c1c;
-    }
-
+    .dash-title { font-weight: 700; font-size: 1.1rem; }
+    .dash-sub { font-size: 0.85rem; color: #9ca3af; }
+    .dash-stats { display: flex; flex-wrap: wrap; gap: 0.75rem; font-size: 0.9rem; }
+    .stat-pill { padding: 0.4rem 0.9rem; border-radius: 999px; border: 1px solid rgba(148, 163, 184, 0.7);
+      display: flex; align-items: center; gap: 0.4rem; backdrop-filter: blur(6px); background: rgba(15, 23, 42, 0.7); }
+    .stat-label { color: #9ca3af; font-size: 0.8rem; }
+    .stat-value { font-weight: 600; }
+    .timer-ok { color: #bbf7d0; }
+    
+    .card { background: var(--card); border-radius: 1rem; padding: 1.25rem 1.5rem; box-shadow: 0 10px 25px rgba(15, 23, 42, 0.15);
+      display: flex; flex-direction: column; gap: 1rem; }
+    
+    .progress-wrapper { display: flex; flex-direction: column; gap: 0.35rem; }
+    .progress-label-row { display: flex; justify-content: space-between; font-size: 0.85rem; color: var(--muted); }
+    .progress-bar { width: 100%; height: 0.55rem; background: #e5e7eb; border-radius: 999px; overflow: hidden; }
+    .progress-inner { height: 100%; width: 0%; background: linear-gradient(to right, #34d399, #22c55e, #16a34a); transition: width 0.25s ease-out; }
+    
+    .question-meta { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: space-between; align-items: baseline; }
+    .question-index { font-weight: 600; color: var(--primary-dark); font-size: 0.95rem; }
+    .question-theme { font-size: 0.8rem; color: var(--muted); padding: 0.1rem 0.6rem; border-radius: 999px; background: #e0f2fe; }
+    .question-text { font-size: 1.02rem; line-height: 1.5; }
+    
+    .options { display: flex; flex-direction: column; gap: 0.5rem; }
+    .option { border-radius: 0.75rem; border: 1px solid var(--border); padding: 0.6rem 0.75rem; display: flex; gap: 0.6rem; align-items: flex-start;
+      cursor: pointer; background: #f9fafb; transition: all 0.15s ease; position: relative; }
+    .option:hover { background: #eff6ff; border-color: var(--primary); box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15); transform: translateY(-1px); }
+    .option.selected { border-color: var(--primary); background: #dbeafe; }
+    .option.correct { border-color: var(--success); background: #dcfce7; }
+    .option.incorrect { border-color: var(--danger); background: #fee2e2; }
+    
+    .letters { font-weight: 700; color: var(--primary-dark); min-width: 1.2rem; }
+    .option-text { font-size: 0.95rem; }
+    
+    .feedback { border-radius: 0.75rem; padding: 0.6rem 0.75rem; font-size: 0.9rem; line-height: 1.4; display: none; }
+    .feedback.visible { display: block; }
+    .feedback.correct { background: #ecfdf3; border: 1px solid #bbf7d0; color: #166534; }
+    .feedback.incorrect { background: #fef2f2; border: 1px solid #fecaca; color: #991b1b; }
+    
+    .nav-row { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.75rem; align-items: center; }
+    .nav-buttons { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    button { border: none; cursor: pointer; font-family: inherit; }
+    .btn { padding: 0.55rem 1.1rem; border-radius: 999px; font-size: 0.9rem; font-weight: 600; display: inline-flex; align-items: center; gap: 0.35rem;
+      transition: all 0.15s ease; }
+    .btn:active { transform: translateY(1px); box-shadow: none; }
+    .btn-primary { background: var(--primary); color: #eff6ff; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4); }
+    .btn-primary:hover { background: var(--primary-dark); }
+    .btn-secondary { background: #e5e7eb; color: #111827; }
+    .btn-secondary:hover { background: #d1d5db; }
+    .btn-outline { background: transparent; border: 1px solid #d1d5db; color: #4b5563; }
+    .btn-outline:hover { background: #e5e7eb; }
+    .btn[disabled] { opacity: 0.5; cursor: not-allowed; box-shadow: none; }
+    
+    .summary { margin-top: 0.5rem; font-size: 0.85rem; color: var(--muted); }
+    
+    .results { display: none; flex-direction: column; gap: 1rem; }
+    .results.visible { display: flex; }
+    .score-main { font-size: 1.6rem; font-weight: 700; color: var(--primary-dark); }
+    .score-detail { font-size: 0.95rem; color: var(--muted); }
+    .badge { display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.8rem; padding: 0.25rem 0.6rem; border-radius: 999px; }
+    .badge-success { background: #dcfce7; color: #166534; }
+    .badge-warning { background: #fef3c7; color: #92400e; }
+    .badge-danger { background: #fee2e2; color: #991b1b; }
+    
+    .answers-list { margin-top: 0.5rem; border-top: 1px dashed #e5e7eb; padding-top: 0.75rem; display: flex; flex-direction: column; gap: 0.7rem; 
+      max-height: 340px; overflow-y: auto; }
+    .answer-item { font-size: 0.9rem; padding: 0.4rem 0.45rem; border-radius: 0.5rem; background: #f9fafb; }
+    .answer-item.correct { border-left: 3px solid var(--success); }
+    .answer-item.incorrect { border-left: 3px solid var(--danger); }
+    .answer-q { font-weight: 600; margin-bottom: 0.2rem; }
+    .answer-user, .answer-corr, .answer-exp { font-size: 0.85rem; color: #4b5563; }
+    .answer-user strong { color: #111827; }
+    .answer-corr strong { color: #16a34a; }
+    .answer-exp { margin-top: 0.1rem; }
+    
+    .pill { display: inline-block; padding: 0.15rem 0.45rem; border-radius: 999px; font-size: 0.78rem; }
+    .pill-theme { background: #e0f2fe; color: #1d4ed8; }
+    .pill-bad { background: #fee2e2; color: #b91c1c; }
+    
     @media (max-width: 720px) {
-      .dashboard {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-
-      .dash-stats {
-        width: 100%;
-      }
-
-      .card {
-        padding: 1rem;
-      }
-
-      .nav-row {
-        flex-direction: column;
-        align-items: stretch;
-      }
-
-      .nav-buttons {
-        width: 100%;
-        justify-content: space-between;
-      }
-
-      .btn {
-        flex: 1 1 auto;
-        justify-content: center;
-      }
+      .dashboard { flex-direction: column; align-items: flex-start; }
+      .dash-stats { width: 100%; }
+      .card { padding: 1rem; }
+      .nav-row { flex-direction: column; align-items: stretch; }
+      .nav-buttons { width: 100%; justify-content: space-between; }
+      .btn { flex: 1 1 auto; justify-content: center; }
     }
   </style>
 </head>
@@ -474,27 +124,13 @@
     <header class="dashboard">
       <div>
         <div class="dash-title">QCM Maths 2nde – Ensembles & Fonctions</div>
-        <div class="dash-sub">
-          Devoir surveillé : ensembles de nombres, valeur absolue, intervalles, fonctions & lecture graphique (programme 2nde « Nombres et calculs », « Fonctions »).[web:29][web:32]
-        </div>
+        <div class="dash-sub">Devoir surveillé : ensembles de nombres, valeur absolue, intervalles, fonctions & lecture graphique</div>
       </div>
       <div class="dash-stats">
-        <div class="stat-pill">
-          <span class="stat-label">Question</span>
-          <span class="stat-value" id="stat-question">1 / 12</span>
-        </div>
-        <div class="stat-pill">
-          <span class="stat-label">Score</span>
-          <span class="stat-value" id="stat-score">0 / 12</span>
-        </div>
-        <div class="stat-pill">
-          <span class="stat-label">Répondues</span>
-          <span class="stat-value" id="stat-answered">0 / 12</span>
-        </div>
-        <div class="stat-pill">
-          <span class="stat-label">Temps</span>
-          <span class="stat-value timer-ok" id="stat-timer">00:00</span>
-        </div>
+        <div class="stat-pill"><span class="stat-label">Question</span><span class="stat-value" id="stat-question">1 / 12</span></div>
+        <div class="stat-pill"><span class="stat-label">Score</span><span class="stat-value" id="stat-score">0 / 12</span></div>
+        <div class="stat-pill"><span class="stat-label">Répondues</span><span class="stat-value" id="stat-answered">0 / 12</span></div>
+        <div class="stat-pill"><span class="stat-label">Temps</span><span class="stat-value timer-ok" id="stat-timer">00:00</span></div>
       </div>
     </header>
 
@@ -514,232 +150,141 @@
           <span class="question-index" id="question-index">Question 1 / 12</span>
           <span class="question-theme" id="question-theme">Ensembles de nombres</span>
         </div>
-        <div class="question-text" id="question-text">
-          <!-- question -->
-        </div>
-
-        <div class="options" id="options-container">
-          <!-- options -->
-        </div>
-
-        <div id="feedback" class="feedback">
-          <!-- feedback -->
-        </div>
+        <div class="question-text" id="question-text"></div>
+        <div class="options" id="options-container"></div>
+        <div id="feedback" class="feedback"></div>
       </section>
 
       <section class="nav-row">
         <div class="nav-buttons">
-          <button id="btn-prev" class="btn btn-secondary" type="button">
-            ← Précédent
-          </button>
-          <button id="btn-next" class="btn btn-primary" type="button">
-            Suivant →
-          </button>
-          <button id="btn-finish" class="btn btn-outline" type="button">
-            Terminer & bilan
-          </button>
+          <button id="btn-prev" class="btn btn-secondary">← Précédent</button>
+          <button id="btn-next" class="btn btn-primary">Suivant →</button>
+          <button id="btn-finish" class="btn btn-outline">Terminer & bilan</button>
         </div>
-        <div class="summary">
-          Boutons toujours actifs. Tu peux changer tes réponses à tout moment avant de valider le bilan final.
-        </div>
+        <div class="summary">Boutons toujours actifs. Tu peux changer tes réponses à tout moment avant le bilan final.</div>
       </section>
 
       <section id="results" class="results">
         <div>
           <div class="score-main" id="final-score"></div>
           <div class="score-detail" id="final-detail"></div>
-          <div id="final-badge" style="margin-top:0.5rem;"></div>
+          <div id="final-badge"></div>
         </div>
-
         <div class="answers-list" id="answers-list"></div>
-
         <div style="display:flex; gap:0.5rem; flex-wrap:wrap; margin-top:0.5rem;">
-          <button class="btn btn-secondary" type="button" id="btn-restart">Recommencer</button>
-          <button class="btn btn-outline" type="button" id="btn-keep-review">
-            Rester sur le bilan
-          </button>
+          <button class="btn btn-secondary" id="btn-restart">Recommencer</button>
+          <button class="btn btn-outline" id="btn-keep-review">Rester sur le bilan</button>
         </div>
       </section>
     </main>
   </div>
 
   <script>
-    // 12 questions couvrant : ensembles de nombres, intervalles, valeur absolue,
-    // domaines, images/antécédents, lecture graphique et résolution graphique.[web:26][web:27][web:30]
+    // Questions avec notation mathématique SIMPLIFIÉE (pas de LaTeX)
     const questions = [
       {
         theme: "Ensembles de nombres",
-        text: "1) À quel ensemble appartient le nombre \\(\\sqrt{2}\\) ?",
-        display: "Nature d’un nombre réel.",
-        options: [
-          "\\(\\mathbb{N}\\)",
-          "\\(\\mathbb{Z}\\)",
-          "\\(\\mathbb{Q}\\)",
-          "\\(\\mathbb{R} \\setminus \\mathbb{Q}\\)"
-        ],
+        text: "1) À quel ensemble appartient le nombre √2 ?",
+        display: "Nature d'un nombre réel.",
+        options: ["N", "Z", "Q", "R\\Q"],
         correctIndex: 3,
-        explanation:
-          "Le nombre \\(\\sqrt{2}\\) n’est pas rationnel, donc il est réel irrationnel : il appartient à \\(\\mathbb{R} \\setminus \\mathbb{Q}\\), pas à \\(\\mathbb{Q}\\)."
+        explanation: "√2 n'est pas rationnel, donc réel irrationnel : R\\Q."
       },
       {
         theme: "Encadrement & arrondi",
-        text: "2) On sait que \\(3{,}14 < \\pi < 3{,}15\\). L’arrondi de \\(\\pi\\) au centième est :",
-        display: "Traduire un encadrement en arrondi.",
+        text: "2) 3,14 < π < 3,15. L'arrondi de π au centième est :",
+        display: "Traduire encadrement → arrondi.",
         options: ["3,1", "3,14", "3,15", "3,20"],
         correctIndex: 1,
-        explanation:
-          "Comme \\(\\pi\\) est compris entre 3,14 et 3,15 et plus proche de 3,14 que de 3,15, son arrondi au centième est 3,14."
+        explanation: "π entre 3,14 et 3,15 → arrondi au centième = 3,14."
       },
       {
         theme: "Intervalles ↔ inégalités",
-        text: "3) Traduire l’inégalité \\(2 \\le x < 5\\) sous forme d’intervalle.",
-        display: "Passer d’une inégalité à un intervalle.",
-        options: [
-          "]2 ; 5[",
-          "[2 ; 5]",
-          "[2 ; 5[",
-          "]2 ; 5]"
-        ],
+        text: "3) Traduire 2 ≤ x < 5 sous forme d'intervalle.",
+        display: "Inégalité → intervalle.",
+        options: ["]2;5[", "[2;5]", "[2;5[", "]2;5]"],
         correctIndex: 2,
-        explanation:
-          "Le signe \\(\\le\\) signifie qu’on inclut 2 (crochet fermé), et \\(<\\) qu’on exclut 5 (crochet ouvert) : on obtient donc \\([2 ; 5[\\)."
+        explanation: "≤ inclut 2 (crochet), < exclut 5 (parenthèse) : [2;5[."
       },
       {
-        theme: "Union / intersection",
-        text: "4) On considère les ensembles \\(A=[-1;2]\\) et \\(B=[1;4]\\). Quel est \\(A \\cap B\\) ?",
-        display: "Intersection de deux intervalles fermés.",
-        options: [
-          "[-1 ; 4]",
-          "[-1 ; 1]",
-          "[1 ; 2]",
-          "[2 ; 4]"
-        ],
+        theme: "Union/intersection",
+        text: "4) A=[-1;2], B=[1;4]. A ∩ B = ?",
+        display: "Intersection d'intervalles.",
+        options: ["[-1;4]", "[-1;1]", "[1;2]", "[2;4]"],
         correctIndex: 2,
-        explanation:
-          "L’intersection garde les nombres communs aux deux intervalles. Les valeurs communes à [-1;2] et [1;4] sont celles de [1;2]."
+        explanation: "Valeurs communes à [-1;2] et [1;4] = [1;2]."
       },
       {
         theme: "Valeur absolue",
-        text: "5) Résoudre dans \\(\\mathbb{R}\\) l’équation \\(|x - 3| = 2\\).",
-        display: "Équation avec valeur absolue.",
-        options: [
-          "x = 1 ou x = 5",
-          "x = -1 ou x = 1",
-          "x = 3 ou x = 2",
-          "x = -2 ou x = 2"
-        ],
+        text: "5) Résoudre |x-3| = 2 dans R.",
+        display: "Équation valeur absolue.",
+        options: ["x=1 ou 5", "x=-1 ou 1", "x=3 ou 2", "x=-2 ou 2"],
         correctIndex: 0,
-        explanation:
-          "On a \\(|x-3| = 2 \\iff x-3 = 2\\) ou \\(x-3 = -2\\). D’où \\(x = 5\\) ou \\(x = 1\\)."
+        explanation: "|x-3|=2 ⇔ x-3=2 ou x-3=-2 → x=5 ou x=1."
       },
       {
         theme: "Val. absolue → intervalle",
-        text: "6) Écrire \\(|x - 1| \\le 3\\) sous forme d’intervalle.",
-        display: "Interpréter une inégalité de valeur absolue.",
-        options: [
-          "x \\in ]-2 ; 4[",
-          "x \\in [-2 ; 4]",
-          "x \\in [-4 ; 2]",
-          "x \\in ]-4 ; 2]"
-        ],
+        text: "6) |x-1| ≤ 3 sous forme d'intervalle.",
+        display: "Inégalité valeur absolue.",
+        options: ["]-2;4[", "[-2;4]", "[-4;2]", "]-4;2]"],
         correctIndex: 1,
-        explanation:
-          "On a \\(|x-1| \\le 3 \\iff -3 \\le x-1 \\le 3\\). Donc \\(-2 \\le x \\le 4\\), soit x \\in [-2 ; 4]."
+        explanation: "|x-1|≤3 ⇔ -3≤x-1≤3 ⇔ -2≤x≤4 → [-2;4]."
       },
       {
         theme: "Domaine de définition",
-        text: "7) On considère la fonction \\(f(x) = \\dfrac{2x+1}{x-3}\\). Quel est son domaine de définition dans \\(\\mathbb{R}\\) ?",
-        display: "Exclure les valeurs interdites au dénominateur.",
-        options: [
-          "\\(\\mathbb{R}\\)",
-          "\\(\\mathbb{R} \\setminus \\{3\\}\\)",
-          "\\(\\mathbb{R} \\setminus \\{-3\\}\\)",
-          "]3 ; +\\infty["
-        ],
+        text: "7) f(x)=(2x+1)/(x-3). Domaine dans R ?",
+        display: "Valeurs interdites au dénominateur.",
+        options: ["R", "R\\{3}", "R\\{-3}", "]3;+∞["],
         correctIndex: 1,
-        explanation:
-          "Le dénominateur x−3 ne doit pas être nul, donc x ≠ 3. Le domaine est \\(\\mathbb{R} \\setminus \\{3\\}\\)."
+        explanation: "Dénominateur x-3≠0 → x≠3 → domaine = R\\{3}."
       },
       {
-        theme: "Image & antécédent",
-        text: "8) Soit \\(f(x) = 2x - 5\\). Quelle est l’image de 4 par f ?",
-        display: "Calculer une image par une fonction affine.",
-        options: [
-          "-3",
-          "3",
-          "8",
-          "11"
-        ],
+        theme: "Image",
+        text: "8) f(x)=2x-5. Image de 4 par f ?",
+        display: "Calculer f(4).",
+        options: ["-3", "3", "8", "11"],
         correctIndex: 1,
-        explanation:
-          "On calcule f(4) = 2×4 − 5 = 8 − 5 = 3. L’image de 4 par f est donc 3."
+        explanation: "f(4)=2×4-5=8-5=3."
       },
       {
-        theme: "Antécédent - calcul",
-        text: "9) Toujours pour \\(f(x) = 2x - 5\\), trouver l’antécédent de 1.",
-        display: "Résoudre f(x)=1 pour une fonction affine.",
-        options: [
-          "x = 1",
-          "x = 2",
-          "x = 3",
-          "x = 4"
-        ],
-        correctIndex: 1,
-        explanation:
-          "On résout 2x − 5 = 1, soit 2x = 6, donc x = 3. L’antécédent de 1 est 3."
+        theme: "Antécédent",
+        text: "9) f(x)=2x-5. Antécédent de 1 ?",
+        display: "Résoudre f(x)=1.",
+        options: ["x=1", "x=2", "x=3", "x=4"],
+        correctIndex: 2,
+        explanation: "2x-5=1 → 2x=6 → x=3."
       },
       {
         theme: "Lecture graphique",
-        text: "10) Sur un graphique, la courbe de f passe par le point A(2 ; 3). Que peut-on dire ?",
-        display: "Lien point–courbe : image et appartenance.",
-        options: [
-          "2 est une image de 3",
-          "3 est une image de 2",
-          "A n’appartient pas à la courbe",
-          "f(3) = 2"
-        ],
+        text: "10) Courbe f passe par A(2;3). Que dire ?",
+        display: "Point sur courbe → image.",
+        options: ["2 image de 3", "3 image de 2", "A hors courbe", "f(3)=2"],
         correctIndex: 1,
-        explanation:
-          "Si A(2 ; 3) est sur la courbe de f, on a f(2) = 3. Donc 3 est l’image de 2 par f."
+        explanation: "A(2;3) sur courbe → f(2)=3 → 3 image de 2."
       },
       {
         theme: "Tableau de valeurs",
-        text: "11) On donne un tableau de valeurs d’une fonction f : f(0)=1, f(1)=3, f(2)=5, f(3)=7. La fonction semble :",
-        display: "Reconnaître une fonction affine à partir d’un tableau.",
-        options: [
-          "Affines croissante de coefficient directeur 1",
-          "Affines croissante de coefficient directeur 2",
-          "Constante égale à 4",
-          "Décroissante"
-        ],
+        text: "11) f(0)=1, f(1)=3, f(2)=5, f(3)=7. f est :",
+        display: "Identifier fonction affine.",
+        options: ["Affine dir. 1", "Affine dir. 2", "Constante", "Décroissante"],
         correctIndex: 1,
-        explanation:
-          "Les images augmentent de 2 à chaque fois : la fonction est affine croissante de coefficient directeur 2."
+        explanation: "Images +2 à chaque fois → affine coefficient directeur 2."
       },
       {
         theme: "Résolution graphique",
-        text: "12) Graphiquement, on lit que la courbe de f coupe l’axe des abscisses en x = -1 et x = 3. Que représentent ces abscisses ?",
-        display: "Résoudre graphiquement f(x)=0.",
-        options: [
-          "Les valeurs du domaine",
-          "Les solutions de f(x)=1",
-          "Les solutions de f(x)=0",
-          "Les valeurs de f(x)"
-        ],
+        text: "12) Courbe coupe x=-1 et x=3. Ces valeurs ?",
+        display: "Intersection axe abscisses.",
+        options: ["Domaine", "f(x)=1", "f(x)=0", "Images"],
         correctIndex: 2,
-        explanation:
-          "Les points d’intersection avec l’axe des abscisses vérifient f(x)=0. Les abscisses −1 et 3 sont donc les solutions de f(x)=0."
+        explanation: "Intersection axe abscisses → f(x)=0 → solutions de f(x)=0."
       }
     ];
 
     const totalQuestions = questions.length;
-
     let currentIndex = 0;
-    let answers = new Array(totalQuestions).fill(null); // index choisi
+    let answers = new Array(totalQuestions).fill(null);
     let score = 0;
     let finished = false;
-
-    // Timer
     let seconds = 0;
     let timerId = null;
 
@@ -771,22 +316,12 @@
       if (timerId !== null) return;
       timerId = setInterval(() => {
         seconds++;
-        updateTimerDisplay();
+        const min = String(Math.floor(seconds / 60)).padStart(2, "0");
+        const sec = String(seconds % 60).padStart(2, "0");
+        els.statTimer.textContent = `${min}:${sec}`;
+        els.statTimer.className = seconds < 300 ? "stat-value timer-ok" : 
+                                  seconds < 600 ? "stat-value timer-medium" : "stat-value timer-high";
       }, 1000);
-    }
-
-    function updateTimerDisplay() {
-      const min = String(Math.floor(seconds / 60)).padStart(2, "0");
-      const sec = String(seconds % 60).padStart(2, "0");
-      els.statTimer.textContent = `${min}:${sec}`;
-
-      if (seconds < 300) {
-        els.statTimer.className = "stat-value timer-ok";
-      } else if (seconds < 600) {
-        els.statTimer.className = "stat-value timer-medium";
-      } else {
-        els.statTimer.className = "stat-value timer-high";
-      }
     }
 
     function updateHeaderStats() {
@@ -794,7 +329,6 @@
       els.statScore.textContent = `${score} / ${totalQuestions}`;
       const answeredCount = answers.filter(a => a !== null).length;
       els.statAnswered.textContent = `${answeredCount} / ${totalQuestions}`;
-
       const percent = Math.round((answeredCount / totalQuestions) * 100);
       els.progressInner.style.width = percent + "%";
       els.progressPercent.textContent = percent + " %";
@@ -808,7 +342,6 @@
 
       els.optionsContainer.innerHTML = "";
       els.feedback.classList.remove("visible", "correct", "incorrect");
-      els.feedback.textContent = "";
 
       q.options.forEach((opt, idx) => {
         const optDiv = document.createElement("label");
@@ -824,17 +357,15 @@
           optDiv.classList.add("selected");
         }
 
-        radio.addEventListener("change", () => {
-          handleSelect(idx);
-        });
+        radio.addEventListener("change", () => handleSelect(idx));
 
         const letterSpan = document.createElement("span");
         letterSpan.className = "letters";
-        letterSpan.textContent = String.fromCharCode(65 + idx) + ".";
+        letterSpan.textContent = String.fromCharCode(65 + idx) + ". ";
 
         const textSpan = document.createElement("span");
         textSpan.className = "option-text";
-        textSpan.innerHTML = opt;
+        textSpan.textContent = opt;
 
         optDiv.appendChild(radio);
         optDiv.appendChild(letterSpan);
@@ -843,37 +374,26 @@
       });
 
       updateHeaderStats();
+      
+      // Montrer feedback si déjà répondu
+      const ans = answers[currentIndex];
+      if (ans !== null) showInstantFeedback(q, ans);
     }
 
     function handleSelect(optionIndex) {
       startTimer();
-
       answers[currentIndex] = optionIndex;
-
-      const q = questions[currentIndex];
-      const prevScore = score;
-
-      const previousAnswerIndex = answers[currentIndex];
-
-      score = 0;
-      answers.forEach((a, i) => {
-        if (a !== null && questions[i].correctIndex === a) {
-          score++;
-        }
-      });
-
+      
+      score = answers.reduce((s, a, i) => s + (a !== null && questions[i].correctIndex === a ? 1 : 0), 0);
       updateHeaderStats();
 
+      // Reset options
       Array.from(els.optionsContainer.children).forEach((optDiv, idx) => {
-        optDiv.classList.remove("selected", "correct", "incorrect");
-        const input = optDiv.querySelector("input[type=radio]");
-        if (idx === optionIndex) {
-          optDiv.classList.add("selected");
-          input.checked = true;
-        }
+        optDiv.classList.remove("selected");
+        if (idx === optionIndex) optDiv.classList.add("selected");
       });
 
-      showInstantFeedback(q, optionIndex);
+      showInstantFeedback(questions[currentIndex], optionIndex);
     }
 
     function showInstantFeedback(q, chosenIndex) {
@@ -881,20 +401,13 @@
       els.feedback.classList.add("visible");
       els.feedback.classList.toggle("correct", isCorrect);
       els.feedback.classList.toggle("incorrect", !isCorrect);
-      els.feedback.innerHTML = (isCorrect ? "✅ Bonne réponse. " : "❌ Réponse incorrecte. ") +
-        `<span>${q.explanation}</span>`;
+      els.feedback.innerHTML = (isCorrect ? "✅ Bonne réponse. " : "❌ Réponse incorrecte. ") + q.explanation;
     }
 
     function goToQuestion(index) {
       if (index < 0 || index >= totalQuestions) return;
       currentIndex = index;
       renderQuestion();
-
-      const q = questions[currentIndex];
-      const ans = answers[currentIndex];
-      if (ans !== null) {
-        showInstantFeedback(q, ans);
-      }
     }
 
     function finishQuiz() {
@@ -905,45 +418,31 @@
       finished = true;
       clearInterval(timerId);
 
-      score = 0;
-      answers.forEach((a, i) => {
-        if (a !== null && questions[i].correctIndex === a) score++;
-      });
-
+      score = answers.reduce((s, a, i) => s + (a !== null && questions[i].correctIndex === a ? 1 : 0), 0);
       const answeredCount = answers.filter(a => a !== null).length;
       const percent = Math.round((score / totalQuestions) * 100);
 
       els.finalScore.textContent = `Score : ${score} / ${totalQuestions} (${percent} %)`;
-      els.finalDetail.textContent =
-        `Questions répondues : ${answeredCount} / ${totalQuestions}. Temps total : ${els.statTimer.textContent}.`;
+      els.finalDetail.textContent = `Répondues : ${answeredCount}/${totalQuestions}. Temps : ${els.statTimer.textContent}.`;
 
-      let badgeHtml = "";
-      if (percent >= 80) {
-        badgeHtml = `<span class="badge badge-success">Très bon niveau – maîtrise solide des notions abordées.</span>`;
-      } else if (percent >= 50) {
-        badgeHtml = `<span class="badge badge-warning">Niveau satisfaisant – quelques points à consolider.</span>`;
-      } else {
-        badgeHtml = `<span class="badge badge-danger">Révisions conseillées : retravailler ensembles, intervalles, valeurs absolues et fonctions.</span>`;
-      }
+      const badgeHtml = percent >= 80 ? 
+        '<span class="badge badge-success">Très bon niveau – maîtrise solide !</span>' :
+        percent >= 50 ?
+        '<span class="badge badge-warning">Niveau satisfaisant – consolider quelques points.</span>' :
+        '<span class="badge badge-danger">Révisions conseillées sur les bases.</span>';
       els.finalBadge.innerHTML = badgeHtml;
 
       els.answersList.innerHTML = "";
       questions.forEach((q, i) => {
         const item = document.createElement("div");
-        const isCorrect = answers[i] === q.correctIndex;
-        item.className = "answer-item " + (isCorrect ? "correct" : "incorrect");
-
-        const userLabel =
-          answers[i] !== null ? q.options[answers[i]] : "<em>aucune réponse</em>";
-        const corrLabel = q.options[q.correctIndex];
-
+        item.className = `answer-item ${answers[i] === q.correctIndex ? 'correct' : 'incorrect'}`;
+        
+        const userAns = answers[i] !== null ? q.options[answers[i]] : "aucune réponse";
         item.innerHTML = `
-          <div class="answer-q">Q${i + 1}. <span class="pill pill-theme">${q.theme}</span></div>
-          <div class="answer-user">Ta réponse : <strong>${userLabel}</strong> ${
-            !isCorrect ? '<span class="pill pill-bad">à revoir</span>' : ""
-          }</div>
-          <div class="answer-corr">Bonne réponse : <strong>${corrLabel}</strong></div>
-          <div class="answer-exp"><em>Explication :</em> ${q.explanation}</div>
+          <div class="answer-q">Q${i+1}. <span class="pill pill-theme">${q.theme}</span></div>
+          <div class="answer-user">Ta réponse : <strong>${userAns}</strong></div>
+          <div class="answer-corr">Correct : <strong>${q.options[q.correctIndex]}</strong></div>
+          <div class="answer-exp"><em>${q.explanation}</em></div>
         `;
         els.answersList.appendChild(item);
       });
@@ -952,44 +451,25 @@
       els.results.scrollIntoView({ behavior: "smooth" });
     }
 
-    els.btnPrev.addEventListener("click", () => {
-      goToQuestion(currentIndex - 1);
-    });
-
-    els.btnNext.addEventListener("click", () => {
-      goToQuestion(currentIndex + 1);
-    });
-
-    els.btnFinish.addEventListener("click", () => {
-      finishQuiz();
-    });
-
-    els.btnRestart.addEventListener("click", () => {
+    // Événements
+    els.btnPrev.onclick = () => goToQuestion(currentIndex - 1);
+    els.btnNext.onclick = () => goToQuestion(currentIndex + 1);
+    els.btnFinish.onclick = finishQuiz;
+    els.btnRestart.onclick = () => {
       answers = new Array(totalQuestions).fill(null);
-      score = 0;
-      finished = false;
-      seconds = 0;
-      clearInterval(timerId);
-      timerId = null;
+      score = 0; finished = false; seconds = 0;
+      clearInterval(timerId); timerId = null;
       els.results.classList.remove("visible");
-      updateTimerDisplay();
-      currentIndex = 0;
-      renderQuestion();
-    });
+      els.statTimer.textContent = "00:00"; els.statTimer.className = "stat-value timer-ok";
+      currentIndex = 0; renderQuestion();
+    };
+    els.btnKeepReview.onclick = () => els.results.scrollIntoView({ behavior: "smooth" });
 
-    els.btnKeepReview.addEventListener("click", () => {
-      els.results.scrollIntoView({ behavior: "smooth" });
-    });
-
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "ArrowRight") {
-        goToQuestion(currentIndex + 1);
-      } else if (e.key === "ArrowLeft") {
-        goToQuestion(currentIndex - 1);
-      } else if (e.key === "Enter") {
-        if (!finished) finishQuiz();
-      }
-    });
+    document.onkeydown = (e) => {
+      if (e.key === "ArrowRight") goToQuestion(currentIndex + 1);
+      else if (e.key === "ArrowLeft") goToQuestion(currentIndex - 1);
+      else if (e.key === "Enter") finishQuiz();
+    };
 
     renderQuestion();
   </script>
