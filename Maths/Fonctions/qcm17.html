@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>QCM Maths 2nde #2 - Graphiques & Fonctions Avancées</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    :root {
+      --primary: #059669;
+      --primary-dark: #047857;
+      --bg: #f0fdf4;
+      --card: #ffffff;
+      --text: #064e3b;
+      --muted: #6b7280;
+      --success: #10b981;
+      --danger: #ef4444;
+      --warning: #f59e0b;
+      --border: #d1d5db;
+      --graph-bg: #f8fafc;
+      --graph-line: #334155;
+      --graph-grid: #e2e8f0;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { 
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; 
+      background: linear-gradient(135deg, #d1fae5 0%, #f0fdf4 50%, #ecfdf5 100%);
+      min-height: 100vh; padding: 1rem; color: var(--text);
+    }
+    .app { max-width: 1000px; margin: 0 auto; display: flex; flex-direction: column; gap: 1.25rem; }
+    
+    .dashboard {
+      background: rgba(6, 78, 59, 0.95); color: #ecfdf5; padding: 1.25rem; border-radius: 1.25rem;
+      display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem;
+      box-shadow: 0 20px 40px rgba(6, 78, 59, 0.3);
+    }
+    .dash-title { font-weight: 700; font-size: 1.25rem; }
+    .dash-sub { font-size: 0.9rem; color: #a7f3d0; }
+    .dash-stats { display: flex; flex-wrap: wrap; gap: 0.75rem; font-size: 0.95rem; }
+    .stat-pill { padding: 0.5rem 1rem; border-radius: 999px; border: 1px solid rgba(16, 185, 129, 0.5);
+      display: flex; align-items: center; gap: 0.5rem; backdrop-filter: blur(8px); background: rgba(6, 78, 59, 0.8); }
+    
+    .card { background: var(--card); border-radius: 1.25rem; padding: 1.5rem; box-shadow: 0 15px 35px rgba(6, 78, 59, 0.15);
+      display: flex; flex-direction: column; gap: 1.25rem; }
+    
+    .progress-wrapper { display: flex; flex-direction: column; gap: 0.5rem; }
+    .progress-label-row { display: flex; justify-content: space-between; font-size: 0.9rem; color: var(--muted); }
+    .progress-bar { width: 100%; height: 0.6rem; background: #d1d5db; border-radius: 999px; overflow: hidden; }
+    .progress-inner { height: 100%; width: 0%; background: linear-gradient(90deg, #10b981, #34d399, #6ee7b7); transition: width 0.3s ease; }
+    
+    .question-meta { display: flex; flex-wrap: wrap; gap: 0.75rem; justify-content: space-between; align-items: baseline; }
+    .question-index { font-weight: 700; color: var(--primary-dark); font-size: 1.1rem; }
+    .question-theme { font-size: 0.85rem; padding: 0.25rem 0.75rem; border-radius: 999px; background: linear-gradient(135deg, #d1fae5, #a7f3d0); color: var(--primary-dark); }
+    
+    .question-content { display: flex; flex-direction: column; gap: 1rem; }
+    .question-text { font-size: 1.1rem; line-height: 1.6; font-weight: 500; }
+    
+    .graph-container { 
+      background: var(--graph-bg); border-radius: 1rem; padding: 1.25rem; border: 2px solid var(--border);
+      position: relative; height: 280px; display: flex; align-items: center; justify-content: center;
+    }
+    canvas { max-height: 100%; max-width: 100%; }
+    
+    .options { display: flex; flex-direction: column; gap: 0.75rem; }
+    .option { border-radius: 1rem; border: 2px solid var(--border); padding: 1rem 1.25rem; display: flex; gap: 1rem; align-items: flex-start;
+      cursor: pointer; background: #f8fafc; transition: all 0.2s ease; position: relative; }
+    .option:hover { background: #ecfdf5; border-color: var(--primary); box-shadow: 0 8px 20px rgba(5, 150, 105, 0.15); transform: translateY(-2px); }
+    .option.selected { border-color: var(--primary); background: #d1fae5; box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1); }
+    .option.correct { border-color: var(--success); background: #d1fae5; }
+    .option.incorrect { border-color: var(--danger); background: #fee2e2; }
+    
+    .letters { font-weight: 800; color: var(--primary-dark); min-width: 1.75rem; font-size: 1.1rem; }
+    .option-text { font-size: 1rem; line-height: 1.5; }
+    
+    .feedback { border-radius: 1rem; padding: 1rem 1.25rem; font-size: 0.95rem; line-height: 1.5; display: none; backdrop-filter: blur(10px); }
+    .feedback.visible { display: block; }
+    .feedback.correct { background: linear-gradient(135deg, #dcfce7, #bbf7d0); border: 2px solid #86efac; color: #065f46; }
+    .feedback.incorrect { background: linear-gradient(135deg, #fee2e2, #fecaca); border: 2px solid #fca5a5; color: #991b1b; }
+    
+    .nav-row { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 1rem; align-items: center; }
+    .nav-buttons { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+    button { border: none; cursor: pointer; font-family: inherit; }
+    .btn { padding: 0.75rem 1.5rem; border-radius: 999px; font-size: 1rem; font-weight: 700; display: inline-flex; align-items: center; gap: 0.5rem;
+      transition: all 0.2s ease; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+    .btn:active { transform: translateY(1px); }
+    .btn-primary { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; }
+    .btn-secondary { background: linear-gradient(135deg, #f3f4f6, #e5e7eb); color: var(--text); }
+    .btn-outline { background: transparent; border: 2px solid var(--primary); color: var(--primary); }
+    
+    .summary { font-size: 0.9rem; color: var(--muted); font-style: italic; }
+    
+    .results { display: none; flex-direction: column; gap: 1.5rem; }
+    .results.visible { display: flex; }
+    .score-main { font-size: 2.25rem; font-weight: 800; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); 
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .score-detail { font-size: 1.1rem; color: var(--muted); }
+    
+    .badge { padding: 0.5rem 1.25rem; border-radius: 999px; font-weight: 700; font-size: 0.95rem; }
+    .badge-excellent { background: linear-gradient(135deg, #10b981, #059669); color: white; }
+    .badge-good { background: linear-gradient(135deg, #f59e0b, #d97706); color: white; }
+    .badge-to-review { background: linear-gradient(135deg, #ef4444, #dc2626); color: white; }
+    
+    .answers-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.25rem; margin-top: 1rem; }
+    .answer-card { background: #f8fafc; border-radius: 1rem; padding: 1.25rem; border-left: 5px solid; }
+    .answer-card.correct { border-left-color: var(--success); }
+    .answer-card.incorrect { border-left-color: var(--danger); }
+    .answer-q { font-weight: 700; margin-bottom: 0.5rem; font-size: 1.1rem; }
+    .answer-details { display: flex; flex-direction: column; gap: 0.5rem; font-size: 0.95rem; }
+    
+    @media (max-width: 768px) {
+      .dashboard { flex-direction: column; text-align: center; }
+      .dash-stats { width: 100%; justify-content: center; }
+      .graph-container { height: 220px; }
+      .nav-row { flex-direction: column; align-items: stretch; }
+      .nav-buttons { width: 100%; justify-content: space-between; }
+      .btn { flex: 1; justify-content: center; }
+      .answers-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="dashboard">
+      <div>
+        <div class="dash-title">📈 QCM Maths 2nde #2 – Graphiques Avancés</div>
+        <div class="dash-sub">15 questions élaborées : lecture graphique approfondie, résolution graphique, variations, extremums</div>
+      </div>
+      <div class="dash-stats">
+        <div class="stat-pill"><span>Question</span><span id="stat-question">1/15</span></div>
+        <div class="stat-pill"><span>Score</span><span id="stat-score">0/15</span></div>
+        <div class="stat-pill"><span>Répondues</span><span id="stat-answered">0/15</span></div>
+        <div class="stat-pill"><span>Temps</span><span class="timer-ok" id="stat-timer">00:00</span></div>
+      </div>
+    </header>
+
+    <main class="card">
+      <section class="progress-wrapper">
+        <div class="progress-label-row">
+          <span>Progression</span><span id="progress-percent">0%</span>
+        </div>
+        <div class="progress-bar"><div class="progress-inner" id="progress-inner"></div></div>
+      </section>
+
+      <section id="question-block">
+        <div class="question-meta">
+          <span class="question-index" id="question-index">Q1/15</span>
+          <span class="question-theme" id="question-theme">Lecture graphique</span>
+        </div>
+        <div class="question-content">
+          <div class="question-text" id="question-text"></div>
+          <div class="graph-container">
+            <canvas id="question-graph"></canvas>
+          </div>
+        </div>
+        <div class="options" id="options-container"></div>
+        <div id="feedback" class="feedback"></div>
+      </section>
+
+      <section class="nav-row">
+        <div class="nav-buttons">
+          <button id="btn-prev" class="btn btn-secondary">← Précédent</button>
+          <button id="btn-next" class="btn btn-primary">Suivant →</button>
+          <button id="btn-finish" class="btn btn-outline">Terminer & Bilan</button>
+        </div>
+        <div class="summary">✅ Boutons toujours actifs | Navigation libre | Feedback immédiat</div>
+      </section>
+
+      <section id="results" class="results">
+        <div style="text-align: center;">
+          <div class="score-main" id="final-score"></div>
+          <div class="score-detail" id="final-detail"></div>
+          <div id="final-badge"></div>
+        </div>
+        <div class="answers-grid" id="answers-grid"></div>
+        <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+          <button class="btn btn-secondary" id="btn-restart">🔄 Recommencer</button>
+          <button class="btn btn-primary" id="btn-print">🖨️ Imprimer</button>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    // 15 questions GRAPHiques élaborées 2nde
+    const questions = [
+      {theme:"Sens de variation", text:"f croissante sur I si pour x1<x2 dans I,", graph:{type:"line", points:[[-2,1],[0,3],[2,5]]}, 
+       options:["f(x1)<f(x2)","f(x1)>f(x2)","f(x1)=f(x2)","Impossible à dire"], correct:0, 
+       expl:"Courbe montante → croissante : f(x1)<f(x2) quand x1<x2."},
+      
+      {theme:"Extremum", text:"Point P(1;4) sur la parabole :", graph:{type:"parabola", vertex:[1,4], a:-1}, 
+       options:["Maximum local","Minimum local","Point d'inflexion","Ni l'un ni l'autre"], correct:0, 
+       expl:"Sommet parabole a<0 (creux vers le bas) → maximum local."},
+      
+      {theme:"Résolution graphique", text:"Solutions graphiques de f(x)=2 ?", graph:{type:"line", points:[[-1,0],[1,2],[3,4]]}, 
+       options:["x≈0.5","x≈1.5","x≈2.5","x≈1 et x≈2"], correct:1, 
+       expl:"f(x)=2 quand ordonnée=2 → intersection avec y=2 à x≈1.5."},
+      
+      {theme:"Image", text:"f(0)=?", graph:{type:"line", points:[[-2,-1],[0,2],[2,5]]}, 
+       options:["0","1","2","Impossible"], correct:2, 
+       expl:"f(0) = ordonnée pour x=0 → lire directement sur graphique : f(0)=2."},
+      
+      {theme:"Antécédent", text:"Antécédent de 3 ?", graph:{type:"line", points:[[-1,1],[1,3],[3,5]]}, 
+       options:["x=1","x=2","x=3","x=4"], correct:1, 
+       expl:"f(x)=3 → ordonnée=3 → abscisse x=2 (lecture horizontale)."},
+      
+      {theme:"Parallèle", text:"Droite D' : f(x)=x+1 passe par :", graph:{type:"line", points:[[0,0],[2,2],[4,4]]}, 
+       options:["P(0;1)","P(1;1)","P(1;2)","P(2;3)"], correct:2, 
+       expl:"Même pente (parallèle), ordonnée à l'origine +1 → passe par (1;2)."},
+      
+      {theme:"Intersection", text:"Intersection avec axe Ox ?", graph:{type:"parabola", vertex:[0,2], a:-0.5}, 
+       options:["x=-2 et x=2","x=-4 et x=4","x=0 seulement","Aucune"], correct:0, 
+       expl:"f(x)=0 → intersections axe abscisses → x=-2 et x=2 (symétrie)."},
+      
+      {theme:"Domaine", text:"Domaine visible graphique ?", graph:{type:"line", points:[[-3,0],[0,3],[3,6]]}, 
+       options:["R","[-3;3]","]-∞;3]","[-3;+∞["], correct:1, 
+       expl:"Graphique montre x∈[-3;3] → domaine représenté = [-3;3]."},
+      
+      {theme:"Croissance", text:"f strictement croissante sur :", graph:{type:"Vshape", vertex:[0,0]}, 
+       options:["]-∞;0[","]0;+∞[","R","Aucune"], correct:2, 
+       expl:"Montée à droite (x>0) et à gauche (x<0) → croissante sur R."},
+      
+      {theme:"Limite", text:"lim x→+∞ f(x) ?", graph:{type:"hyperbola", asymptote:2}, 
+       options:["+∞","-∞","2","0"], correct:2, 
+       expl:"Asymptote horizontale y=2 → limite = 2 quand x→+∞."},
+      
+      {theme:"Tangente", text:"Pente en x=1 ?", graph:{type:"parabola", vertex:[0,0], a:1}, 
+       options:["0","1","2","Impossible"], correct:2, 
+       expl:"Dérivée parabole ax² = 2ax → en x=1 : 2×1×1 = 2."},
+      
+      {theme:"Bijection", text:"f bijective sur I ?", graph:{type:"line", points:[[0,1],[2,3],[4,5]]}, 
+       options:["[0;4]","]0;4[","R","Aucune"], correct:0, 
+       expl:"Droite continue croissante sur intervalle fermé → bijective."},
+      
+      {theme:"Inéquation", text:"Solutions f(x)>0 ?", graph:{type:"parabola", vertex:[0,-1], a:1}, 
+       options:["x<-1 ou x>1","]-1;1[","x<1","R"], correct:0, 
+       expl:"Parabole creuse vers haut, sous Ox entre racines → f(x)>0 pour x<-1 ou x>1."},
+      
+      {theme:"Monotonie", text:"f décroît sur :", graph:{type:"Sshape"}, 
+       options:["]-2;-1[","]-1;1[","]1;2[","R"], correct:0, 
+       expl:"Partie descendante visible entre x≈-2 et x≈-1."},
+      
+      {theme:"Suite graphique", text:"u3 = f(3) ?", graph:{type:"line", points:[[1,2],[2,4],[3,6]]}, 
+       options:["4","5","6","7"], correct:2, 
+       expl:"u1=f(1)=2, u2=f(2)=4 → u3=f(3)=6 (droite coefficient 2)."}
+    ];
+
+    const totalQuestions = 15;
+    let currentIndex = 0, answers = new Array(15).fill(null), score = 0, finished = false, seconds = 0, timerId = null;
+    let canvas = null;
+
+    const els = {
+      statQuestion:document.getElementById("stat-question"), statScore:document.getElementById("stat-score"),
+      statAnswered:document.getElementById("stat-answered"), statTimer:document.getElementById("stat-timer"),
+      progressInner:document.getElementById("progress-inner"), progressPercent:document.getElementById("progress-percent"),
+      questionIndex:document.getElementById("question-index"), questionTheme:document.getElementById("question-theme"),
+      questionText:document.getElementById("question-text"), optionsContainer:document.getElementById("options-container"),
+      feedback:document.getElementById("feedback"), questionGraph:document.getElementById("question-graph"),
+      btnPrev:document.getElementById("btn-prev"), btnNext:document.getElementById("btn-next"),
+      btnFinish:document.getElementById("btn-finish"), results:document.getElementById("results"),
+      finalScore:document.getElementById("final-score"), finalDetail:document.getElementById("final-detail"),
+      finalBadge:document.getElementById("final-badge"), answersGrid:document.getElementById("answers-grid"),
+      btnRestart:document.getElementById("btn-restart"), btnPrint:document.getElementById("btn-print")
+    };
+
+    function drawGraph(q) {
+      canvas = document.getElementById("question-graph");
+      const ctx = canvas.getContext("2d");
+      canvas.width = 400; canvas.height = 280;
+      
+      // Fond et grille
+      ctx.fillStyle = "#f8fafc"; ctx.fillRect(0,0,canvas.width,canvas.height);
+      ctx.strokeStyle = "#e2e8f0"; ctx.lineWidth = 1;
+      for(let i=-2; i<=4; i+=0.5) {
+        ctx.beginPath(); ctx.moveTo(50+80*i, 20); ctx.lineTo(50+80*i, 260); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(20, 140-40*i); ctx.lineTo(380, 140-40*i); ctx.stroke();
+      }
+      
+      // Axes
+      ctx.strokeStyle = "#334155"; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.moveTo(50,20); ctx.lineTo(50,260); ctx.lineTo(380,260); ctx.stroke();
+      
+      // Labels axes
+      ctx.fillStyle = "#334155"; ctx.font = "bold 12px sans-serif"; ctx.textAlign = "center";
+      for(let i=-2; i<=4; i++) ctx.fillText(i, 50+80*i, 275);
+      ctx.textAlign = "right"; for(let i=-2; i<=4; i++) ctx.fillText(i, 42, 145-40*i);
+      
+      // Courbe selon type
+      ctx.strokeStyle = "#059669"; ctx.lineWidth = 3; ctx.lineCap = "round"; ctx.lineJoin = "round";
+      ctx.beginPath();
+      
+      if(q.graph.type === "line") {
+        const p1 = q.graph.points[0], p2 = q.graph.points[1];
+        ctx.moveTo(50+80*p1[0], 140-40*p1[1]); ctx.lineTo(50+80*p2[0], 140-40*p2[1]);
+      } else if(q.graph.type === "parabola") {
+        const vx = q.graph.vertex[0], vy = q.graph.vertex[1], a = q.graph.a;
+        for(let x=-3; x<=3; x+=0.1) {
+          const y = a*(x-vx)*(x-vx) + vy;
+          if(x===-3) ctx.moveTo(50+80*x, Math.max(20, Math.min(260, 140-40*y)));
+          else ctx.lineTo(50+80*x, Math.max(20, Math.min(260, 140-40*y)));
+        }
+      }
+      ctx.stroke();
+      
+      // Points particuliers
+      if(q.graph.vertex) {
+        ctx.fillStyle = "#ef4444"; ctx.beginPath();
+        ctx.arc(50+80*q.graph.vertex[0], 140-40*q.graph.vertex[1], 6, 0, Math.PI*2); ctx.fill();
+      }
+    }
+
+    function startTimer() {
+      if(timerId) return;
+      timerId = setInterval(() => {
+        seconds++;
+        const m = String(Math.floor(seconds/60)).padStart(2,"0"), s = String(seconds%60).padStart(2,"0");
+        els.statTimer.textContent = `${m}:${s}`;
+      }, 1000);
+    }
+
+    function updateStats() {
+      els.statQuestion.textContent = `${currentIndex+1}/${totalQuestions}`;
+      els.statScore.textContent = `${score}/${totalQuestions}`;
+      const answered = answers.filter(a=>a!==null).length;
+      els.statAnswered.textContent = `${answered}/${totalQuestions}`;
+      els.progressInner.style.width = `${Math.round(answered/totalQuestions*100)}%`;
+      els.progressPercent.textContent = `${Math.round(answered/totalQuestions*100)}%`;
+    }
+
+    function renderQuestion() {
+      const q = questions[currentIndex];
+      els.questionIndex.textContent = `Q${currentIndex+1}/${totalQuestions}`;
+      els.questionTheme.textContent = q.theme;
+      els.questionText.textContent = q.text;
+      
+      drawGraph(q);
+      
+      els.optionsContainer.innerHTML = "";
+      els.feedback.classList.remove("visible","correct","incorrect");
+      
+      q.options.forEach((opt, i) => {
+        const div = document.createElement("label"); div.className = "option";
+        const radio = document.createElement("input"); radio.type = "radio"; radio.name = "opt"; radio.value = i;
+        if(answers[currentIndex] === i) { radio.checked = true; div.classList.add("selected"); }
+        
+        radio.onchange = () => handleAnswer(i);
+        
+        div.innerHTML = `<span class="letters">${String.fromCharCode(65+i)}.</span><span class="option-text">${opt}</span>`;
+        div.prepend(radio);
+        els.optionsContainer.appendChild(div);
+      });
+      
+      updateStats();
+      if(answers[currentIndex] !== null) showFeedback(questions[currentIndex], answers[currentIndex]);
+    }
+
+    function handleAnswer(idx) {
+      startTimer();
+      answers[currentIndex] = idx;
+      score = answers.reduce((s,a,i)=>s+(a!==null&&questions[i].correct===a?1:0),0);
+      updateStats();
+      
+      Array.from(els.optionsContainer.children).forEach((opt,i)=> {
+        opt.classList.remove("selected");
+        if(i === idx) opt.classList.add("selected");
+      });
+      
+      showFeedback(questions[currentIndex], idx);
+    }
+
+    function showFeedback(q, choice) {
+      const correct = choice === q.correct;
+      els.feedback.classList.add("visible");
+      els.feedback.classList.toggle("correct", correct);
+      els.feedback.classList.toggle("incorrect", !correct);
+      els.feedback.innerHTML = correct ? `✅ Correct ! ${q.expl}` : `❌ Faux. ${q.expl}`;
+    }
+
+    function goTo(n) {
+      if(n<0 || n>=totalQuestions) return;
+      currentIndex = n; renderQuestion();
+    }
+
+    function finish() {
+      if(finished) { els.results.scrollIntoView({behavior:"smooth"}); return; }
+      finished = true; clearInterval(timerId);
+      
+      score = answers.reduce((s,a,i)=>s+(a!==null&&questions[i].correct===a?1:0),0);
+      const pct = Math.round(score/totalQuestions*100), answered = answers.filter(a=>a!==null).length;
+      
+      els.finalScore.textContent = `${score}/${totalQuestions} (${pct}%)`;
+      els.finalDetail.textContent = `Répondues: ${answered}/${totalQuestions} | Temps: ${els.statTimer.textContent}`;
+      
+      const badge = pct>=80 ? '<div class="badge badge-excellent">🎖️ EXCELLENT - Niveau expert !</div>' :
+                     pct>=60 ? '<div class="badge badge-good">👍 BON - Solide maîtrise !</div>' :
+                     '<div class="badge badge-to-review">📚 À travailler - Revoir les bases graphiques</div>';
+      els.finalBadge.innerHTML = badge;
+      
+      els.answersGrid.innerHTML = "";
+      questions.forEach((q,i)=>{
+        const div = document.createElement("div");
+        div.className = `answer-card ${answers[i]===q.correct ? 'correct' : 'incorrect'}`;
+        div.innerHTML = `
+          <div class="answer-q">${String.fromCharCode(65+i)}. ${q.theme}</div>
+          <div class="answer-details">
+            <strong>Question:</strong> ${q.text}<br>
+            <strong>Vous:</strong> ${answers[i]!==null ? q.options[answers[i]] : "Non répondu"}<br>
+            <strong>Correct:</strong> ${q.options[q.correct]}<br>
+            <em>${q.expl}</em>
+          </div>`;
+        els.answersGrid.appendChild(div);
+      });
+      
+      els.results.classList.add("visible");
+      els.results.scrollIntoView({behavior:"smooth"});
+    }
+
+    // Events
+    els.btnPrev.onclick = ()=>goTo(currentIndex-1);
+    els.btnNext.onclick = ()=>goTo(currentIndex+1);
+    els.btnFinish.onclick = finish;
+    els.btnRestart.onclick = ()=>{
+      answers.fill(null); score=0; finished=false; seconds=0; clearInterval(timerId);
+      els.results.classList.remove("visible"); els.statTimer.textContent="00:00";
+      currentIndex=0; renderQuestion();
+    };
+    els.btnPrint.onclick = ()=>window.print();
+
+    document.onkeydown = e=>{
+      if(e.key==="ArrowLeft") goTo(currentIndex-1);
+      if(e.key==="ArrowRight") goTo(currentIndex+1);
+      if(e.key==="Enter") finish();
+    };
+
+    renderQuestion();
+  </script>
+</body>
+</html>
