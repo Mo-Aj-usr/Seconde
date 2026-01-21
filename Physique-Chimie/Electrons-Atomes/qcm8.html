@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chimie 2nde - QCM Interactif</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh; padding: 20px; 
+        }
+        .dashboard {
+            max-width: 1200px; margin: 0 auto; background: white; border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1); overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(90deg, #ff6b6b, #4ecdc4); color: white; padding: 20px; text-align: center;
+        }
+        .header h1 { font-size: 2em; margin-bottom: 10px; }
+        .stats { display: flex; justify-content: space-around; flex-wrap: wrap; gap: 15px; margin-top: 15px; }
+        .stat { background: rgba(255,255,255,0.2); padding: 15px 25px; border-radius: 15px; text-align: center; }
+        .stat-number { font-size: 2.5em; font-weight: bold; display: block; }
+        .progress-bar { width: 100%; height: 12px; background: rgba(255,255,255,0.3); border-radius: 6px; overflow: hidden; margin-top: 5px; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, #4ecdc4, #44a08d); transition: width 0.5s; }
+        
+        .content { padding: 30px; }
+        .question { 
+            background: #f8f9fa; border-left: 5px solid #667eea; padding: 25px; margin-bottom: 20px; 
+            border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+        .question-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .q-number { background: #667eea; color: white; padding: 10px 15px; border-radius: 50%; font-weight: bold; }
+        .question-text { font-size: 1.2em; line-height: 1.6; margin-bottom: 20px; }
+        .options { display: flex; flex-direction: column; gap: 12px; }
+        .option { 
+            padding: 15px 20px; background: white; border: 2px solid #e9ecef; border-radius: 10px; 
+            cursor: pointer; transition: all 0.3s; font-size: 1.1em;
+        }
+        .option:hover:not(.feedback) { border-color: #667eea; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(102,126,234,0.2); }
+        .option.selected { background: #667eea; color: white; border-color: #5a67d8; }
+        .option.correct { background: #48bb78 !important; border-color: #38a169 !important; color: white; }
+        .option.incorrect { background: #f56565 !important; border-color: #e53e3e !important; color: white; }
+        .feedback { font-size: 0.9em; opacity: 0.8; margin-top: 10px; padding: 10px; background: rgba(102,126,234,0.1); border-radius: 8px; }
+        
+        .controls { text-align: center; margin: 30px 0; }
+        button { 
+            background: linear-gradient(90deg, #4ecdc4, #44a08d); color: white; border: none; 
+            padding: 15px 40px; font-size: 1.1em; border-radius: 50px; cursor: pointer; 
+            transition: all 0.3s; margin: 0 10px; min-width: 140px;
+        }
+        button:hover:not(:disabled) { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(78,205,196,0.4); }
+        button:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+        #finish-btn { background: linear-gradient(90deg, #48bb78, #38a169); }
+        
+        .result-modal, .explanations-modal {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: rgba(0,0,0,0.8); z-index: 1000; justify-content: center; align-items: center;
+        }
+        .modal-box {
+            background: white; padding: 40px; border-radius: 20px; max-width: 90vw; max-height: 90vh;
+            overflow-y: auto; box-shadow: 0 30px 60px rgba(0,0,0,0.3); transform: scale(0.8); 
+            animation: pop 0.5s forwards;
+        }
+        @keyframes pop { to { transform: scale(1); } }
+        .score { font-size: 4em; font-weight: bold; margin: 20px 0; }
+        .score.good { color: #48bb78; } .score.bad { color: #f56565; }
+        .explanations-list { max-height: 60vh; overflow-y: auto; }
+        .explanation-item { margin-bottom: 20px; padding: 20px; background: #f8f9fa; border-radius: 10px; }
+        .explanation-q { font-weight: bold; color: #667eea; margin-bottom: 10px; }
+        
+        @media (max-width: 768px) {
+            body { padding: 10px; }
+            .stats { flex-direction: column; }
+            .question { padding: 20px; }
+            .header h1 { font-size: 1.5em; }
+            button { padding: 12px 25px; font-size: 1em; min-width: 120px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <div class="header">
+            <h1>🧪 Chimie 2nde - QCM Interactif</h1>
+            <p>Matière microscopique • Cortège électronique • Stabilité chimique</p>
+            <div class="stats">
+                <div class="stat">
+                    <span class="stat-number" id="q-current">1</span>
+                    <span>Question</span>
+                    <div class="progress-bar"><div class="progress-fill" id="progress" style="width:5%"></div></div>
+                </div>
+                <div class="stat">
+                    <span class="stat-number" id="score">0</span>
+                    <span>/20</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number" id="correct">0</span>
+                    <span>Bonnes réponses</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="content" id="quiz-container"></div>
+        
+        <div class="controls">
+            <button id="prev-btn" disabled>← Précédent</button>
+            <button id="next-btn">Suivant →</button>
+            <button id="finish-btn" onclick="showResults()">⚡ Terminer QCM</button>
+        </div>
+    </div>
+    
+    <!-- Modal résultats -->
+    <div class="result-modal" id="result-modal">
+        <div class="modal-box">
+            <h2>🏆 Résultats finaux</h2>
+            <div class="score" id="final-score"></div>
+            <p id="final-message"></p>
+            <button onclick="showExplanations()">📚 Réponses détaillées</button>
+            <button onclick="restartQuiz()">🔄 Refaire le QCM</button>
+        </div>
+    </div>
+    
+    <!-- Modal explications détaillées -->
+    <div class="explanations-modal" id="explanations-modal">
+        <div class="modal-box">
+            <h2>📖 Explications détaillées</h2>
+            <div class="explanations-list" id="explanations-list"></div>
+            <button onclick="closeExplanations()">Fermer</button>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            { q: "Un corps pur se caractérise par :", options: ["Plusieurs constituants", "Température de fusion unique", "Densité variable"], correct: 1, explanation: "Corps pur = T° fusion/fusion unique (programme officiel)" },
+            { q: "L'eau de mer est un exemple de :", options: ["Corps pur", "Mélange homogène", "Mélange hétérogène"], correct: 1, explanation: "Sel dissous uniformément = homogène" },
+            { q: "La masse volumique de l'eau liquide est :", options: ["0,8 g/cm³", "1 g/cm³", "1,2 g/cm³"], correct: 1, explanation: "ρ(H₂O) = 1 g/cm³ à 25°C (valeur référence)" },
+            { q: "Test chimique présence d'eau :", options: ["Tournesol bleu", "Anhydride sulfurique", "Dioxyde de carbone"], correct: 1, explanation: "Anhydride sulfurique blanc → blanc humide" },
+            { q: "Composition volumique air :", options: ["21% O₂, 78% N₂", "50% O₂, 50% N₂", "10% O₂, 90% N₂"], correct: 0, explanation: "Air : 21% O₂, 78% N₂, 1% autres" },
+            { q: "¹²₆C signifie :", options: ["6 protons, 12 neutrons", "12 protons, 6 neutrons", "6 électrons, 12 noyaux"], correct: 0, explanation: "Z=6 protons, A-Z=6 neutrons" },
+            { q: "Taille d'un atome :", options: ["10⁻¹⁰ m", "10⁻¹⁵ m", "10⁻⁵ m"], correct: 0, explanation: "Diamètre atomique ≈ 10⁻¹⁰ m" },
+            { q: "Noyau = ", options: ["99,9% masse atome", "50% masse", "0,01% masse"], correct: 0, explanation: "Noyau concentre 99,9% masse" },
+            { q: "Config Na (Z=11) :", options: ["1s²2s²2p⁶3s¹", "1s²2s²2p⁵", "1s²2s²2p⁶3s²"], correct: 0, explanation: "Na : [Ne] 3s¹" },
+            { q: "Électrons valence P (Z=15) :", options: ["3", "5", "8"], correct: 1, explanation: "P : [Ne] 3s²3p³ → 5 électrons valence" },
+            { q: "Gaz nobles :", options: ["Couche valence complète", "8 protons", "Liaisons covalentes"], correct: 0, explanation: "ns²np⁶ = couche complète" },
+            { q: "Alcalins colonne :", options: ["1A", "7A", "8A"], correct: 0, explanation: "Colonne 1A = Li, Na, K..." },
+            { q: "Charge Ca²⁺ :", options: ["Perte 2e⁻", "Gain 2e⁻", "Perte 2 protons"], correct: 0, explanation: "Ca → Ca²⁺ + 2e⁻" },
+            { q: "Schéma Lewis F :", options: [":F•", ":F:", "F:"], correct: 0, explanation: "F : 7e⁻ valence → 1 liaison" },
+            { q: "H₂O doublets :", options: ["2 liants, 2 non-liants", "4 liants", "8 valence"], correct: 0, explanation: "2 OH + 2 doublets libres" },
+            { q: "Énergie liaison :", options: ["Énergie dissociation", "Énergie formation", "Énergie ionisation"], correct: 0, explanation: "Liaison = énergie pour rompre" },
+            { q: "Mélange hétérogène :", options: ["Homogène macro", "Non homogène macro", "Corps pur"], correct: 1, explanation: "Phases distinctes visibles" },
+            { q: "Test dioxygène :", options: ["Flamme ravive", "Décoloration permanganate", "Précipité blanc"], correct: 0, explanation: "Bois + O₂ → flamme intensifiée" },
+            { q: "1s²2s²2p⁵ :", options: ["Fluor", "Néon", "Chlore"], correct: 0, explanation: "Fluor Z=9" },
+            { q: "Cl⁻ config :", options: ["Argon", "Chlore", "Soufre"], correct: 0, explanation: "Cl⁻ gagne 1e⁻ → [Ar]" }
+        ];
+
+        let currentQ = 0, score = 0, answers = Array(20).fill(-1), showFeedback = false;
+
+        function initQuiz() {
+            loadQuestion();
+            document.getElementById('prev-btn').onclick = prevQuestion;
+            document.getElementById('next-btn').onclick = nextQuestion;
+        }
+
+        function loadQuestion() {
+            const q = questions[currentQ];
+            const container = document.getElementById('quiz-container');
+            const answered = answers[currentQ] !== -1;
+            container.innerHTML = `
+                <div class="question">
+                    <div class="question-header">
+                        <div class="q-number">Q${currentQ + 1}/20</div>
+                        ${answered ? `<span style="color: ${answers[currentQ] === q.correct ? '#48bb78' : '#f56565'}">✓ Répondu</span>` : ''}
+                    </div>
+                    <div class="question-text">${q.q}</div>
+                    <div class="options">
+                        ${q.options.map((opt, i) => {
+                            let classes = 'option';
+                            if (showFeedback) {
+                                if (i === q.correct) classes += ' correct';
+                                else if (i === answers[currentQ] && answers[currentQ] !== q.correct) classes += ' incorrect';
+                            } else if (i === answers[currentQ]) {
+                                classes += ' selected';
+                            }
+                            return `<div class="${classes}" onclick="selectOption(${i})">${String.fromCharCode(65+i)}. ${opt}</div>`;
+                        }).join('')}
+                    </div>
+                    ${showFeedback ? `<div class="feedback"><strong>Réponse : ${String.fromCharCode(65 + q.correct)}</strong><br>${q.explanation}</div>` : ''}
+                </div>
+            `;
+            updateUI();
+        }
+
+        function selectOption(index) {
+            if (!showFeedback) {
+                answers[currentQ] = index;
+                showFeedback = true;
+                loadQuestion(); // Reload pour feedback immédiat
+            }
+        }
+
+        function nextQuestion() {
+            if (currentQ < questions.length - 1) {
+                currentQ++;
+                showFeedback = false;
+                loadQuestion();
+            }
+        }
+
+        function prevQuestion() {
+            if (currentQ > 0) {
+                currentQ--;
+                showFeedback = false;
+                loadQuestion();
+            }
+        }
+
+        function updateUI() {
+            const answeredCount = answers.filter(a => a !== -1).length;
+            document.getElementById('q-current').textContent = currentQ + 1;
+            document.getElementById('score').textContent = answeredCount;
+            document.getElementById('correct').textContent = score;
+            document.getElementById('progress').style.width = (answeredCount / 20 * 100) + '%';
+            
+            document.getElementById('prev-btn').disabled = currentQ === 0;
+        }
+
+        function showResults() {
+            // Calcul score final
+            score = 0;
+            answers.forEach((ans, i) => {
+                if (ans === questions[i].correct) score++;
+            });
+            
+            const modal = document.getElementById('result-modal');
+            const finalScore = document.getElementById('final-score');
+            const message = document.getElementById('final-message');
+            
+            finalScore.textContent = score + '/20';
+            finalScore.className = score >= 16 ? 'score good' : score >= 10 ? 'score' : 'score bad';
+            message.textContent = score >= 16 ? '🎉 Excellent ! Niveau lycée scientifique' : 
+                                 score >= 10 ? '👍 Bon niveau !' : '💪 Continuez l’entraînement !';
+            
+            modal.style.display = 'flex';
+        }
+
+        function showExplanations() {
+            document.getElementById('result-modal').style.display = 'none';
+            const list = document.getElementById('explanations-list');
+            list.innerHTML = questions.map((q, i) => `
+                <div class="explanation-item">
+                    <div class="explanation-q">Q${i+1} : ${q.q}</div>
+                    <strong>Réponse : ${String.fromCharCode(65 + q.correct)}</strong><br>
+                    <em>${q.explanation}</em>
+                </div>
+            `).join('');
+            document.getElementById('explanations-modal').style.display = 'flex';
+        }
+
+        function closeExplanations() {
+            document.getElementById('explanations-modal').style.display = 'none';
+            document.getElementById('result-modal').style.display = 'flex';
+        }
+
+        function restartQuiz() {
+            currentQ = 0; score = 0; answers = Array(20).fill(-1); showFeedback = false;
+            document.getElementById('result-modal').style.display = 'none';
+            document.getElementById('explanations-modal').style.display = 'none';
+            initQuiz();
+        }
+
+        initQuiz();
+    </script>
+</body>
+</html>

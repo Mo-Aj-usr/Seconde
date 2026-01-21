@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>QCM – Chimie 2nde</title>
+<style>
+  :root{
+    --bg:#0f172a; --card:#111827; --ink:#e5e7eb; --muted:#9ca3af;
+    --ok:#16a34a; --bad:#dc2626; --accent:#38bdf8;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto;background:linear-gradient(120deg,#020617,#0b1220);color:var(--ink)}
+  header{position:sticky;top:0;z-index:10;background:rgba(2,6,23,.85);backdrop-filter:blur(8px);border-bottom:1px solid #1f2933}
+  .wrap{max-width:1100px;margin:auto;padding:14px}
+  .bar{display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:center}
+  .pill{padding:6px 10px;border:1px solid #1f2933;border-radius:999px;color:var(--muted)}
+  button{background:var(--accent);border:0;color:#020617;padding:8px 14px;border-radius:10px;font-weight:700;cursor:pointer}
+  button.secondary{background:#1f2933;color:var(--ink)}
+  main{max-width:1100px;margin:auto;padding:18px}
+  .card{background:var(--card);border:1px solid #1f2933;border-radius:18px;padding:18px}
+  .q{font-size:1.05rem;margin-bottom:10px}
+  .choices{display:grid;gap:10px}
+  .choice{padding:10px 12px;border-radius:12px;border:1px solid #1f2933;cursor:pointer}
+  .choice:hover{border-color:var(--accent)}
+  .choice.sel{outline:2px solid var(--accent)}
+  .feedback{margin-top:10px;padding:10px 12px;border-radius:12px}
+  .ok{background:rgba(22,163,74,.15);border:1px solid var(--ok)}
+  .bad{background:rgba(220,38,38,.15);border:1px solid var(--bad)}
+  .nav{display:flex;gap:10px;justify-content:space-between;margin-top:14px}
+  .grid{display:grid;gap:12px}
+  .result h3{margin:.3em 0}
+  .muted{color:var(--muted)}
+  @media(min-width:900px){
+    main{display:grid;grid-template-columns:2fr 1fr;gap:18px}
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap bar">
+    <div class="pill" id="prog">Question 1 / 20</div>
+    <div class="pill" id="score">Score : 0</div>
+    <div>
+      <button class="secondary" onclick="finish()">Terminer</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="card" id="zone"></section>
+  <aside class="card grid">
+    <div class="pill">Thèmes</div>
+    <div class="muted">Matière • Atome • Cortège électronique • Stabilité</div>
+    <div class="pill">Consignes</div>
+    <div class="muted">Une seule bonne réponse par question. Le feedback court apparaît immédiatement. Les corrections détaillées sont données à la fin.</div>
+  </aside>
+</main>
+
+<script>
+const Q = [
+ {q:"Un corps pur est :",a:["un mélange homogène","une seule espèce chimique","plusieurs espèces visibles","toujours liquide"],c:1,
+  short:"Un corps pur ne contient qu’une seule espèce chimique.",
+  long:"Un corps pur est constitué d’une seule espèce chimique (ex. eau distillée, dioxygène). Un mélange contient plusieurs espèces."
+ },
+ {q:"Un mélange hétérogène se reconnaît car :",a:["on ne distingue qu’une phase","il est toujours gazeux","on distingue plusieurs phases","il est pur"],c:2,
+  short:"Plusieurs phases visibles.",
+  long:"Dans un mélange hétérogène, on observe au moins deux phases (eau + huile, sable + eau)."
+ },
+ {q:"Test de présence du dioxyde de carbone :",a:["bûchette incandescente","eau de chaux","papier pH","aimant"],c:1,
+  short:"L’eau de chaux se trouble.",
+  long:"Le CO₂ trouble l’eau de chaux par formation de carbonate de calcium solide."
+ },
+ {q:"Valeur approchée de la masse volumique de l’eau :",a:["0,1 kg·L⁻¹","1 kg·L⁻¹","10 kg·L⁻¹","100 kg·L⁻¹"],c:1,
+  short:"≈ 1 kg·L⁻¹.",
+  long:"À 20 °C, ρ(eau) ≈ 1,0 kg·L⁻¹ (1000 kg·m⁻³)."
+ },
+ {q:"L’air est principalement composé de :",a:["O₂ et CO₂","N₂ et O₂","H₂ et He","CO₂ et H₂O"],c:1,
+  short:"≈ 78 % N₂ et 21 % O₂.",
+  long:"L’air sec contient ~78 % de diazote, ~21 % de dioxygène, le reste étant des gaz rares."
+ },
+ {q:"Le noyau d’un atome contient :",a:["des électrons","des protons et neutrons","seulement des protons","seulement des neutrons"],c:1,
+  short:"Protons + neutrons.",
+  long:"Le noyau est le siège de la masse ; il contient protons (chargés +) et neutrons (neutres)."
+ },
+ {q:"Le numéro atomique Z correspond :",a:["au nombre de neutrons","au nombre de protons","à la masse du noyau","au nombre total de particules"],c:1,
+  short:"Z = nombre de protons.",
+  long:"Z identifie l’élément chimique : il est égal au nombre de protons du noyau."
+ },
+ {q:"Un atome neutre possède :",a:["plus d’électrons que de protons","autant d’électrons que de protons","aucun électron","aucun proton"],c:1,
+  short:"Autant d’électrons que de protons.",
+  long:"La neutralité électrique impose l’égalité entre charges + (protons) et – (électrons)."
+ },
+ {q:"Ordre de grandeur de la taille d’un atome :",a:["10⁻¹⁰ m","10⁻³ m","1 m","10⁻⁶ m"],c:0,
+  short:"≈ 10⁻¹⁰ m.",
+  long:"Le diamètre atomique est de l’ordre de 0,1 nm, soit 10⁻¹⁰ m."
+ },
+ {q:"Configuration de l’oxygène (Z=8) :",a:["1s²2s²2p⁴","1s²2s²2p⁶","1s²2s⁶","1s²2p⁶"],c:0,
+  short:"1s² 2s² 2p⁴.",
+  long:"On remplit les sous-couches par ordre d’énergie jusqu’à 8 électrons."
+ },
+ {q:"Les électrons de valence sont :",a:["ceux du noyau","ceux des couches internes","ceux de la couche externe","les protons"],c:2,
+  short:"Ceux de la couche externe.",
+  long:"Ils gouvernent les propriétés chimiques et la réactivité."
+ },
+ {q:"Les éléments d’une même famille :",a:["ont Z identique","ont des propriétés proches","ont la même masse","ne réagissent pas"],c:1,
+  short:"Propriétés chimiques communes.",
+  long:"Une famille regroupe des éléments ayant la même configuration de valence."
+ },
+ {q:"Les gaz nobles sont stables car :",a:["ils ont 1 électron","leur couche externe est pleine","ils sont lourds","ils sont radioactifs"],c:1,
+  short:"Couche externe saturée.",
+  long:"He, Ne, Ar… possèdent une configuration électronique stable."
+ },
+ {q:"L’ion Na⁺ s’obtient quand le sodium :",a:["gagne 1 e⁻","perd 1 e⁻","gagne 2 e⁻","perd 2 e⁻"],c:1,
+  short:"Perte d’un électron.",
+  long:"Na (Z=11) perd un électron pour atteindre la configuration du néon."
+ },
+ {q:"Charge de l’ion chlorure :",a:["Cl⁺","Cl²⁺","Cl⁻","Cl²⁻"],c:2,
+  short:"Cl⁻.",
+  long:"Le chlore gagne un électron pour compléter sa couche externe."
+ },
+ {q:"Une molécule est :",a:["un atome isolé","un ion","un assemblage d’atomes liés","un noyau"],c:2,
+  short:"Atomes liés.",
+  long:"Les liaisons stabilisent l’ensemble par partage d’électrons."
+ },
+ {q:"Dans un schéma de Lewis, un doublet liant :",a:["représente un noyau","est partagé entre deux atomes","est toujours seul","n’existe pas"],c:1,
+  short:"Doublet partagé.",
+  long:"Il matérialise la liaison covalente entre deux atomes."
+ },
+ {q:"L’énergie de liaison correspond :",a:["à l’énergie libérée à la rupture","à l’énergie nécessaire pour rompre","à la masse de la molécule","à la charge"],c:1,
+  short:"Énergie pour rompre.",
+  long:"Plus elle est grande, plus la liaison est forte."
+ },
+ {q:"Un mélange peut être identifié par :",a:["une seule mesure","température, masse volumique, tests","la couleur seulement","la forme du récipient"],c:1,
+  short:"Mesures et tests.",
+  long:"On croise des données expérimentales avec des valeurs de référence."
+ },
+ {q:"La composition volumique de l’air indique :",a:["la masse des gaz","leur volume relatif","leur couleur","leur densité"],c:1,
+  short:"Les proportions en volume.",
+  long:"On exprime en pourcentage de volume chaque gaz."
+ }
+];
+
+let i=0, answers=Array(Q.length).fill(null), score=0;
+
+function render(){
+  const q=Q[i];
+  document.getElementById("prog").textContent=`Question ${i+1} / ${Q.length}`;
+  document.getElementById("score").textContent=`Score : ${score}`;
+  let html=`<div class="q"><b>Q${i+1}.</b> ${q.q}</div><div class="choices">`;
+  q.a.forEach((t,idx)=>{
+    const sel = answers[i]===idx ? "sel":"";
+    html+=`<div class="choice ${sel}" onclick="pick(${idx})">${t}</div>`;
+  });
+  html+=`</div>`;
+  if(answers[i]!==null){
+    const ok = answers[i]===q.c;
+    html+=`<div class="feedback ${ok?"ok":"bad"}">${ok?"✔️ Bonne réponse. ":"❌ Mauvaise réponse. "}${q.short}</div>`;
+  }
+  html+=`<div class="nav">
+    <button class="secondary" onclick="prev()">◀ Précédent</button>
+    <button onclick="next()">Suivant ▶</button>
+  </div>`;
+  document.getElementById("zone").innerHTML=html;
+}
+
+function pick(idx){
+  if(answers[i]===null){
+    answers[i]=idx;
+    if(idx===Q[i].c) score++;
+  }else{
+    if(answers[i]===Q[i].c && idx!==Q[i].c) score--;
+    if(answers[i]!==Q[i].c && idx===Q[i].c) score++;
+    answers[i]=idx;
+  }
+  render();
+}
+
+function next(){ if(i<Q.length-1){ i++; render(); } }
+function prev(){ if(i>0){ i--; render(); } }
+
+function finish(){
+  let html=`<div class="result"><h2>Résultat</h2>
+  <p>Score final : <b>${score} / ${Q.length}</b></p></div><hr>`;
+  Q.forEach((q,idx)=>{
+    const ok = answers[idx]===q.c;
+    html+=`<div class="card" style="margin-bottom:12px">
+      <h3>Q${idx+1}. ${q.q}</h3>
+      <p>Ta réponse : <b>${answers[idx]!==null?q.a[answers[idx]]:"—"}</b></p>
+      <p>${ok?"✔️ Correct":"❌ Incorrect"} — <span class="muted">${q.short}</span></p>
+      <p><em>${q.long}</em></p>
+    </div>`;
+  });
+  document.getElementById("zone").innerHTML=html;
+}
+
+render();
+</script>
+</body>
+</html>

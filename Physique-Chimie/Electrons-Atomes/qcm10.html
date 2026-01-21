@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>QCM Chimie 2nde</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-light: #dbeafe;
+      --danger: #dc2626;
+      --success: #16a34a;
+      --bg: #f3f4f6;
+      --card: #ffffff;
+      --text: #111827;
+      --muted: #6b7280;
+      --radius: 10px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      padding: 1rem;
+    }
+
+    .app {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1.7fr 1fr;
+      gap: 1.5rem;
+    }
+
+    @media (max-width: 900px) {
+      .app {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 1.25rem 1.5rem;
+      box-shadow: 0 10px 25px rgba(15, 23, 42, 0.08);
+    }
+
+    h1 {
+      font-size: 1.6rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.2rem 0.6rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      background: var(--primary-light);
+      color: var(--primary);
+      margin-right: 0.4rem;
+    }
+
+    .questions {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      max-height: 75vh;
+      overflow-y: auto;
+      padding-right: 0.3rem;
+    }
+
+    .question-card {
+      border-radius: var(--radius);
+      border: 1px solid #e5e7eb;
+      padding: 0.9rem 1rem;
+      background: #ffffff;
+      transition: border-color 0.2s, box-shadow 0.2s, transform 0.1s;
+    }
+
+    .question-card:hover {
+      border-color: var(--primary-light);
+      box-shadow: 0 6px 16px rgba(15, 23, 42, 0.06);
+      transform: translateY(-1px);
+    }
+
+    .question-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 0.4rem;
+      gap: 0.5rem;
+    }
+
+    .question-title {
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    .question-index {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .choices {
+      margin-top: 0.4rem;
+      display: grid;
+      gap: 0.3rem;
+    }
+
+    .choice {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.35rem 0.5rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+      font-size: 0.9rem;
+    }
+
+    .choice input {
+      accent-color: var(--primary);
+    }
+
+    .choice:hover {
+      background: #f9fafb;
+    }
+
+    .choice.correct {
+      background: #ecfdf3;
+      color: var(--success);
+    }
+
+    .choice.incorrect {
+      background: #fef2f2;
+      color: var(--danger);
+    }
+
+    .choice.disabled {
+      pointer-events: none;
+      opacity: 0.9;
+    }
+
+    .question-footer {
+      margin-top: 0.3rem;
+      font-size: 0.8rem;
+      color: var(--muted);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .tag {
+      font-size: 0.7rem;
+      padding: 0.15rem 0.45rem;
+      border-radius: 999px;
+      background: #f3f4f6;
+      color: #4b5563;
+    }
+
+    .tag-theme {
+      background: #eef2ff;
+      color: #4338ca;
+    }
+
+    .tag-level {
+      background: #ecfdf3;
+      color: #15803d;
+    }
+
+    .btn {
+      border: none;
+      border-radius: 999px;
+      padding: 0.55rem 1.1rem;
+      font-size: 0.9rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: var(--primary);
+      color: #ffffff;
+      font-weight: 500;
+      transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
+      box-shadow: 0 8px 18px rgba(37, 99, 235, 0.35);
+    }
+
+    .btn:hover {
+      background: #1d4ed8;
+      transform: translateY(-1px);
+      box-shadow: 0 10px 22px rgba(37, 99, 235, 0.45);
+    }
+
+    .btn:disabled {
+      opacity: 0.6;
+      cursor: default;
+      box-shadow: none;
+      transform: none;
+    }
+
+    .btn-secondary {
+      background: #e5e7eb;
+      color: #111827;
+      box-shadow: none;
+    }
+
+    .btn-secondary:hover {
+      background: #d1d5db;
+      box-shadow: none;
+    }
+
+    .actions {
+      margin-top: 0.9rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      justify-content: flex-end;
+    }
+
+    /* Dashboard */
+
+    .dashboard-header {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .score-main {
+      font-size: 1.4rem;
+      font-weight: 700;
+    }
+
+    .score-sub {
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 8px;
+      border-radius: 999px;
+      background: #e5e7eb;
+      overflow: hidden;
+      margin-top: 0.3rem;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #22c55e, #16a34a);
+      transition: width 0.25s ease-out;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.6rem;
+      margin-top: 0.8rem;
+    }
+
+    .stat-card {
+      border-radius: 8px;
+      padding: 0.6rem 0.7rem;
+      background: #f9fafb;
+      display: flex;
+      flex-direction: column;
+      gap: 0.15rem;
+    }
+
+    .stat-label {
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    .stat-value {
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    .filters {
+      margin-top: 1rem;
+      border-top: 1px solid #e5e7eb;
+      padding-top: 0.8rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      font-size: 0.8rem;
+    }
+
+    .filter-pill {
+      padding: 0.25rem 0.7rem;
+      border-radius: 999px;
+      border: 1px solid #e5e7eb;
+      background: #f9fafb;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      transition: background 0.15s, border-color 0.15s;
+    }
+
+    .filter-pill.active {
+      background: var(--primary-light);
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .legend {
+      margin-top: 0.7rem;
+      font-size: 0.75rem;
+      color: var(--muted);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      align-items: center;
+    }
+
+    .legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+    }
+
+    .dot-correct {
+      background: #22c55e;
+    }
+
+    .dot-incorrect {
+      background: #ef4444;
+    }
+
+    .dot-unanswered {
+      background: #9ca3af;
+    }
+
+    .question-list-mini {
+      margin-top: 0.7rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.3rem;
+    }
+
+    .q-mini {
+      width: 26px;
+      height: 26px;
+      border-radius: 999px;
+      border: 1px solid #e5e7eb;
+      font-size: 0.75rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      background: #f9fafb;
+      transition: background 0.15s, border-color 0.15s, transform 0.1s;
+    }
+
+    .q-mini:hover {
+      transform: translateY(-1px);
+    }
+
+    .q-mini.correct {
+      background: #ecfdf3;
+      border-color: #22c55e;
+      color: #15803d;
+    }
+
+    .q-mini.incorrect {
+      background: #fef2f2;
+      border-color: #ef4444;
+      color: #b91c1c;
+    }
+
+    .q-mini.unanswered {
+      background: #f9fafb;
+      color: #6b7280;
+    }
+
+    .q-mini.focused {
+      box-shadow: 0 0 0 2px var(--primary-light);
+      border-color: var(--primary);
+    }
+
+    .hint {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-top: 0.4rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <!-- Colonne gauche : QCM -->
+    <div class="card">
+      <div>
+        <h1>QCM Chimie 2nde</h1>
+        <div class="subtitle">
+          La matière à l’échelle microscopique · Cortège électronique · Stabilité des entités chimiques
+        </div>
+        <div>
+          <span class="badge">Programme officiel</span>
+          <span class="badge">20 questions</span>
+        </div>
+      </div>
+
+      <div class="questions" id="questions-container">
+        <!-- Questions générées par JS -->
+      </div>
+
+      <div class="actions">
+        <button class="btn-secondary btn" id="reset-btn">Réinitialiser</button>
+        <button class="btn" id="submit-btn">
+          Corriger le QCM
+        </button>
+      </div>
+      <div class="hint">
+        Tu peux répondre dans l’ordre que tu veux, puis cliquer sur « Corriger le QCM » pour voir ton score.
+      </div>
+    </div>
+
+    <!-- Colonne droite : Dashboard -->
+    <div class="card">
+      <div class="dashboard-header">
+        <div class="score-main" id="score-main">Score : 0 / 20</div>
+        <div class="score-sub" id="score-sub">Aucune correction effectuée pour l’instant.</div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="progress-fill"></div>
+        </div>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-label">Questions répondues</div>
+          <div class="stat-value" id="answered-count">0 / 20</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Taux de réussite</div>
+          <div class="stat-value" id="success-rate">0 %</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Bonnes réponses</div>
+          <div class="stat-value" id="correct-count">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Mauvaises réponses</div>
+          <div class="stat-value" id="incorrect-count">0</div>
+        </div>
+      </div>
+
+      <div class="filters">
+        <span style="font-weight: 600; margin-right: 0.3rem;">Filtrer :</span>
+        <button class="filter-pill active" data-filter="all">Toutes</button>
+        <button class="filter-pill" data-filter="correct">Justes</button>
+        <button class="filter-pill" data-filter="incorrect">Fausses</button>
+        <button class="filter-pill" data-filter="unanswered">Non répondues</button>
+      </div>
+
+      <div class="legend">
+        <span>Légende :</span>
+        <span class="legend-item">
+          <span class="legend-dot dot-correct"></span> Bonne réponse
+        </span>
+        <span class="legend-item">
+          <span class="legend-dot dot-incorrect"></span> Mauvaise réponse
+        </span>
+        <span class="legend-item">
+          <span class="legend-dot dot-unanswered"></span> Non répondu
+        </span>
+      </div>
+
+      <div class="question-list-mini" id="mini-map">
+        <!-- Pastilles de questions générées par JS -->
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const questionsData = [
+      {
+        text: "Un corps pur est :",
+        theme: "Matière macroscopique",
+        level: "Base",
+        choices: [
+          "Un matériau constitué d’une seule espèce chimique.",
+          "Un mélange homogène.",
+          "Un mélange hétérogène.",
+          "Un matériau contenant plusieurs phases."
+        ],
+        correctIndex: 0
+      },
+      {
+        text: "Un mélange homogène se caractérise par :",
+        theme: "Matière macroscopique",
+        level: "Base",
+        choices: [
+          "Une composition uniforme.",
+          "La présence de plusieurs phases visibles.",
+          "Une séparation spontanée des constituants.",
+          "Une seule espèce chimique."
+        ],
+        correctIndex: 0
+      },
+      {
+        text: "Quel test permet d’identifier la présence d’eau ?",
+        theme: "Tests chimiques",
+        level: "Base",
+        choices: [
+          "Le test au sulfate de cuivre anhydre.",
+          "Le test à la flamme.",
+          "Le test à l’eau de chaux.",
+          "Le test au tison incandescent."
+        ],
+        correctIndex: 0
+      },
+      {
+        text: "Le tison qui se ravive indique la présence de :",
+        theme: "Tests chimiques",
+        level: "Base",
+        choices: [
+          "Dioxygène.",
+          "Dihydrogène.",
+          "Dioxyde de carbone.",
+          "Vapeur d’eau."
+        ],
+        correctIndex: 0
+      },
+      {
+        text: "La masse volumique de l’eau liquide est environ :",
+        theme: "Grandeurs physiques",
+        level: "Base",
+        choices: [
+          "1 g·cm⁻³",
+          "0,1 g·cm⁻³",
+          "10 g·cm⁻³",
+          "0,5 g·cm⁻³"
+        ],
+        correctIndex: 0
+      },
+      {
+        text: "L’air est constitué majoritairement de :",
+        theme: "Composition de l’air",
+        level: "Base",
+        choices: [
+          "Diazote.",
+          "Dioxygène.",
+          "Dioxyde de carbone.",
+          "Vapeur d’eau."
+        ],
+        correctIndex: 0
+      },
+      {
+        text: "L’ordre de grandeur de la taille d’un atome est :",
+        theme: "Atome",
+        level: "Notion clé",
+        choices: [
+          "≈ 10⁻¹⁰ m",
+          "≈ 10⁻⁶ m",
+          "≈ 10⁻³ m",
+          "≈ 10⁻¹⁵ m"
+        ],
+        correctIndex: 0
+      },
+      {
+        text: "Le numéro atomique Z représente :",
+        theme: "Atome",
+        level: "Notion clé",
+        choices: [
+          "Le nombre de protons.",
+          "Le nombre de neutrons.",
+          "Le nombre de nucléons.",
+          "La masse de l’atome."
+        ],
+        correctIndex: 0
+      },
+      {
+        text: "Le noyau d’un atome contient :",
+        theme: "Atome",
+        level: "Base",
+        choices: [
+          "Protons et neutrons.",
+          "Protons et électrons.",
+          "Neutrons et électrons.",
+          "Uniquement des électrons."
+        ],
+        correctIndex: 0
+      },
+      {
+        text: "L’atome est électriquement neutre car :",
+        theme: "Atome",
+        level: "Base",
+        choices: [
+          "Le nombre d’électrons est égal au nombre de protons.",
+          "Le nombre de neutrons compense les électrons.",
+          "Les électrons n’ont pas de charge.",
+          "Les protons n’ont pas de charge."
+        ],
+        correctIndex: 0
+      },
+      {
+        text: "La configuration électronique du sodium (Z = 11) est :",
+        theme: "Cortège électronique",
+        level: "Application",
+        choices: [
+          "1s² 2s² 2p⁶ 3s¹",
+          "1s² 2s² 2p⁵ 3s²",
+          "1s² 2s² 2p⁶",
+          "1s² 2s² 2p⁶ 3p¹"
+        ],
+        correctIndex: 0
+      },
+      {
+        text: "Les électrons de valence du magnésium (Z = 12) sont :",
+        theme: "Cortège électronique",
+        level: "Application",
+        choices: [
+          "2 électrons.",
+          "8 électrons.",
+          "12 électrons.",
+          "1 électron."
+        ],
+        correctIndex: 0
+      },
+      {
+        text: "Les éléments d’une même famille chimique ont :",
+        theme: "Familles chimiques",
+        level: "Notion clé",
+        choices: [
+          "Le même nombre d’électrons de valence.",
+          "La même masse.",
+          "Le même nombre de neutrons.",
+          "Le même numéro atomique."
+        ],
+        correctIndex: 0
+      },
+      {
+        text: "Les gaz nobles sont particulièrement stables car :",
+        theme: "Stabilité chimique",
+        level: "Notion clé",
+        choices: [
+          "Leur couche externe est saturée.",
+          "Ils ont beaucoup de protons.",
+          "Ils réagissent facilement.",
+          "Ils possèdent des charges électriques."
+        ],
+        correctIndex: 0
+      },
+      {
+        text: "L’ion Cl⁻ possède :",
+        theme: "Ions monoatomiques",
+        level: "Application",
+        choices: [
+          "Un électron de plus que l’atome de chlore.",
+          "Un électron de moins que l’atome de chlore.",
+          "Le même nombre d’électrons que l’atome de chlore.",
+          "Deux électrons de moins."
+        ],
+        correctIndex: 0
+      },
+      {
+        text: "La charge de l’ion calcium Ca²⁺ provient de :",
+        theme: "Ions monoatomiques",
+        level: "Application",
+        choices: [
+          "La perte de deux électrons.",
+          "Le gain de deux électrons.",
+          "La perte de deux protons.",
+          "Le gain de deux protons."
+        ],
+        correctIndex: 0
+      },
+      {
+        text: "Une liaison covalente correspond à :",
+        theme: "Liaison covalente",
+        level: "Notion clé",
+        choices: [
+          "Un doublet d’électrons partagé entre deux atomes.",
+          "Un transfert d’électrons.",
+          "Une attraction entre noyaux uniquement.",
+          "Une répulsion entre électrons."
+        ],
+        correctIndex: 0
+      },
+      {
+        text: "Dans un schéma de Lewis, un doublet non liant est représenté par :",
+        theme: "Schéma de Lewis",
+        level: "Base",
+        choices: [
+          "Deux points sur un atome.",
+          "Un tiret entre deux atomes.",
+          "Une flèche.",
+          "Un cercle."
+        ],
+        correctIndex: 0
+      },
+      {
+        text: "Une molécule est plus stable que les atomes isolés car :",
+        theme: "Stabilité des entités",
+        level: "Notion clé",
+        choices: [
+          "Les atomes atteignent une configuration proche des gaz nobles.",
+          "Les atomes deviennent plus lourds.",
+          "Les électrons disparaissent.",
+          "Les noyaux fusionnent."
+        ],
+        correctIndex: 0
+      },
+      {
+        text: "L’énergie de liaison correspond à :",
+        theme: "Énergie de liaison",
+        level: "Notion clé",
+        choices: [
+          "L’énergie nécessaire pour rompre une liaison.",
+          "L’énergie libérée par un électron.",
+          "L’énergie du noyau.",
+          "L’énergie thermique d’un gaz."
+        ],
+        correctIndex: 0
+      }
+    ];
+
+    const state = {
+      answers: Array(questionsData.length).fill(null),
+      corrected: false
+    };
+
+    const questionsContainer = document.getElementById("questions-container");
+    const submitBtn = document.getElementById("submit-btn");
+    const resetBtn = document.getElementById("reset-btn");
+    const scoreMain = document.getElementById("score-main");
+    const scoreSub = document.getElementById("score-sub");
+    const progressFill = document.getElementById("progress-fill");
+    const answeredCountEl = document.getElementById("answered-count");
+    const successRateEl = document.getElementById("success-rate");
+    const correctCountEl = document.getElementById("correct-count");
+    const incorrectCountEl = document.getElementById("incorrect-count");
+    const miniMap = document.getElementById("mini-map");
+    const filterButtons = document.querySelectorAll(".filter-pill");
+
+    function renderQuestions() {
+      questionsContainer.innerHTML = "";
+      questionsData.forEach((q, index) => {
+        const card = document.createElement("div");
+        card.className = "question-card";
+        card.dataset.index = index;
+
+        const header = document.createElement("div");
+        header.className = "question-header";
+
+        const title = document.createElement("div");
+        title.className = "question-title";
+        title.textContent = q.text;
+
+        const indexLabel = document.createElement("div");
+        indexLabel.className = "question-index";
+        indexLabel.textContent = `Question ${index + 1}`;
+
+        header.appendChild(title);
+        header.appendChild(indexLabel);
+
+        const footer = document.createElement("div");
+        footer.className = "question-footer";
+
+        const themeTag = document.createElement("span");
+        themeTag.className = "tag tag-theme";
+        themeTag.textContent = q.theme;
+
+        const levelTag = document.createElement("span");
+        levelTag.className = "tag tag-level";
+        levelTag.textContent = q.level;
+
+        footer.appendChild(themeTag);
+        footer.appendChild(levelTag);
+
+        const choicesDiv = document.createElement("div");
+        choicesDiv.className = "choices";
+
+        q.choices.forEach((choiceText, cIndex) => {
+          const label = document.createElement("label");
+          label.className = "choice";
+
+          const input = document.createElement("input");
+          input.type = "radio";
+          input.name = `q-${index}`;
+          input.value = cIndex;
+
+          input.addEventListener("change", () => {
+            state.answers[index] = cIndex;
+            updateDashboard();
+          });
+
+          const span = document.createElement("span");
+          span.textContent = choiceText;
+
+          label.appendChild(input);
+          label.appendChild(span);
+          choicesDiv.appendChild(label);
+        });
+
+        card.appendChild(header);
+        card.appendChild(choicesDiv);
+        card.appendChild(footer);
+        questionsContainer.appendChild(card);
+      });
+    }
+
+    function renderMiniMap() {
+      miniMap.innerHTML = "";
+      questionsData.forEach((_, index) => {
+        const btn = document.createElement("button");
+        btn.className = "q-mini unanswered";
+        btn.textContent = index + 1;
+        btn.dataset.index = index;
+
+        btn.addEventListener("click", () => {
+          const card = document.querySelector(`.question-card[data-index="${index}"]`);
+          if (card) {
+            card.scrollIntoView({ behavior: "smooth", block: "center" });
+            document.querySelectorAll(".q-mini").forEach(b => b.classList.remove("focused"));
+            btn.classList.add("focused");
+            setTimeout(() => btn.classList.remove("focused"), 1200);
+          }
+        });
+
+        miniMap.appendChild(btn);
+      });
+    }
+
+    function updateDashboard() {
+      const total = questionsData.length;
+      const answered = state.answers.filter(a => a !== null).length;
+      const correct = state.answers.reduce((acc, ans, i) => {
+        if (ans === null) return acc;
+        return acc + (ans === questionsData[i].correctIndex ? 1 : 0);
+      }, 0);
+      const incorrect = answered - correct;
+
+      answeredCountEl.textContent = `${answered} / ${total}`;
+      correctCountEl.textContent = correct;
+      incorrectCountEl.textContent = incorrect;
+
+      const answeredRatio = (answered / total) * 100;
+      progressFill.style.width = `${answeredRatio}%`;
+
+      if (state.corrected) {
+        scoreMain.textContent = `Score : ${correct} / ${total}`;
+        const rate = total === 0 ? 0 : Math.round((correct / total) * 100);
+        successRateEl.textContent = `${rate} %`;
+
+        if (rate === 100) {
+          scoreSub.textContent = "Parfait, tu maîtrises ce QCM !";
+        } else if (rate >= 70) {
+          scoreSub.textContent = "Très bon niveau, quelques détails à consolider.";
+        } else if (rate >= 40) {
+          scoreSub.textContent = "Niveau intermédiaire, revois les notions clés.";
+        } else {
+          scoreSub.textContent = "C’est un bon point de départ pour réviser le chapitre.";
+        }
+      } else {
+        scoreMain.textContent = `Score : 0 / ${total}`;
+        successRateEl.textContent = "0 %";
+        scoreSub.textContent = "Réponds aux questions puis clique sur « Corriger le QCM ».";
+      }
+
+      updateMiniMapStatus();
+    }
+
+    function updateMiniMapStatus() {
+      const miniButtons = miniMap.querySelectorAll(".q-mini");
+      miniButtons.forEach(btn => {
+        const index = parseInt(btn.dataset.index, 10);
+        const ans = state.answers[index];
+        btn.classList.remove("correct", "incorrect", "unanswered");
+        if (ans === null) {
+          btn.classList.add("unanswered");
+        } else if (state.corrected) {
+          if (ans === questionsData[index].correctIndex) {
+            btn.classList.add("correct");
+          } else {
+            btn.classList.add("incorrect");
+          }
+        } else {
+          btn.classList.add("unanswered");
+        }
+      });
+    }
+
+    function correctQCM() {
+      state.corrected = true;
+
+      const cards = document.querySelectorAll(".question-card");
+      cards.forEach((card, index) => {
+        const choices = card.querySelectorAll(".choice");
+        choices.forEach((choiceLabel, cIndex) => {
+          choiceLabel.classList.remove("correct", "incorrect", "disabled");
+          const input = choiceLabel.querySelector("input");
+          if (cIndex === questionsData[index].correctIndex) {
+            choiceLabel.classList.add("correct");
+          }
+          if (state.answers[index] !== null && cIndex === state.answers[index] && cIndex !== questionsData[index].correctIndex) {
+            choiceLabel.classList.add("incorrect");
+          }
+          choiceLabel.classList.add("disabled");
+          input.disabled = true;
+        });
+      });
+
+      updateDashboard();
+    }
+
+    function resetQCM() {
+      state.answers = Array(questionsData.length).fill(null);
+      state.corrected = false;
+
+      renderQuestions();
+      attachFilterLogic();
+      updateDashboard();
+    }
+
+    function applyFilter(filter) {
+      const cards = document.querySelectorAll(".question-card");
+      cards.forEach((card, index) => {
+        const ans = state.answers[index];
+        const isCorrect = ans === questionsData[index].correctIndex;
+        let show = true;
+
+        if (filter === "correct") {
+          show = state.corrected && ans !== null && isCorrect;
+        } else if (filter === "incorrect") {
+          show = state.corrected && ans !== null && !isCorrect;
+        } else if (filter === "unanswered") {
+          show = ans === null;
+        }
+
+        card.style.display = show ? "" : "none";
+      });
+    }
+
+    function attachFilterLogic() {
+      filterButtons.forEach(btn => {
+        btn.addEventListener("click", () => {
+          filterButtons.forEach(b => b.classList.remove("active"));
+          btn.classList.add("active");
+          const filter = btn.dataset.filter;
+          applyFilter(filter);
+        });
+      });
+    }
+
+    submitBtn.addEventListener("click", () => {
+      correctQCM();
+    });
+
+    resetBtn.addEventListener("click", () => {
+      resetQCM();
+    });
+
+    // Initialisation
+    renderQuestions();
+    renderMiniMap();
+    attachFilterLogic();
+    updateDashboard();
+  </script>
+</body>
+</html>

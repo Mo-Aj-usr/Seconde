@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QCM Chimie Seconde - Stabilité et Électrons</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(to bottom, #f0f4f8, #d9e2ec);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+        }
+        #container {
+            width: 100%;
+            max-width: 900px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+            padding: 25px;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #2c3e50;
+        }
+        #dashboard {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        #progress-bar {
+            flex: 1;
+            height: 12px;
+            background: #e0e0e0;
+            border-radius: 6px;
+            overflow: hidden;
+            min-width: 200px;
+        }
+        #progress {
+            height: 100%;
+            background: linear-gradient(to right, #27ae60, #2ecc71);
+            width: 0%;
+            transition: width 0.4s ease;
+        }
+        #stats {
+            font-weight: bold;
+            color: #34495e;
+        }
+        #question {
+            font-size: 1.25rem;
+            margin: 25px 0 20px;
+            line-height: 1.5;
+            color: #2c3e50;
+        }
+        .option {
+            padding: 14px 18px;
+            margin: 10px 0;
+            background: #f8f9fa;
+            border: 2px solid #dfe6e9;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            user-select: none;
+        }
+        .option:hover {
+            background: #e8f4ff;
+            border-color: #3498db;
+        }
+        .option.selected {
+            background: #3498db;
+            color: white;
+            border-color: #2980b9;
+        }
+        .buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+        button {
+            padding: 12px 24px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        #next { background: #27ae60; color: white; }
+        #next:hover { background: #219653; }
+        #finish { background: #e74c3c; color: white; }
+        #finish:hover { background: #c0392b; }
+        #result, #explanations { display: none; }
+        .answer-short { 
+            font-weight: bold; 
+            color: #27ae60; 
+            margin: 15px 0; 
+            font-size: 1.1rem;
+        }
+        .explanation {
+            background: #f1f8ff;
+            padding: 15px;
+            border-left: 5px solid #3498db;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        @media (max-width: 600px) {
+            #container { padding: 15px; }
+            .buttons { flex-direction: column; }
+            button { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+<div id="container">
+    <header>
+        <h2>QCM – Chimie Seconde<br>La matière à l'échelle microscopique • Cortège électronique • Stabilité chimique</h2>
+    </header>
+
+    <div id="dashboard">
+        <div id="stats">Question <span id="current">1</span>/20 • Score : <span id="score">0</span></div>
+        <div id="progress-bar"><div id="progress"></div></div>
+    </div>
+
+    <div id="question"></div>
+    <div id="options"></div>
+
+    <div id="answer-area" style="min-height: 60px;"></div>
+
+    <div class="buttons">
+        <button id="next">Question suivante</button>
+        <button id="finish">Terminer le test</button>
+    </div>
+
+    <div id="result">
+        <h2>Résultats finaux</h2>
+        <p style="font-size: 1.4rem; margin: 20px 0;">
+            Score : <strong><span id="final-score">0</span>/20</strong> 
+            (<span id="percent"></span>%)
+        </p>
+        <button id="restart">Recommencer</button>
+    </div>
+
+    <div id="explanations">
+        <h3>Corrections détaillées</h3>
+        <div id="explanations-content"></div>
+    </div>
+</div>
+
+<script>
+    const questions = [
+        { q: "Le noyau atomique contient des particules de charge positive appelées :", opts: ["Électrons", "Protons", "Neutrons", "Quarks"], ans: 1, exp: "Les **protons** portent une charge positive +1 et se trouvent dans le noyau avec les neutrons (neutres)." },
+        { q: "La masse de l'atome est principalement concentrée dans :", opts: ["Les électrons", "Le noyau", "Les couches électroniques", "Les orbitales"], ans: 1, exp: "Le noyau contient les protons et neutrons dont la masse est environ 1836 fois plus grande que celle d’un électron." },
+        { q: "L’ordre de grandeur du rayon d’un atome est de l’ordre de :", opts: ["10⁻¹⁵ m", "10⁻¹⁰ m", "10⁻⁶ m", "10⁻³ m"], ans: 1, exp: "Le rayon atomique est typiquement de 100 pm = 10⁻¹⁰ m." },
+        { q: "Le numéro atomique Z correspond au nombre de :", opts: ["Neutrons", "Protons", "Nucléons", "Électrons de valence"], ans: 1, exp: "Z = nombre de protons = nombre d’électrons dans l’atome neutre." },
+        { q: "Dans la notation ¹⁶O, le nombre 16 représente :", opts: ["Z", "A (nombre de masse)", "Nombre d’électrons", "Charge"], ans: 1, exp: "A = nombre de masse = protons + neutrons." },
+        { q: "Un atome est électriquement neutre parce que :", opts: ["protons = électrons", "neutrons = protons", "électrons = nucléons", "Z = A"], ans: 0, exp: "Dans un atome neutre, nombre de protons = nombre d’électrons → charges se compensent." },
+        { q: "Configuration électronique de l’oxygène (Z=8) :", opts: ["1s² 2s² 2p⁴", "1s² 2s² 2p⁶", "1s² 2s² 2p⁵", "1s² 2s¹ 2p⁵"], ans: 0, exp: "O (8 électrons) : 1s² 2s² 2p⁴ – 6 électrons sur la couche de valence." },
+        { q: "Les électrons de valence se trouvent sur :", opts: ["La première couche", "La couche la plus externe", "Le noyau", "Toutes les couches"], ans: 1, exp: "Ce sont les électrons de la couche la plus externe (niveau de valence)." },
+        { q: "Le numéro de période dans le tableau périodique correspond au :", opts: ["Nombre d’électrons de valence", "Numéro de la couche principale externe", "Numéro de colonne", "Bloc s/p"], ans: 1, exp: "Période = numéro de la dernière couche occupée." },
+        { q: "Les gaz nobles se trouvent dans la colonne :", opts: ["1", "2", "17", "18"], ans: 3, exp: "Colonne 18 (groupe 18) : configuration ns² np⁶ (sauf He : 1s²)." },
+        { q: "Configuration électronique du phosphore (Z=15) :", opts: ["1s² 2s² 2p⁶ 3s² 3p³", "1s² 2s² 2p⁶ 3s² 3p⁵", "1s² 2s² 2p⁶ 3s¹ 3p⁴", "1s² 2s² 2p⁵ 3s² 3p³"], ans: 0, exp: "P : [Ne] 3s² 3p³ → 5 électrons de valence." },
+        { q: "La sous-couche p peut contenir au maximum :", opts: ["2 électrons", "6 électrons", "10 électrons", "14 électrons"], ans: 1, exp: "Sous-couche p : 3 orbitales → 6 électrons maximum." },
+        { q: "Les gaz nobles sont chimiquement stables car leur couche externe est :", opts: ["Vide", "Complète / saturée", "Avec un seul électron", "Avec 7 électrons"], ans: 1, exp: "Configuration ns² np⁶ → règle de l’octet (sauf He : duet)." },
+        { q: "Un ion monoatomique se forme par :", opts: ["Gain ou perte de protons", "Gain ou perte d’électrons", "Gain de neutrons", "Fusion de noyaux"], ans: 1, exp: "Les ions gardent le même noyau mais modifient le nombre d’électrons." },
+        { q: "L’ion Na⁺ possède une charge :", opts: ["–1", "+1", "+2", "0"], ans: 1, exp: "Na (11 électrons) → Na⁺ perd 1 électron → configuration de Ne." },
+        { q: "La règle de l’octet concerne :", opts: ["2 électrons sur la couche externe", "8 électrons sur la couche de valence", "18 électrons", "Nombre de protons"], ans: 1, exp: "Les atomes tendent vers la configuration électronique des gaz nobles (8 électrons sur la couche externe)." },
+        { q: "Dans la formule de Lewis, les doublets non-liants sont :", opts: ["Partagés entre deux atomes", "Appartenant à un seul atome", "Liants", "Dans le noyau"], ans: 1, exp: "Doublets non-liants = paires libres, non partagées." },
+        { q: "Un cation est :", opts: ["Un ion négatif", "Un ion positif", "Un atome neutre", "Une molécule"], ans: 1, exp: "Cation = ion ayant perdu un ou plusieurs électrons → charge positive." },
+        { q: "L’ion le plus stable pour l’oxygène est :", opts: ["O⁺", "O²⁺", "O⁻", "O²⁻"], ans: 3, exp: "O gagne 2 électrons → O²⁻ (configuration de Ne : 1s² 2s² 2p⁶)." },
+        { q: "La stabilité des ions monoatomiques est liée à l’acquisition de la configuration électronique des :", opts: ["Métaux de transition", "Gaz nobles", "Halogènes", "Alcalins"], ans: 1, exp: "Règle de Lewis : stabilité par configuration identique à un gaz noble (duet ou octet)." }
+    ];
+
+    let current = 0;
+    let score = 0;
+    let answers = new Array(questions.length).fill(-1);
+    let finished = false;
+
+    const qEl = document.getElementById("question");
+    const optsEl = document.getElementById("options");
+    const answerArea = document.getElementById("answer-area");
+    const nextBtn = document.getElementById("next");
+    const finishBtn = document.getElementById("finish");
+    const resultDiv = document.getElementById("result");
+    const explanationsDiv = document.getElementById("explanations");
+    const explanationsContent = document.getElementById("explanations-content");
+    const currentEl = document.getElementById("current");
+    const scoreEl = document.getElementById("score");
+    const progress = document.getElementById("progress");
+    const finalScoreEl = document.getElementById("final-score");
+    const percentEl = document.getElementById("percent");
+    const restartBtn = document.getElementById("restart");
+
+    function loadQuestion() {
+        if (finished) return;
+
+        currentEl.textContent = current + 1;
+        scoreEl.textContent = score;
+        progress.style.width = ((current + 1) / questions.length * 100) + "%";
+
+        qEl.textContent = questions[current].q;
+        optsEl.innerHTML = "";
+
+        questions[current].opts.forEach((opt, i) => {
+            const div = document.createElement("div");
+            div.className = "option";
+            div.textContent = `${String.fromCharCode(65 + i)}. ${opt}`;
+            div.onclick = () => select(i);
+            optsEl.appendChild(div);
+        });
+
+        // Affichage réponse courte si déjà répondu
+        if (answers[current] !== -1) {
+            showShortAnswer();
+        } else {
+            answerArea.innerHTML = "";
+        }
+    }
+
+    function select(index) {
+        if (finished || answers[current] !== -1) return;
+        answers[current] = index;
+        Array.from(optsEl.children).forEach((el, i) => {
+            el.classList.toggle("selected", i === index);
+        });
+
+        if (index === questions[current].ans) score++;
+
+        showShortAnswer();
+    }
+
+    function showShortAnswer() {
+        const correctLetter = String.fromCharCode(65 + questions[current].ans);
+        const userLetter = answers[current] !== -1 ? String.fromCharCode(65 + answers[current]) : "?";
+        const color = answers[current] === questions[current].ans ? "#27ae60" : "#e74c3c";
+
+        answerArea.innerHTML = `
+            <div class="answer-short">
+                Réponse attendue : ${correctLetter}<br>
+                Votre réponse : <span style="color:${color}">${userLetter}</span>
+            </div>
+        `;
+    }
+
+    function showFinalResult() {
+        finished = true;
+        document.querySelector(".buttons").style.display = "none";
+        resultDiv.style.display = "block";
+        explanationsDiv.style.display = "block";
+
+        finalScoreEl.textContent = score;
+        percentEl.textContent = Math.round((score / questions.length) * 100);
+
+        explanationsContent.innerHTML = "";
+        questions.forEach((q, i) => {
+            const userAns = answers[i];
+            const correct = q.ans;
+            const status = userAns === correct ? "correct" : "incorrect";
+            const userLetter = userAns !== -1 ? String.fromCharCode(65 + userAns) : "–";
+
+            const block = document.createElement("div");
+            block.innerHTML = `
+                <h4>Question ${i+1} – ${status.toUpperCase()}</h4>
+                <p><strong>${q.q}</strong></p>
+                <p>Votre réponse : <strong>${userLetter}</strong> 
+                   → Correcte : <strong>${String.fromCharCode(65 + correct)}</strong></p>
+                <div class="explanation">${q.exp}</div>
+                <hr>
+            `;
+            explanationsContent.appendChild(block);
+        });
+    }
+
+    nextBtn.onclick = () => {
+        if (current < questions.length - 1) {
+            current++;
+            loadQuestion();
+        }
+    };
+
+    finishBtn.onclick = () => {
+        showFinalResult();
+    };
+
+    restartBtn.onclick = () => {
+        current = 0;
+        score = 0;
+        answers.fill(-1);
+        finished = false;
+        resultDiv.style.display = "none";
+        explanationsDiv.style.display = "none";
+        document.querySelector(".buttons").style.display = "flex";
+        loadQuestion();
+    };
+
+    // Démarrage
+    loadQuestion();
+</script>
+</body>
+</html>
