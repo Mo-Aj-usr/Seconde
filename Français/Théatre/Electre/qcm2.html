@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QCM – Électre (Giraudoux)</title>
+
+<style>
+:root{
+  --primary:#4a5cff;
+  --success:#2ecc71;
+  --error:#e74c3c;
+  --bg:#f4f6fb;
+}
+
+body{
+  margin:0;
+  font-family:Segoe UI,sans-serif;
+  background:var(--bg);
+}
+
+.dashboard{
+  max-width:900px;
+  margin:auto;
+  padding:20px;
+}
+
+header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.score-box{
+  background:white;
+  padding:12px 18px;
+  border-radius:10px;
+  box-shadow:0 4px 10px rgba(0,0,0,.1);
+  font-weight:bold;
+}
+
+.progress{
+  margin:20px 0;
+  background:#ddd;
+  border-radius:10px;
+  overflow:hidden;
+}
+
+.progress-bar{
+  height:10px;
+  background:var(--primary);
+  width:0%;
+}
+
+.card{
+  background:white;
+  padding:25px;
+  border-radius:15px;
+  box-shadow:0 8px 20px rgba(0,0,0,.1);
+}
+
+.question{
+  font-size:1.2rem;
+  margin-bottom:15px;
+}
+
+.answers button{
+  width:100%;
+  padding:12px;
+  margin-bottom:10px;
+  border:none;
+  border-radius:8px;
+  background:#f1f3ff;
+  cursor:pointer;
+}
+
+.answers button.correct{background:var(--success);color:white;}
+.answers button.wrong{background:var(--error);color:white;}
+
+.feedback{
+  margin-top:10px;
+  font-weight:bold;
+}
+
+.nav{
+  display:flex;
+  gap:10px;
+  margin-top:20px;
+}
+
+.nav button{
+  flex:1;
+  padding:12px;
+  border:none;
+  border-radius:8px;
+  background:var(--primary);
+  color:white;
+  cursor:pointer;
+}
+
+.nav button.finish{
+  background:#555;
+}
+
+.correction{
+  background:#f9f9ff;
+  padding:15px;
+  border-radius:10px;
+  margin-top:15px;
+}
+</style>
+</head>
+
+<body>
+<div class="dashboard">
+<header>
+  <h1>QCM – Électre (Giraudoux)</h1>
+  <div class="score-box">Score : <span id="score">0</span>/20</div>
+</header>
+
+<div class="progress">
+  <div class="progress-bar" id="progress"></div>
+</div>
+
+<div class="card" id="quiz">
+  <div class="question" id="question"></div>
+  <div class="answers" id="answers"></div>
+  <div class="feedback" id="feedback"></div>
+
+  <div class="nav">
+    <button onclick="prev()">Précédent</button>
+    <button onclick="next()">Suivant</button>
+    <button class="finish" onclick="finish()">Terminer</button>
+  </div>
+</div>
+</div>
+
+<script>
+const questions = [
+{q:"Qui est l’auteur de la pièce Électre ?",a:["Sophocle","Eschyle","Jean Giraudoux","Racine"],c:2,exp:"Jean Giraudoux écrit Électre en 1937."},
+{q:"En quelle année la pièce est-elle créée ?",a:["1920","1937","1945","1913"],c:1,exp:"La pièce est représentée pour la première fois en 1937."},
+{q:"Dans quelle ville se déroule l’action ?",a:["Troie","Sparte","Argos","Athènes"],c:2,exp:"Argos est la cité des Atrides."},
+{q:"Qui est le père d’Électre ?",a:["Égisthe","Oreste","Agamemnon","Achille"],c:2,exp:"Agamemnon est le roi assassiné."},
+{q:"Qui a tué Agamemnon ?",a:["Oreste","Égisthe seul","Clytemnestre et Égisthe","Les dieux"],c:2,exp:"Clytemnestre et Égisthe sont complices."},
+{q:"Comment la mort d’Agamemnon est-elle présentée ?",a:["Assassinat","Maladie","Accident","Suicide"],c:2,exp:"La vérité est dissimulée par un mensonge officiel."},
+{q:"Qui est la mère d’Électre ?",a:["Hélène","Iphigénie","Clytemnestre","Cassandre"],c:2,exp:"Clytemnestre est la reine d’Argos."},
+{q:"Pourquoi Électre est-elle mariée à un jardinier ?",a:["Par amour","Pour l’éloigner du pouvoir","Par tradition","Par hasard"],c:1,exp:"Ce mariage l’empêche d’agir politiquement."},
+{q:"Quel est le trait principal d’Électre ?",a:["La joie","La peur","La recherche de la vérité","La passivité"],c:2,exp:"Elle refuse tout compromis avec le mensonge."},
+{q:"Qui est Oreste ?",a:["Le roi","Le frère d’Électre","Son mari","Un serviteur"],c:1,exp:"Oreste est le fils d’Agamemnon."},
+{q:"Pourquoi Oreste a-t-il été exilé ?",a:["Pour le punir","Pour le protéger","Par choix","Pour voyager"],c:1,exp:"On l’a éloigné après le meurtre de son père."},
+{q:"Comment Oreste revient-il à Argos ?",a:["Comme roi","Déguisé en soldat","Sous une fausse identité","Avec une armée"],c:2,exp:"Il se fait passer pour un étranger."},
+{q:"Comment est Clytemnestre ?",a:["Innocente","Indifférente","Coupable et tourmentée","Héroïque"],c:2,exp:"Elle est hantée par sa faute."},
+{q:"Quel est le rôle d’Égisthe ?",a:["Un devin","Un roi usurpateur","Un serviteur","Un messager"],c:1,exp:"Il gouverne Argos après Agamemnon."},
+{q:"Que cherche Égisthe avant tout ?",a:["La justice","La vérité","La stabilité","La vengeance"],c:2,exp:"Il privilégie l’ordre au détriment de la vérité."},
+{q:"Qui pousse Oreste à agir ?",a:["Égisthe","Les dieux","Électre","Le jardinier"],c:2,exp:"Électre l’oblige à accepter son rôle."},
+{q:"Que fait Oreste à la fin ?",a:["Il fuit","Il pardonne","Il tue Égisthe et Clytemnestre","Il abdique"],c:2,exp:"Il accomplit la vengeance."},
+{q:"Qui sont les Euménides ?",a:["Des reines","Des déesses de la vengeance","Des servantes","Des prêtresses"],c:1,exp:"Elles poursuivent Oreste après le crime."},
+{q:"La fin de la pièce est :",a:["Heureuse","Comique","Ambiguë et sombre","Optimiste"],c:2,exp:"La vérité entraîne le chaos."},
+{q:"Quel conflit central structure la pièce ?",a:["Amour / haine","Justice / bonheur","Jeunesse / vieillesse","Raison / folie"],c:1,exp:"Giraudoux oppose vérité et bonheur."}
+];
+
+let index=0;
+let answers=new Array(questions.length).fill(null);
+
+const qEl=document.getElementById("question");
+const aEl=document.getElementById("answers");
+const fb=document.getElementById("feedback");
+const scoreEl=document.getElementById("score");
+const progress=document.getElementById("progress");
+
+function load(){
+  const q=questions[index];
+  qEl.textContent=`Q${index+1}. ${q.q}`;
+  aEl.innerHTML="";
+  fb.textContent="";
+  progress.style.width=`${(index/questions.length)*100}%`;
+
+  q.a.forEach((txt,i)=>{
+    const b=document.createElement("button");
+    b.textContent=txt;
+    if(answers[index]!==null){
+      if(i===q.c) b.classList.add("correct");
+      if(i===answers[index] && i!==q.c) b.classList.add("wrong");
+      b.disabled=true;
+    }
+    b.onclick=()=>select(i,b);
+    aEl.appendChild(b);
+  });
+  updateScore();
+}
+
+function select(i,btn){
+  answers[index]=i;
+  [...aEl.children].forEach(b=>b.disabled=true);
+  if(i===questions[index].c){
+    btn.classList.add("correct");
+    fb.textContent="✔️ Bonne réponse";
+  }else{
+    btn.classList.add("wrong");
+    aEl.children[questions[index].c].classList.add("correct");
+    fb.textContent="❌ Mauvaise réponse";
+  }
+  updateScore();
+}
+
+function updateScore(){
+  let s=0;
+  answers.forEach((a,i)=>{if(a===questions[i].c) s++;});
+  scoreEl.textContent=s;
+}
+
+function next(){if(index<questions.length-1){index++;load();}}
+function prev(){if(index>0){index--;load();}}
+
+function finish(){
+  let html=`<h2>Correction détaillée</h2>`;
+  questions.forEach((q,i)=>{
+    html+=`
+    <div class="correction">
+      <strong>Q${i+1}. ${q.q}</strong><br>
+      Bonne réponse : <em>${q.a[q.c]}</em><br>
+      ${q.exp}
+    </div>`;
+  });
+  document.getElementById("quiz").innerHTML=html;
+}
+
+load();
+</script>
+</body>
+</html>

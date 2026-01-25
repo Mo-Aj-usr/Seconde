@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>QCM Électre – Jean Giraudoux (Seconde)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    /* --- STYLES IDENTIQUES À TA VERSION PRÉCÉDENTE --- */
+    /* (Je n’ai modifié que ce qui était nécessaire pour le bouton Terminer) */
+
+    :root {
+      --bg: #0f172a;
+      --bg-card: #111827;
+      --accent: #3b82f6;
+      --accent-soft: rgba(59,130,246,0.15);
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --danger: #ef4444;
+      --success: #22c55e;
+      --border: #1f2937;
+      --radius: 14px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui; }
+
+    body {
+      background: radial-gradient(circle at top, #1f2937 0, #020617 55%);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 1100px;
+      display: grid;
+      grid-template-columns: minmax(0, 2fr) minmax(260px, 1fr);
+      gap: 18px;
+    }
+
+    @media (max-width: 900px) {
+      .app { grid-template-columns: 1fr; }
+    }
+
+    .card {
+      background: linear-gradient(145deg, rgba(15,23,42,0.96), rgba(15,23,42,0.9));
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      box-shadow: 0 18px 45px rgba(0,0,0,0.55);
+      padding: 18px;
+      backdrop-filter: blur(18px);
+    }
+
+    .header { display: flex; justify-content: space-between; margin-bottom: 14px; }
+    .title-block h1 { font-size: 1.4rem; }
+    .title-block p { font-size: 0.85rem; color: var(--muted); }
+
+    .badge {
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.4);
+      font-size: 0.75rem;
+      color: var(--muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .badge .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: var(--accent);
+      box-shadow: 0 0 10px rgba(59,130,246,0.9);
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 7px;
+      border-radius: 999px;
+      background: #020617;
+      overflow: hidden;
+      margin-bottom: 10px;
+      border: 1px solid #111827;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #22c55e, #3b82f6);
+      transition: width 0.25s ease-out;
+    }
+
+    .question-meta {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .question-card {
+      margin-top: 4px;
+      padding: 14px;
+      border-radius: 12px;
+      background: rgba(15,23,42,0.95);
+      border: 1px solid rgba(31,41,55,0.9);
+    }
+
+    .question-text { font-size: 1rem; margin-bottom: 10px; }
+
+    .answers { display: grid; gap: 8px; }
+
+    .answer {
+      position: relative;
+      border-radius: 10px;
+      border: 1px solid rgba(31,41,55,0.9);
+      background: rgba(15,23,42,0.9);
+      padding: 8px 10px 8px 32px;
+      cursor: pointer;
+      transition: all 0.18s ease-out;
+    }
+
+    .answer:hover {
+      border-color: rgba(59,130,246,0.7);
+      background: rgba(37,99,235,0.18);
+    }
+
+    .answer.selected { border-color: var(--accent); }
+    .answer.correct { border-color: var(--success); }
+    .answer.wrong { border-color: var(--danger); }
+
+    .answer-label {
+      position: absolute;
+      left: 10px;
+      width: 16px;
+      height: 16px;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+    }
+
+    .controls {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 12px;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .btn {
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.4);
+      padding: 7px 14px;
+      font-size: 0.85rem;
+      background: rgba(15,23,42,0.9);
+      color: var(--text);
+      cursor: pointer;
+    }
+
+    .btn-primary {
+      border-color: transparent;
+      background: linear-gradient(135deg, #2563eb, #4f46e5);
+    }
+
+    .btn-danger {
+      background: linear-gradient(135deg, #dc2626, #b91c1c);
+      border-color: transparent;
+    }
+
+    .feedback { margin-top: 8px; min-height: 18px; font-size: 0.85rem; }
+  </style>
+</head>
+
+<body>
+  <div class="app">
+    <main class="card">
+      <div class="header">
+        <div class="title-block">
+          <h1>QCM – <em>Électre</em> de Jean Giraudoux</h1>
+          <p>Niveau : Seconde · 20 questions</p>
+        </div>
+        <div class="badge"><span class="dot"></span> Mode révision</div>
+      </div>
+
+      <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+
+      <div class="question-meta">
+        <span>Question <strong id="questionIndex">1</strong> / <strong id="questionTotal">20</strong></span>
+        <span id="questionTag"></span>
+      </div>
+
+      <section class="question-card">
+        <div class="question-text" id="questionText"></div>
+        <div class="answers" id="answersContainer"></div>
+        <div class="feedback" id="feedback"></div>
+
+        <div class="controls">
+          <button class="btn" id="prevBtn">← Précédente</button>
+
+          <div style="display:flex; gap:6px;">
+            <button class="btn" id="checkBtn">Vérifier</button>
+            <button class="btn btn-primary" id="nextBtn">Suivante →</button>
+            <button class="btn btn-danger" id="finishBtn">Terminer</button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <aside class="card">
+      <h2>Tableau de bord</h2>
+      <p>Score : <strong id="scorePercent">0%</strong></p>
+      <p>Correctes : <strong id="correctCount">0</strong> / 20</p>
+      <p>Répondues : <strong id="answeredCount">0</strong></p>
+    </aside>
+  </div>
+
+  <script>
+    /* --- QUESTIONS AVEC ACCENTS CORRIGÉS --- */
+    const questions = [
+      { text: "Dans quelle cité se déroule l’action d’Électre ?", tag: "Intrigue", options: ["Thèbes", "Argos", "Athènes", "Troie"], correctIndex: 1 },
+      { text: "Qui est le père d’Électre ?", tag: "Personnages", options: ["Oreste", "Égisthe", "Agamemnon", "Ménesthès"], correctIndex: 2 },
+      { text: "Quel lien unit Clytemnestre et Électre ?", tag: "Personnages", options: ["Sœur", "Mère", "Tante", "Belle-mère"], correctIndex: 1 },
+      { text: "Avec qui Clytemnestre entretient-elle une relation ?", tag: "Intrigue", options: ["Oreste", "Le Mendiant", "Égisthe", "Le Juge"], correctIndex: 2 },
+      { text: "Quel crime Clytemnestre et Égisthe ont-ils commis ?", tag: "Intrigue", options: ["Exilé Électre", "Incendié Argos", "Assassiné Agamemnon", "Enlevé Oreste"], correctIndex: 2 },
+      { text: "Quel événement ouvre la pièce ?", tag: "Intrigue", options: ["Un procès", "Les noces d’Électre", "Un sacrifice", "Une fête"], correctIndex: 1 },
+      { text: "Comment décrire l’attitude d’Électre ?", tag: "Caractère", options: ["Conciliatrice", "Indifférente", "Ironique", "Intransigeante"], correctIndex: 3 },
+      { text: "Quel est l’objectif d’Électre ?", tag: "Thèmes", options: ["Retrouver son rang", "Fuir Argos", "Révéler la vérité", "Épouser Égisthe"], correctIndex: 2 },
+      { text: "Qui revient à Argos sous une fausse identité ?", tag: "Personnages", options: ["Le Mendiant", "Oreste", "Le Juge", "Le Jardinier"], correctIndex: 1 },
+      { text: "Quelle est l’attitude d’Oreste au début ?", tag: "Caractère", options: ["Violent", "Refuse d’écouter", "Hésitant", "Déterminé"], correctIndex: 2 },
+      { text: "Quel personnage semble connaître le destin ?", tag: "Symboles", options: ["Le Mendiant", "Le Juge", "Le Jardinier", "Le Maître d’hôtel"], correctIndex: 0 },
+      { text: "Que représente le Mendiant ?", tag: "Symboles", options: ["La richesse", "Le peuple", "La conscience", "Un figurant"], correctIndex: 2 },
+      { text: "Quel est le genre de la pièce ?", tag: "Littérature", options: ["Comédie", "Tragédie moderne", "Farce", "Conte"], correctIndex: 1 },
+      { text: "Quel est l’effet de la vengeance ?", tag: "Thèmes", options: ["Paix", "Prospérité", "Chaos", "Aucun effet"], correctIndex: 2 },
+      { text: "Comment Électre considère-t-elle la vérité ?", tag: "Thèmes", options: ["Danger", "Inutile", "Supérieure à la paix", "Détail"], correctIndex: 2 },
+      { text: "Quel thème majeur est exploré ?", tag: "Thèmes", options: ["Lâcheté", "Justice", "Vie domestique", "Politique"], correctIndex: 1 },
+      { text: "Quel lien avec le mythe antique ?", tag: "Culture", options: ["Inventé", "Parodie", "Réécriture moderne", "Citations"], correctIndex: 2 },
+      { text: "Quel est le sort de Clytemnestre et Égisthe ?", tag: "Intrigue", options: ["Fuite", "Grâce", "Acquittement", "Tués"], correctIndex: 3 },
+      { text: "Quel est l’effet de la vengeance sur Électre ?", tag: "Personnage", options: ["Regret", "Doute", "Assume", "Fuit"], correctIndex: 2 },
+      { text: "Quel aspect du style de Giraudoux ressort ?", tag: "Style", options: ["Argot", "Poésie", "Peu de dialogues", "Documentaire"], correctIndex: 1 }
+    ];
+
+    const state = {
+      currentIndex: 0,
+      answers: Array(questions.length).fill(null),
+      checked: Array(questions.length).fill(false)
+    };
+
+    const qText = document.getElementById("questionText");
+    const qTag = document.getElementById("questionTag");
+    const qIndex = document.getElementById("questionIndex");
+    const answersEl = document.getElementById("answersContainer");
+    const feedback = document.getElementById("feedback");
+
+    const scorePercent = document.getElementById("scorePercent");
+    const correctCount = document.getElementById("correctCount");
+    const answeredCount = document.getElementById("answeredCount");
+
+    function render() {
+      const q = questions[state.currentIndex];
+      qText.textContent = q.text;
+      qTag.textContent = q.tag;
+      qIndex.textContent = state.currentIndex + 1;
+
+      answersEl.innerHTML = "";
+      q.options.forEach((opt, i) => {
+        const label = document.createElement("label");
+        label.className = "answer";
+        if (state.answers[state.currentIndex] === i) label.classList.add("selected");
+        if (state.checked[state.currentIndex]) {
+          if (i === q.correctIndex) label.classList.add("correct");
+          else if (state.answers[state.currentIndex] === i) label.classList.add("wrong");
+        }
+        label.textContent = opt;
+        label.onclick = () => {
+          if (!state.checked[state.currentIndex]) {
+            state.answers[state.currentIndex] = i;
+            render();
+          }
+        };
+        answersEl.appendChild(label);
+      });
+
+      updateStats();
+    }
+
+    function updateStats() {
+      const answered = state.answers.filter(a => a !== null).length;
+      const correct = state.answers.reduce((acc, ans, i) => acc + (ans === questions[i].correctIndex ? 1 : 0), 0);
+      answeredCount.textContent = answered;
+      correctCount.textContent = correct;
+      scorePercent.textContent = Math.round((correct / questions.length) * 100) + "%";
+    }
+
+    document.getElementById("prevBtn").onclick = () => {
+      if (state.currentIndex > 0) { state.currentIndex--; render(); }
+    };
+
+    document.getElementById("nextBtn").onclick = () => {
+      if (state.currentIndex < questions.length - 1) { state.currentIndex++; render(); }
+    };
+
+    document.getElementById("checkBtn").onclick = () => {
+      if (state.answers[state.currentIndex] !== null) {
+        state.checked[state.currentIndex] = true;
+        render();
+      }
+    };
+
+    /* --- BOUTON TERMINER --- */
+    document.getElementById("finishBtn").onclick = () => {
+      for (let i = 0; i < questions.length; i++) {
+        state.checked[i] = true;
+      }
+      render();
+      alert("QCM terminé ! Score final : " + scorePercent.textContent);
+    };
+
+    render();
+  </script>
+</body>
+</html>
