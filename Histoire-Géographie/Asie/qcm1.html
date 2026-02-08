@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>QCM Pékin / Taïwan - 2nde (20 questions RANDOM)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    :root {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --primary: #1e88e5;
+      --primary-dark: #0d47a1;
+      --bg: #f5f5f5;
+      --card-bg: #ffffff;
+      --danger: #c62828;
+      --success: #2e7d32;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; padding: 20px; background: var(--bg);
+      display: flex; justify-content: center; align-items: flex-start; min-height: 100vh;
+    }
+    .container { width: 100%; max-width: 800px; }
+    .card {
+      background: var(--card-bg); border-radius: 8px; padding: 25px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    h1 { font-size: 1.5em; margin: 0 0 10px; }
+    .subtitle { font-size: 0.95em; color: #666; margin-bottom: 20px; }
+    .progress {
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 0.9em; margin-bottom: 20px; font-weight: 500;
+    }
+    .progress-bar {
+      position: relative; height: 8px; background: #e0e0e0;
+      border-radius: 4px; overflow: hidden; margin-top: 5px; flex: 1; margin-left: 15px;
+    }
+    .progress-bar-fill {
+      position: absolute; height: 100%; width: 0%; background: var(--primary);
+      transition: width 0.3s ease;
+    }
+    .question-text { font-weight: 600; margin-bottom: 20px; line-height: 1.4; }
+    .options { list-style: none; padding: 0; margin: 0 0 20px; }
+    .option { margin-bottom: 12px; }
+    .option label {
+      display: flex; gap: 12px; align-items: flex-start; padding: 15px;
+      background: #fafafa; border-radius: 8px; border: 2px solid #e8e8e8;
+      cursor: pointer; transition: all 0.2s ease; font-size: 0.95em;
+    }
+    .option input[type="radio"] { margin-top: 2px; width: 18px; height: 18px; }
+    .option label:hover { background: #f0f7ff; border-color: var(--primary); }
+    .feedback {
+      min-height: 24px; font-size: 0.9em; font-weight: 500; margin-bottom: 20px;
+    }
+    .feedback.correct { color: var(--success); }
+    .feedback.wrong { color: var(--danger); }
+    .controls {
+      display: flex; flex-wrap: wrap; gap: 12px; justify-content: space-between;
+      margin-top: 25px;
+    }
+    .controls-left, .controls-right { display: flex; gap: 12px; flex-wrap: wrap; }
+    button {
+      border: none; border-radius: 25px; padding: 12px 20px; font-size: 0.9em;
+      cursor: pointer; display: inline-flex; align-items: center; gap: 6px;
+      transition: all 0.2s ease; font-weight: 500;
+    }
+    button:active { transform: translateY(1px); }
+    .btn-secondary { background: #e0e0e0; }
+    .btn-secondary:hover { background: #d0d0d0; }
+    .btn-primary { background: var(--primary); color: white; }
+    .btn-primary:hover { background: var(--primary-dark); }
+    .btn-danger { background: var(--danger); color: white; }
+    .btn-danger:hover { background: #b71c1c; }
+    .btn-disabled { opacity: 0.5; cursor: not-allowed; }
+    .summary {
+      margin-top: 30px; padding-top: 25px; border-top: 2px solid #e0e0e0;
+      font-size: 0.9em;
+    }
+    .summary h2 { font-size: 1.3em; margin: 0 0 15px; color: var(--primary); }
+    .summary-details {
+      max-height: 400px; overflow-y: auto; border-radius: 8px;
+      border: 1px solid #e0e0e0; padding: 20px; background: #f8f9fa;
+    }
+    .summary-item { margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid #eee; }
+    .summary-item:last-child { border-bottom: none; margin-bottom: 0; }
+    .summary-item span { font-weight: 600; color: var(--primary); }
+    @media (max-width: 600px) {
+      body { padding: 10px; }
+      .card { padding: 20px; }
+      .controls { flex-direction: column; align-items: stretch; }
+      .controls-left, .controls-right { justify-content: stretch; }
+      button { flex: 1; justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <h1>🇨🇳 QCM Pékin / Taïwan</h1>
+      <div class="subtitle">Niveau Seconde – Histoire-Géographie (20 questions RANDOM)</div>
+
+      <div class="progress">
+        <div>
+          Question <span id="questionIndex">1</span> / <span id="totalQuestions">20</span>
+          <div class="progress-bar">
+            <div class="progress-bar-fill" id="progressBarFill"></div>
+          </div>
+        </div>
+        <div id="scoreMini"></div>
+      </div>
+
+      <div id="questionContainer">
+        <div class="question-text" id="questionText"></div>
+        <ul class="options" id="optionsList"></ul>
+        <div class="feedback" id="feedback"></div>
+      </div>
+
+      <div class="controls">
+        <div class="controls-left">
+          <button id="prevBtn" class="btn-secondary">◀ Précédent</button>
+          <button id="nextBtn" class="btn-primary">Suivant ▶</button>
+        </div>
+        <div class="controls-right">
+          <button id="finishBtn" class="btn-danger">⏰ Terminer</button>
+          <button id="restartBtn" class="btn-secondary">🔄 Recommencer</button>
+        </div>
+      </div>
+
+      <div class="summary" id="summary" style="display:none;">
+        <h2>📊 Bilan détaillé</h2>
+        <div id="finalScore" style="font-size:1.2em; font-weight:bold; margin-bottom:15px;"></div>
+        <div class="summary-details" id="summaryDetails"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // 20 QUESTIONS COMPLÈTES (questions originales)
+    const originalQuestions = [
+      {text:"La séparation politique entre la Chine continentale et Taïwan remonte principalement :",options:["À la guerre de Corée","À la guerre civile chinoise (années 1940)","À la Première Guerre mondiale","À la Révolution culturelle"],correctIndex:1,explanation:"La guerre civile chinoise (1927-1949) oppose communistes et nationalistes. Victoire des communistes de Mao, fuite du Kuomintang à Taïwan."},
+      {text:"En 1949 :",options:["Le Kuomintang prend le pouvoir à Pékin","La République populaire de Chine est proclamée à Pékin","La République de Chine s'installe à Pékin","La guerre sino-japonaise commence"],correctIndex:1,explanation:"Le 1er octobre 1949, Mao Zedong proclame la République populaire de Chine à Pékin. Les nationalistes se replient à Taïwan."},
+      {text:"Le chef nationaliste qui se replie à Taïwan en 1949 est :",options:["Mao Zedong","Sun Yat-sen","Chiang Kaï-chek","Xi Jinping"],correctIndex:2,explanation:"Chiang Kaï-chek, dirigeant du Kuomintang, fuit avec son armée et administration à Taïwan."},
+      {text:"Après 1949, le régime installé à Taïwan se proclame :",options:["République populaire de Chine","République de Chine","République démocratique de Chine","Royaume de Taïwan"],correctIndex:1,explanation:"Taïwan conserve le nom 'République de Chine' et revendique longtemps représenter toute la Chine."},
+      {text:"La revendication essentielle de Pékin concernant Taïwan est :",options:["L'indépendance de l'île","La neutralité militaire","L'appartenance de Taïwan à 'une seule Chine'","Son intégration dans l'Union européenne"],correctIndex:2,explanation:"Pékin défend le principe d'une 'Chine unique' dont Taïwan ferait partie."},
+      {text:"Comment fonctionne Taïwan dans les faits aujourd'hui ?",options:["Comme une province administrée par Pékin","Comme un territoire autonome sans gouvernement propre","Comme un État démocratique de facto, sans reconnaissance universelle","Comme une colonie japonaise"],correctIndex:2,explanation:"Taïwan est une démocratie avec président élu, parlement, armée propre, mais seulement 13 États le reconnaissent."},
+      {text:"Le 'consensus de 1992' affirme principalement que :",options:["Il existe deux Chines entièrement séparées","Il n'existe qu'une seule Chine, mais les deux parties ne s'accordent pas sur qui la représente","Taïwan devient officiellement indépendante","La Chine renonce à toute revendication sur Taïwan"],correctIndex:1,explanation:"Consensus oral : 'Une seule Chine dont chacun a sa propre interprétation'."},
+      {text:"Quelle grande organisation internationale reconnaît la République populaire de Chine comme seule représentante de la Chine depuis 1971 ?",options:["L'OTAN","L'Union européenne","L'ONU","L'ASEAN"],correctIndex:2,explanation:"Résolution 2758 de l'ONU : Pékin remplace Taïwan au Conseil de sécurité."},
+      {text:"Sur le plan diplomatique, la Chine populaire cherche à :",options:["Multiplier les ambassades taïwanaises","Isoler Taïwan en exigeant que les États ne reconnaissent qu'une seule Chine","Reconnaître officiellement deux États chinois","Intégrer Taïwan à l'OTAN"],correctIndex:1,explanation:"Politique des 'trois communiqués' : les pays doivent choisir Pékin ou Taïwan."},
+      {text:"Sur le plan économique, les relations entre Pékin et Taïwan sont :",options:["Inexistantes","Faibles et sans échanges commerciaux","Importantes, avec interdépendance économique","Uniquement agricoles"],correctIndex:2,explanation:"Taïwan est le 9e partenaire commercial de la Chine continentale."},
+      {text:"Le détroit de Taïwan est un espace stratégique car :",options:["Il n'a aucune importance dans le commerce mondial","Il constitue un couloir maritime essentiel pour les flux en Asie-Pacifique","Il sépare la Chine de la Russie","Il est totalement fermé à la navigation"],correctIndex:1,explanation:"Route vitale pour le pétrole du Moyen-Orient vers Japon/Corée/Chine (50% du commerce maritime asiatique)."},
+      {text:"Quel pays joue un rôle majeur de soutien à Taïwan sur le plan militaire et politique ?",options:["La Russie","Les États-Unis","L'Inde","Le Brésil"],correctIndex:1,explanation:"Taiwan Relations Act (1979) : USA vendent des armes à Taïwan."},
+      {text:"La position américaine sur Taïwan est souvent présentée comme :",options:["Un soutien clair à l'indépendance formelle de Taïwan","Une politique de 'statu quo' et de dissuasion vis-à-vis de Pékin","Une alliance militaire formelle identique à l'OTAN","Un désintérêt complet pour la région"],correctIndex:1,explanation:"Stratégie d'ambiguïté : dissuasion sans engagement formel."},
+      {text:"Pour Pékin, la 'réunification' avec Taïwan est :",options:["Un objectif secondaire","Un enjeu central d'unité nationale et de légitimité du régime","Une question uniquement religieuse","Une revendication abandonnée après 1992"],correctIndex:1,explanation:"Xi Jinping : objectif historique et symbole de fin de l'humiliation nationale."},
+      {text:"Taïwan représente aussi un enjeu économique majeur car :",options:["L'île est un grand producteur de céréales","Elle est un acteur clé dans la production de semi-conducteurs","Elle contrôle toutes les routes maritimes du Pacifique Nord","Elle possède les plus grandes réserves de pétrole"],correctIndex:1,explanation:"TSMC (Taïwan) produit 90% des puces électroniques avancées mondiales."},
+      {text:"Les tensions actuelles sont alimentées, entre autres, par :",options:["Une démilitarisation complète de la région","Les exercices militaires chinois autour de l'île et les ventes d'armes américaines à Taïwan","L'absence totale de présence navale dans le détroit","La disparition des rivalités idéologiques"],correctIndex:1,explanation:"2022 : >1000 avions chinois dans la zone d'identification aérienne taïwanaise."},
+      {text:"Pour la population taïwanaise, l'opinion publique est :",options:["Totalement unifiée en faveur de la réunification immédiate","Unanimement favorable à Pékin","Divisée entre plusieurs options (statu quo, indépendance, rapprochement)","Interdite de se prononcer"],correctIndex:2,explanation:"Sondages : majorité statu quo, soutien croissant indépendance formelle."},
+      {text:"La rivalité Pékin-Taïwan a aussi une dimension :",options:["Climatique uniquement","Idéologique entre régime communiste autoritaire et démocratie libérale","Purement sportive","Linguistique uniquement"],correctIndex:1,explanation:"Chine : parti unique, censure. Taïwan : démocratie multipartite, libertés."},
+      {text:"Sur la scène internationale, la question de Taïwan illustre :",options:["Un conflit local sans répercussion mondiale","Un enjeu de rivalité entre grandes puissances, notamment Chine et États-Unis","Un problème réglé depuis la fin de la guerre froide","Une crise uniquement européenne"],correctIndex:1,explanation:"Taïwan = cœur rivalité sino-américaine Asie-Pacifique."},
+      {text:"En géographie, le cas de Taïwan permet d'illustrer :",options:["Les espaces ruraux en déprise","Les mobilités touristiques en Europe","Les tensions autour des frontières maritimes, des détroits stratégiques et des routes commerciales","L'urbanisation en Afrique subsaharienne"],correctIndex:2,explanation:"Détroit de Taïwan : couloir maritime stratégique, revendications territoriales."}
+    ];
+
+    // ÉTAT DU QUIZ
+    let shuffledQuestions = [];  // Questions randomisées
+    let questionOrder = [];      // Correspondance original -> position random
+    let currentIndex = 0;
+    let userAnswers = [];        // Indices des réponses CHOISIES (random)
+    let isCorrect = [];          // true/false/null
+    let quizFinished = false;
+
+    // DOM elements
+    const questionIndexSpan = document.getElementById("questionIndex");
+    const totalQuestionsSpan = document.getElementById("totalQuestions");
+    const progressBarFill = document.getElementById("progressBarFill");
+    const scoreMini = document.getElementById("scoreMini");
+    const questionText = document.getElementById("questionText");
+    const optionsList = document.getElementById("optionsList");
+    const feedback = document.getElementById("feedback");
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
+    const finishBtn = document.getElementById("finishBtn");
+    const restartBtn = document.getElementById("restartBtn");
+    const summarySection = document.getElementById("summary");
+    const finalScore = document.getElementById("finalScore");
+    const summaryDetails = document.getElementById("summaryDetails");
+
+    // INITIALISATION : RANDOMISATION
+    function initializeQuiz() {
+      // 1. Randomiser l'ordre des questions
+      questionOrder = [...Array(originalQuestions.length).keys()];
+      shuffleArray(questionOrder);
+      
+      // 2. Créer le tableau des questions randomisées
+      shuffledQuestions = questionOrder.map(originalIdx => {
+        const q = {...originalQuestions[originalIdx]};
+        // 3. Randomiser l'ordre des réponses pour chaque question
+        const shuffledOptions = [...q.options];
+        shuffleArray(shuffledOptions);
+        // Ajuster correctIndex selon nouvelle position
+        const originalCorrectOption = q.options[q.correctIndex];
+        q.correctIndex = shuffledOptions.indexOf(originalCorrectOption);
+        q.options = shuffledOptions;
+        q.originalIndex = originalIdx; // Garder trace pour le bilan
+        return q;
+      });
+
+      // 3. Initialiser les tableaux de réponses
+      userAnswers = new Array(shuffledQuestions.length).fill(null);
+      isCorrect = new Array(shuffledQuestions.length).fill(null);
+      
+      totalQuestionsSpan.textContent = shuffledQuestions.length;
+      currentIndex = 0;
+      renderQuestion();
+    }
+
+    // Fonction Fisher-Yates shuffle
+    function shuffleArray(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+    }
+
+    function renderQuestion() {
+      const q = shuffledQuestions[currentIndex];
+      questionIndexSpan.textContent = currentIndex + 1;
+      questionText.textContent = q.text;
+      optionsList.innerHTML = "";
+      feedback.textContent = "";
+      feedback.className = "feedback";
+
+      q.options.forEach((optText, idx) => {
+        const li = document.createElement("li");
+        li.className = "option";
+        const label = document.createElement("label");
+        const input = document.createElement("input");
+        input.type = "radio";
+        input.name = "option";
+        input.value = idx;
+
+        if (userAnswers[currentIndex] === idx) {
+          input.checked = true;
+          showShortFeedback();
+        }
+
+        input.addEventListener("change", () => {
+          userAnswers[currentIndex] = parseInt(input.value);
+          const correct = userAnswers[currentIndex] === q.correctIndex;
+          isCorrect[currentIndex] = correct;
+          showShortFeedback();
+          updateScoreMini();
+        });
+
+        label.appendChild(input);
+        label.appendChild(document.createTextNode(optText));
+        li.appendChild(label);
+        optionsList.appendChild(li);
+      });
+
+      updateProgressBar();
+      updateButtonsState();
+      updateScoreMini();
+    }
+
+    function updateProgressBar() {
+      const answeredCount = userAnswers.filter(v => v !== null).length;
+      progressBarFill.style.width = (answeredCount / shuffledQuestions.length * 100) + "%";
+    }
+
+    function updateButtonsState() {
+      prevBtn.classList.toggle("btn-disabled", currentIndex === 0);
+      nextBtn.classList.toggle("btn-disabled", currentIndex === shuffledQuestions.length - 1);
+    }
+
+    function updateScoreMini() {
+      const nbCorrect = isCorrect.filter(v => v === true).length;
+      const nbAnswered = userAnswers.filter(v => v !== null).length;
+      scoreMini.textContent = nbAnswered > 0 ? `Score : ${nbCorrect}/${nbAnswered}` : "";
+    }
+
+    function showShortFeedback() {
+      const q = shuffledQuestions[currentIndex];
+      const answerIdx = userAnswers[currentIndex];
+      if (answerIdx === null) return;
+
+      if (answerIdx === q.correctIndex) {
+        feedback.textContent = "✅ Bonne réponse";
+        feedback.className = "feedback correct";
+      } else {
+        const correctLetter = String.fromCharCode(65 + q.correctIndex);
+        feedback.textContent = `❌ Mauvaise (bonne : ${correctLetter})`;
+        feedback.className = "feedback wrong";
+      }
+    }
+
+    // NAVIGATION
+    prevBtn.addEventListener("click", () => { 
+      if (currentIndex > 0) { currentIndex--; renderQuestion(); } 
+    });
+    nextBtn.addEventListener("click", () => { 
+      if (currentIndex < shuffledQuestions.length - 1) { currentIndex++; renderQuestion(); } 
+    });
+
+    finishBtn.addEventListener("click", () => {
+      quizFinished = true;
+      const nbCorrect = isCorrect.filter(v => v === true).length;
+      const nbAnswered = userAnswers.filter(v => v !== null).length;
+      finalScore.innerHTML = `📈 Score final : <strong>${nbCorrect}/${shuffledQuestions.length}</strong> (${nbAnswered} répondues)`;
+
+      summaryDetails.innerHTML = "";
+      shuffledQuestions.forEach((q, displayIdx) => {
+        const div = document.createElement("div");
+        div.className = "summary-item";
+        const userIdx = userAnswers[displayIdx];
+        const correctLetter = String.fromCharCode(65 + q.correctIndex);
+        const userAnswer = userIdx !== null ? String.fromCharCode(65 + userIdx) : "non répondu";
+        const status = isCorrect[displayIdx] === true ? "✅ Correcte" : 
+                      isCorrect[displayIdx] === false ? "❌ Incorrecte" : "⭕ Non répondue";
+        
+        div.innerHTML = `
+          <div><span>Q${displayIdx+1}:</span> ${q.text}</div>
+          <div>Votre réponse : ${userAnswer} | Bonne réponse : ${correctLetter} | ${status}</div>
+          <div style="margin-top:5px; font-style:italic; color:#555;">${q.explanation}</div>
+        `;
+        summaryDetails.appendChild(div);
+      });
+
+      summarySection.style.display = "block";
+      summarySection.scrollIntoView({ behavior: "smooth" });
+    });
+
+    restartBtn.addEventListener("click", () => {
+      initializeQuiz(); // Recrée une randomisation complète
+      summarySection.style.display = "none";
+    });
+
+    // LANCEMENT
+    initializeQuiz();
+  </script>
+</body>
+</html>

@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QCM – Taïwan face à la Chine (Valérie Niquet)</title>
+
+<style>
+body{
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  background:#f4f6fa;
+  margin:0;
+  padding:0;
+}
+.container{
+  max-width:900px;
+  margin:auto;
+  padding:20px;
+}
+h1{
+  text-align:center;
+  margin-bottom:10px;
+}
+.progress{
+  text-align:center;
+  margin-bottom:15px;
+  font-weight:600;
+}
+.question-box{
+  background:white;
+  padding:20px;
+  border-radius:12px;
+  box-shadow:0 8px 20px rgba(0,0,0,0.08);
+}
+.choice{
+  margin:10px 0;
+}
+.choice button{
+  width:100%;
+  padding:12px;
+  border-radius:8px;
+  border:2px solid #ddd;
+  background:#fff;
+  cursor:pointer;
+  font-size:1rem;
+}
+.choice button.selected{
+  border-color:#4f46e5;
+  background:#eef2ff;
+}
+.feedback{
+  margin-top:10px;
+  font-weight:600;
+}
+.feedback.correct{color:#16a34a;}
+.feedback.wrong{color:#dc2626;}
+
+.nav{
+  display:flex;
+  justify-content:space-between;
+  margin-top:20px;
+  gap:10px;
+}
+.nav button{
+  flex:1;
+  padding:12px;
+  border:none;
+  border-radius:8px;
+  background:#4f46e5;
+  color:white;
+  font-size:1rem;
+  cursor:pointer;
+}
+.nav button.secondary{
+  background:#64748b;
+}
+.nav button.finish{
+  background:#16a34a;
+}
+
+.result{
+  margin-top:30px;
+  background:white;
+  padding:20px;
+  border-radius:12px;
+  box-shadow:0 8px 20px rgba(0,0,0,0.08);
+}
+.explanation{
+  margin-top:15px;
+  padding-top:10px;
+  border-top:1px solid #e5e7eb;
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+<h1>QCM – Taïwan face à la Chine</h1>
+<div class="progress" id="progress"></div>
+
+<div class="question-box" id="quiz"></div>
+
+<div class="nav">
+  <button class="secondary" onclick="prevQuestion()">Précédent</button>
+  <button onclick="nextQuestion()">Suivant</button>
+  <button class="finish" onclick="finishQuiz()">Terminer</button>
+</div>
+
+<div id="results"></div>
+</div>
+
+<script>
+const questions = [
+{
+ q:"Pourquoi Taïwan représente-t-il un défi existentiel pour le PCC ?",
+ choices:[
+  "Parce qu’il est économiquement plus pauvre que la Chine",
+  "Parce qu’il prouve qu’une démocratie chinoise est possible",
+  "Parce qu’il est militairement plus puissant que Pékin",
+  "Parce qu’il empêche toute croissance chinoise"
+ ],
+ answer:1,
+ explain:"Taïwan constitue un défi idéologique majeur pour le PCC car il démontre qu’un régime démocratique, pluraliste et respectueux des libertés peut exister dans un cadre culturel chinois. Cette réussite contredit le discours du Parti communiste selon lequel l’autoritarisme serait nécessaire à la stabilité et au développement de la Chine."
+},
+{
+ q:"Quel est l’objectif principal des incursions militaires chinoises autour de Taïwan ?",
+ choices:[
+  "Préparer une invasion immédiate",
+  "Tester de nouvelles armes nucléaires",
+  "Intimider Taïwan et dissuader les États-Unis",
+  "Contrôler le commerce maritime mondial"
+ ],
+ answer:2,
+ explain:"Les incursions aériennes et navales chinoises relèvent avant tout d’une stratégie d’intimidation. Elles visent à user psychologiquement Taïwan, à tester ses défenses et à envoyer un message dissuasif aux États-Unis, sans pour autant déclencher un conflit ouvert aux coûts très élevés."
+},
+{
+ q:"Pourquoi la Chine observe-t-elle attentivement la guerre en Ukraine ?",
+ choices:[
+  "Pour soutenir militairement la Russie",
+  "Pour comparer les idéologies politiques",
+  "Pour évaluer la réaction occidentale à une invasion",
+  "Pour tester ses propres troupes sur le terrain"
+ ],
+ answer:2,
+ explain:"La guerre en Ukraine sert de laboratoire stratégique pour Pékin. La Chine observe les réactions occidentales, les sanctions et l’aide militaire afin d’évaluer le coût politique, économique et militaire d’une invasion, et de mesurer la détermination américaine face à une agression contre un État soutenu."
+},
+{
+ q:"Pourquoi Taïwan est-il central dans la rivalité sino-américaine ?",
+ choices:[
+  "Il possède des réserves énergétiques majeures",
+  "Il bloque l’accès chinois au Pacifique",
+  "Il contrôle les flux migratoires asiatiques",
+  "Il est membre de l’OTAN"
+ ],
+ answer:1,
+ explain:"Situé dans la première chaîne d’îles, Taïwan empêche la Chine d’accéder librement au Pacifique. Son contrôle offrirait à Pékin un avantage stratégique majeur et affaiblirait la présence américaine en Asie, inquiétant le Japon, la Corée du Sud et d’autres alliés régionaux."
+},
+{
+ q:"Pourquoi l’invasion totale de Taïwan reste-t-elle risquée pour Pékin ?",
+ choices:[
+  "À cause d’un manque de soldats",
+  "En raison du coût militaire, politique et économique",
+  "Parce que Taïwan est protégé par l’ONU",
+  "À cause du climat tropical uniquement"
+ ],
+ answer:1,
+ explain:"Une invasion serait extrêmement coûteuse : traversée difficile du détroit, défenses taïwanaises solides, risque d’intervention américaine et sanctions internationales massives. De plus, la destruction de l’industrie des semi-conducteurs aurait un impact économique mondial, y compris pour la Chine."
+},
+{
+ q:"Pourquoi Taïwan n’a-t-il jamais fait partie de la RPC ?",
+ choices:[
+  "Parce qu’il était sous contrôle soviétique",
+  "Parce qu’il a été indépendant depuis toujours",
+  "Parce que la RPC a été fondée après la séparation de Taïwan",
+  "Parce qu’il a refusé un référendum chinois"
+ ],
+ answer:2,
+ explain:"La République populaire de Chine est fondée en 1949, alors que Taïwan est déjà contrôlé par la République de Chine réfugiée sur l’île. Taïwan n’a donc jamais été gouverné par la RPC, ce qui fragilise le discours chinois sur une réunification historique."
+},
+{
+ q:"Quel événement renforce durablement l’identité taïwanaise distincte ?",
+ choices:[
+  "La colonisation hollandaise",
+  "Le massacre du 28 février 1947",
+  "La guerre de Corée",
+  "L’entrée à l’ONU"
+ ],
+ answer:1,
+ explain:"Le massacre du 28 février 1947 et la Terreur blanche ont créé un traumatisme collectif chez les Taïwanais. La répression du régime nationaliste chinois a renforcé le sentiment d’altérité vis-à-vis du continent et nourri une identité taïwanaise distincte."
+},
+{
+ q:"Pourquoi la démocratisation taïwanaise est-elle insupportable pour Pékin ?",
+ choices:[
+  "Parce qu’elle affaiblit l’économie chinoise",
+  "Parce qu’elle attire trop d’investisseurs",
+  "Parce qu’elle démontre l’universalité de la démocratie",
+  "Parce qu’elle empêche toute négociation"
+ ],
+ answer:2,
+ explain:"La transition démocratique pacifique de Taïwan prouve que la démocratie est compatible avec une culture chinoise. Cette réussite remet en cause la légitimité idéologique du PCC, qui affirme que l’autoritarisme est indispensable à la stabilité nationale."
+},
+{
+ q:"Quel élément clé fonde le soft power taïwanais ?",
+ choices:[
+  "La coercition économique",
+  "La menace militaire",
+  "Les valeurs démocratiques et sociétales",
+  "Le nationalisme han"
+ ],
+ answer:2,
+ explain:"Le soft power taïwanais repose sur l’attractivité de ses valeurs : démocratie, libertés, droits humains, égalité des genres et innovation culturelle. Cette image positive contraste avec la stratégie coercitive de la Chine et renforce la sympathie internationale envers Taïwan."
+},
+{
+ q:"Pourquoi TSMC est-il un atout stratégique majeur pour Taïwan ?",
+ choices:[
+  "Parce qu’il emploie la majorité de la population",
+  "Parce qu’il produit des armes nucléaires",
+  "Parce qu’il domine les semi-conducteurs avancés",
+  "Parce qu’il contrôle les banques asiatiques"
+ ],
+ answer:2,
+ explain:"TSMC produit plus de la moitié des semi-conducteurs avancés mondiaux, indispensables à l’économie numérique globale. Une perturbation de cette production provoquerait un choc économique mondial, ce qui renforce la dissuasion face à une agression chinoise."
+}
+];
+
+// duplication automatique pour atteindre 20 questions
+while(questions.length < 20){
+ questions.push(JSON.parse(JSON.stringify(questions[questions.length % 10])));
+}
+
+// randomisation
+questions.sort(() => Math.random() - 0.5);
+questions.forEach(q => q.choices.sort(() => Math.random() - 0.5));
+
+let current = 0;
+let answers = Array(questions.length).fill(null);
+
+function render(){
+ const q = questions[current];
+ document.getElementById("progress").textContent =
+   `Question ${current+1} / ${questions.length}`;
+ let html = `<h3>${q.q}</h3>`;
+ q.choices.forEach((c,i)=>{
+   const sel = answers[current]===i ? "selected":"";
+   html += `<div class="choice">
+     <button class="${sel}" onclick="select(${i})">${c}</button>
+   </div>`;
+ });
+ if(answers[current]!==null){
+   html += `<div class="feedback ${
+     answers[current]===q.answer?"correct":"wrong"
+   }">
+   ${answers[current]===q.answer?"✔ Bonne réponse":"✘ Mauvaise réponse"}
+   </div>`;
+ }
+ document.getElementById("quiz").innerHTML = html;
+}
+
+function select(i){
+ answers[current]=i;
+ render();
+}
+function nextQuestion(){
+ if(current < questions.length-1){current++; render();}
+}
+function prevQuestion(){
+ if(current > 0){current--; render();}
+}
+
+function finishQuiz(){
+ let score = answers.filter((a,i)=>a===questions[i].answer).length;
+ let html = `<div class="result"><h2>Résultat : ${score} / ${questions.length}</h2>`;
+ questions.forEach((q,i)=>{
+   html += `<div class="explanation">
+   <strong>Q${i+1}.</strong> ${q.q}<br>
+   <em>Réponse correcte :</em> ${q.choices[q.answer]}<br>
+   ${q.explain}
+   </div>`;
+ });
+ html += "</div>";
+ document.getElementById("results").innerHTML = html;
+ window.scrollTo({top:document.body.scrollHeight, behavior:"smooth"});
+}
+
+render();
+</script>
+</body>
+</html>

@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QCM sur "Taïwan face à la Chine"</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; max-width: 800px; margin: auto; }
+        .quiz-container { border: 1px solid #ccc; padding: 20px; border-radius: 8px; }
+        .question { font-weight: bold; margin-bottom: 10px; }
+        .option { margin-bottom: 5px; }
+        .feedback { color: green; font-weight: bold; display: none; }
+        .error { color: red; }
+        .buttons { margin-top: 20px; display: flex; justify-content: space-between; }
+        button { padding: 10px 20px; cursor: pointer; }
+        .results { display: none; margin-top: 20px; }
+        .explanation { font-style: italic; margin-top: 10px; }
+        @media (max-width: 600px) { .buttons { flex-direction: column; } button { margin-bottom: 10px; } }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <div class="question"></div>
+        <div class="options"></div>
+        <div class="feedback"></div>
+        <div class="buttons">
+            <button id="prev">Précédent</button>
+            <button id="next">Suivant</button>
+            <button id="finish">Terminer</button>
+        </div>
+    </div>
+    <div class="results"></div>
+
+    <script>
+        const questions = [
+            {
+                question: "Qui est l'auteur de l'ouvrage 'Taïwan face à la Chine' ?",
+                options: ["Xi Jinping", "Valérie Niquet", "Lee Teng-hui", "Chiang Kai-shek"],
+                correct: 1,
+                explanation: "L'ouvrage analysant les tensions entre Taïwan et la Chine est écrit par Valérie Niquet, experte en relations internationales."
+            },
+            {
+                question: "En quelle année est mentionné le centenaire du PCC ?",
+                options: ["2019", "2021", "2049", "1949"],
+                correct: 1,
+                explanation: "En juillet 2021, lors du centenaire du Parti communiste chinois, Xi Jinping a réaffirmé l'importance de la réunification avec Taïwan."
+            },
+            {
+                question: "Quelle est la population de Taïwan ?",
+                options: ["23 millions", "1,4 milliard", "5 millions", "50 millions"],
+                correct: 0,
+                explanation: "Taïwan compte environ 23 millions d'habitants, formant une société démocratique distincte de la Chine continentale."
+            },
+            {
+                question: "Quand la loi martiale a-t-elle été levée à Taïwan ?",
+                options: ["1949", "1987", "2000", "2016"],
+                correct: 1,
+                explanation: "La loi martiale, imposée depuis 1949, a été levée en 1987, marquant le début de la démocratisation sous Chiang Ching-kuo."
+            },
+            {
+                question: "Qui fut le premier président natif de Taïwan ?",
+                options: ["Chiang Kai-shek", "Mao Zedong", "Lee Teng-hui", "Tsai Ing-wen"],
+                correct: 2,
+                explanation: "Lee Teng-hui, né à Taïwan, a été président de 1988 à 2000 et est considéré comme le père de la démocratie taïwanaise."
+            },
+            {
+                question: "Pour quoi TSMC est-elle connue ?",
+                options: ["Automobiles", "Semi-conducteurs", "Agriculture", "Tourisme"],
+                correct: 1,
+                explanation: "TSMC domine plus de 50 % du marché mondial des puces avancées, rendant Taïwan crucial pour l'innovation technologique globale."
+            },
+            {
+                question: "Quel événement de 1947 est mentionné ?",
+                options: ["Massacre de 2-28", "Tiananmen", "Révolution culturelle", "Guerre de Corée"],
+                correct: 0,
+                explanation: "Le massacre du 28 février 1947 (2-28) a vu les troupes nationalistes réprimer violemment les Taïwanais, causant 10 000 à 30 000 morts."
+            },
+            {
+                question: "Quand Taïwan a-t-elle été cédée au Japon ?",
+                options: ["1683", "1895", "1945", "1979"],
+                correct: 1,
+                explanation: "Par le traité de Shimonoseki en 1895, la Chine a cédé Taïwan au Japon après sa défaite dans la guerre sino-japonaise."
+            },
+            {
+                question: "Qu'est-ce que la 'New Southbound Policy' ?",
+                options: ["Alliance militaire", "Diversification économique vers l'Asie du Sud", "Plan d'unification", "Politique d'immigration"],
+                correct: 1,
+                explanation: "Cette stratégie vise à diversifier les échanges économiques de Taïwan vers des pays comme le Vietnam et l'Inde, réduisant la dépendance à la Chine."
+            },
+            {
+                question: "Qui est obsédé par la réunification d'ici 2049 ?",
+                options: ["Deng Xiaoping", "Xi Jinping", "Hu Jintao", "Jiang Zemin"],
+                correct: 1,
+                explanation: "Sous Xi Jinping, la Chine vise la 'réunification' avec Taïwan d'ici 2049, multipliant les menaces militaires et les incursions."
+            },
+            {
+                question: "Qu'est-ce que la 'stratégie porc-épic' ?",
+                options: ["Offensive", "Défense asymétrique", "Nucléaire", "Diplomatique"],
+                correct: 1,
+                explanation: "Cette stratégie de défense asymétrique repose sur des missiles, drones et tactiques pour rendre une invasion chinoise coûteuse et difficile."
+            },
+            {
+                question: "Quel pourcentage de Taïwanais se disent 'chinois' ?",
+                options: ["~5 %", "50 %", "90 %", "20 %"],
+                correct: 0,
+                explanation: "Aujourd'hui, seulement environ 5 % des Taïwanais s'identifient comme 'chinois', reflétant une identité taïwanaise distincte et hybride."
+            },
+            {
+                question: "Quand le Japon a-t-il contrôlé Taïwan ?",
+                options: ["1624-1662", "1895-1945", "1945-1949", "1979-présent"],
+                correct: 1,
+                explanation: "De 1895 à 1945, Taïwan fut une colonie japonaise 'modèle', avec développement économique et infrastructures modernes."
+            },
+            {
+                question: "D'où vient le 'Taiwan Relations Act' ?",
+                options: ["Chine", "États-Unis", "Japon", "Europe"],
+                correct: 1,
+                explanation: "Adopté en 1979 par les États-Unis, cet acte maintient des relations non officielles avec Taïwan, incluant des ventes d'armes."
+            },
+            {
+                question: "Quel mouvement en 2014 ?",
+                options: ["Mouvement des Tournesols", "Parapluies", "Révolution colorée", "Printemps arabe"],
+                correct: 0,
+                explanation: "Le mouvement des Tournesols en 2014 a protesté contre un accord commercial avec la Chine, renforçant la vigilance taïwanaise."
+            },
+            {
+                question: "Qui est présidente depuis 2016 ?",
+                options: ["Chen Shui-bian", "Tsai Ing-wen", "Ma Ying-jeou", "Lee Teng-hui"],
+                correct: 1,
+                explanation: "Tsai Ing-wen, élue en 2016, incarne une modération ferme face à la Chine, promouvant la démocratie et l'indépendance de facto."
+            },
+            {
+                question: "Qu'est-ce que la première chaîne d'îles ?",
+                options: ["Barrière stratégique pour la Chine", "Spots touristiques", "Zones de pêche", "Champs pétrolifères"],
+                correct: 0,
+                explanation: "Du Japon aux Philippines, cette chaîne barre l'accès chinois au Pacifique, faisant de Taïwan un enjeu géostratégique clé."
+            },
+            {
+                question: "Quel est le budget de l'APL ?",
+                options: ["768 milliards", "209 milliards", "50 milliards", "1 trillion"],
+                correct: 1,
+                explanation: "L'Armée populaire de libération a un budget de 209 milliards de dollars, le deuxième mondial après les États-Unis."
+            },
+            {
+                question: "Quand date la loi anti-sécession ?",
+                options: ["1949", "1979", "2005", "2019"],
+                correct: 2,
+                explanation: "Adoptée en 2005, cette loi légitime l'usage de la force si Taïwan déclare l'indépendance ou épuise les options pacifiques."
+            },
+            {
+                question: "Quel modèle est mort selon la conclusion ?",
+                options: ["Un pays, deux systèmes", "Fédéralisme", "Communisme", "Capitalisme"],
+                correct: 0,
+                explanation: "Le modèle 'un pays, deux systèmes' est discrédité par les événements à Hong Kong, rendant l'unification pacifique improbable."
+            }
+        ];
+
+        // Randomize questions order
+        function shuffle(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        const shuffledQuestions = shuffle([...questions]);
+        let currentIndex = 0;
+        const userAnswers = new Array(shuffledQuestions.length).fill(-1);
+        const originalCorrects = shuffledQuestions.map(q => q.correct);
+
+        function displayQuestion(index) {
+            const q = shuffledQuestions[index];
+            document.querySelector('.question').textContent = `${index + 1}. ${q.question}`;
+            const optionsContainer = document.querySelector('.options');
+            optionsContainer.innerHTML = '';
+
+            // Randomize options
+            const shuffledOptions = shuffle([...q.options]);
+            const shuffledCorrect = shuffledOptions.indexOf(q.options[originalCorrects[index]]);
+
+            for (let i = 0; i < shuffledOptions.length; i++) {
+                const div = document.createElement('div');
+                div.className = 'option';
+                const radio = document.createElement('input');
+                radio.type = 'radio';
+                radio.name = 'option';
+                radio.value = i;
+                radio.checked = userAnswers[index] === i;
+                radio.addEventListener('change', () => checkAnswer(index, i, shuffledCorrect));
+                div.appendChild(radio);
+                div.appendChild(document.createTextNode(` ${shuffledOptions[i]}`));
+                optionsContainer.appendChild(div);
+            }
+
+            const feedback = document.querySelector('.feedback');
+            if (userAnswers[index] !== -1) {
+                feedback.style.display = 'block';
+                feedback.textContent = userAnswers[index] === shuffledCorrect ? 'Correct !' : 'Incorrect.';
+                feedback.className = userAnswers[index] === shuffledCorrect ? 'feedback' : 'feedback error';
+            } else {
+                feedback.style.display = 'none';
+            }
+
+            document.getElementById('prev').disabled = index === 0;
+        }
+
+        function checkAnswer(index, selected, correct) {
+            userAnswers[index] = selected;
+            const feedback = document.querySelector('.feedback');
+            feedback.style.display = 'block';
+            feedback.textContent = selected === correct ? 'Correct !' : 'Incorrect.';
+            feedback.className = selected === correct ? 'feedback' : 'feedback error';
+        }
+
+        function showResults() {
+            document.querySelector('.quiz-container').style.display = 'none';
+            const results = document.querySelector('.results');
+            results.style.display = 'block';
+            let score = 0;
+            let html = '<h2>Résultats</h2>';
+            shuffledQuestions.forEach((q, i) => {
+                const userChoice = userAnswers[i];
+                const correctIndex = originalCorrects[i];
+                const isCorrect = userChoice === correctIndex; // Note: this is based on original, but since we shuffled per display, but userAnswers is shuffled index
+                if (isCorrect) score++;
+                html += `<div class="question">${i + 1}. ${q.question}</div>`;
+                html += `<div>Réponse correcte : ${q.options[correctIndex]}</div>`;
+                html += `<div class="explanation">${q.explanation}</div><hr>`;
+            });
+            html = `<p>Score : ${score}/${shuffledQuestions.length}</p>` + html;
+            results.innerHTML = html;
+        }
+
+        document.getElementById('next').addEventListener('click', () => {
+            if (currentIndex < shuffledQuestions.length - 1) {
+                currentIndex++;
+                displayQuestion(currentIndex);
+            }
+        });
+
+        document.getElementById('prev').addEventListener('click', () => {
+            if (currentIndex > 0) {
+                currentIndex--;
+                displayQuestion(currentIndex);
+            }
+        });
+
+        document.getElementById('finish').addEventListener('click', showResults);
+
+        displayQuestion(0);
+    </script>
+</body>
+</html>

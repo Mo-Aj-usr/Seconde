@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QCM Histoire-Géo 2nde: Pékin-Taïwan (Randomisé)</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); overflow: hidden; }
+        .header { background: #2c3e50; color: white; padding: 20px; text-align: center; }
+        .progress { background: #ecf0f1; height: 8px; margin: 0 20px 20px; border-radius: 4px; overflow: hidden; }
+        .progress-bar { background: #3498db; height: 100%; transition: width 0.3s; width: 0%; }
+        .question-container { padding: 40px 30px; min-height: 400px; display: flex; flex-direction: column; justify-content: space-between; }
+        .question { font-size: 1.4em; font-weight: 600; margin-bottom: 30px; color: #2c3e50; line-height: 1.4; }
+        .options { display: flex; flex-direction: column; gap: 15px; }
+        .option { padding: 18px 20px; background: #f8f9fa; border: 2px solid transparent; border-radius: 12px; cursor: pointer; transition: all 0.3s; font-size: 1.1em; }
+        .option:hover { background: #e3f2fd; border-color: #2196f3; transform: translateY(-2px); }
+        .option.selected { background: #2196f3; color: white; border-color: #1976d2; }
+        .option.correct { background: #4caf50; color: white; border-color: #388e3c; }
+        .option.incorrect { background: #f44336; color: white; border-color: #d32f2f; }
+        .feedback { margin-top: 20px; padding: 15px; border-radius: 8px; font-weight: 500; opacity: 0; transition: opacity 0.3s; }
+        .feedback.show { opacity: 1; }
+        .feedback.correct { background: #e8f5e8; color: #2e7d32; border-left: 4px solid #4caf50; }
+        .feedback.incorrect { background: #ffebee; color: #c62828; border-left: 4px solid #f44336; }
+        .navigation { display: flex; gap: 10px; justify-content: space-between; margin-top: 30px; }
+        .btn { padding: 15px 25px; border: none; border-radius: 10px; font-size: 1.1em; font-weight: 600; cursor: pointer; transition: all 0.3s; flex: 1; }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; }
+        .btn-prev { background: #95a5a6; color: white; }
+        .btn-prev:hover:not(:disabled) { background: #7f8c8d; transform: translateX(-3px); }
+        .btn-next { background: #3498db; color: white; }
+        .btn-next:hover:not(:disabled) { background: #2980b9; transform: translateX(3px); }
+        .btn-finish { background: #27ae60; color: white; }
+        .btn-finish:hover:not(:disabled) { background: #229954; transform: scale(1.05); }
+        .results { padding: 40px 30px; text-align: center; display: none; }
+        .score { font-size: 3em; font-weight: 800; background: linear-gradient(45deg, #ff6b6b, #4ecdc4); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 20px; }
+        .detailed-results { margin-top: 30px; text-align: left; }
+        .result-item { padding: 15px; margin-bottom: 10px; border-radius: 8px; background: #f8f9fa; border-left: 4px solid #3498db; }
+        .result-item.correct { border-left-color: #27ae60; }
+        .result-item.incorrect { border-left-color: #e74c3c; }
+        @media (max-width: 600px) { 
+            .question-container { padding: 30px 20px; } 
+            .question { font-size: 1.2em; } 
+            .btn { padding: 12px 20px; font-size: 1em; }
+            .navigation { flex-direction: column; gap: 10px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🇨🇳 Relations Pékin-Taïwan 🇹🇼</h1>
+            <p>Niveau Lycée 2nde Histoire-Géo • Questions & réponses <strong>randomisées</strong></p>
+            <div class="progress"><div class="progress-bar" id="progress-bar"></div></div>
+        </div>
+
+        <div class="question-container" id="quiz">
+            <div class="question" id="question-text"></div>
+            <div class="options" id="options"></div>
+            <div class="feedback" id="feedback"></div>
+            <div class="navigation">
+                <button class="btn btn-prev" id="prev-btn" disabled>Précédent</button>
+                <button class="btn btn-next" id="next-btn">Suivant</button>
+                <button class="btn btn-finish" id="finish-btn">Terminer</button>
+            </div>
+        </div>
+
+        <div class="results" id="results">
+            <div class="score" id="score"></div>
+            <p id="score-text"></p>
+            <div class="detailed-results" id="detailed-results"></div>
+            <button class="btn" onclick="restartQuiz()" style="margin-top: 30px; background: #e74c3c; color: white;">🔄 Nouveau quiz randomisé</button>
+        </div>
+    </div>
+
+    <script>
+        const originalQuestions = [
+            {
+                question: "Quelle guerre civile a donné naissance à la rivalité Pékin-Taïwan ?",
+                options: ["Guerre du Vietnam", "Guerre de Corée", "Guerre civile chinoise (1927-1949)", "Guerre sino-japonaise"],
+                correct: 2,
+                short: "Guerre civile chinoise 1927-1949",
+                detail: "Après la victoire des communistes de Mao, les nationalistes de Tchang Kaï-chek fuient vers Taïwan en 1949, créant deux Chine rivales."
+            },
+            {
+                question: "En quelle année les nationalistes chinois fuient-ils vers Taïwan ?",
+                options: ["1937", "1945", "1949", "1955"],
+                correct: 2,
+                short: "1949",
+                detail: "Défaite des nationalistes (Guomindang) face aux communistes (PCC). Proclamation RPC à Pékin, ROC reste à Taïwan."
+            },
+            {
+                question: "Quel leader communiste proclame la RPC en 1949 ?",
+                options: ["Deng Xiaoping", "Mao Zedong", "Xi Jinping", "Zhou Enlai"],
+                correct: 1,
+                short: "Mao Zedong",
+                detail: "1er octobre 1949 : proclamation de la République populaire de Chine sur le continent."
+            },
+            {
+                question: "Taïwan était sous contrôle japonais de 1895 à quand ?",
+                options: ["1937", "1945", "1949", "1958"],
+                correct: 1,
+                short: "1945",
+                detail: "Traité de Shimonoseki (1895) → Restitution à la Chine après capitulation japonaise WWII."
+            },
+            {
+                question: "Quelle organisation internationale Taïwan a-t-elle perdue en 1971 ?",
+                options: ["OTAN", "ONU", "OMC", "ASEAN"],
+                correct: 1,
+                short: "ONU (Résolution 2758)",
+                detail: "Pékin remplace Taïwan comme représentant unique de la 'Chine' à l'ONU."
+            },
+            {
+                question: "Quelle doctrine US protège Taïwan militairement ?",
+                options: ["Doctrines Monroe", "Doctrines Truman", "Doctrines Eisenhower", "Taiwan Relations Act"],
+                correct: 3,
+                short: "Taiwan Relations Act 1979",
+                detail: "Après rupture diplomatique USA-Taïwan, engagement US à fournir armes défensives."
+            },
+            {
+                question: "Quelle île taïwanaise proche du continent fut disputée en 1958 ?",
+                options: ["Taïwan", "Penghu", "Kinmen", "Matsu"],
+                correct: 2,
+                short: "Kinmen (Quemoy)",
+                detail: "2e crise du détroit : bombardements chinois, intervention US."
+            },
+            {
+                question: "Quelle est la principale industrie stratégique de Taïwan ?",
+                options: ["Pétrole", "Semi-conducteurs", "Armement", "Automobile"],
+                correct: 1,
+                short: "Semi-conducteurs (TSMC)",
+                detail: "TSMC = 90% marché mondial puces avancées. Atout stratégique majeur."
+            },
+            {
+                question: "Quel parti taïwanais est favorable au statu quo ?",
+                options: ["DPP (Tsai Ing-wen)", "KMT (Kuomintang)", "NPP", "PFP"],
+                correct: 1,
+                short: "KMT",
+                detail: "Kuomintang : héritier nationalistes, pro-dialogue Pékin. DPP : indépendantiste."
+            },
+            {
+                question: "Quelle mer stratégique contrôle Taïwan ?",
+                options: ["Mer de Chine méridionale", "Mer de Chine orientale", "Détroit de Taïwan", "Mer Jaune"],
+                correct: 2,
+                short: "Détroit de Taïwan",
+                detail: "Route maritime vitale (1/3 commerce mondial). 1er rideau perles chinoises."
+            },
+            {
+                question: "Quand fut la 3e crise du détroit (plus grave) ?",
+                options: ["1954-55", "1958", "1995-96", "2008"],
+                correct: 2,
+                short: "1995-1996",
+                detail: "Missiles chinois vs élection Lee Teng-hui. 2e plus grande flotte US depuis Vietnam."
+            },
+            {
+                question: "Quelle politique chinoise justifie la réunification ?",
+                options: ["Une ceinture, une route", "Renaissance nationale", "Quatre modernisations", "Socialisme marché"],
+                correct: 1,
+                short: "Renaissance chinoise (Xi Jinping)",
+                detail: "Réunification = humiliation du siècle achevée (1842-1949)."
+            },
+            {
+                question: "Quelle alliance US contre Chine inclut Taïwan ?",
+                options: ["OTAN", "AUKUS", "QUAD", "Les trois"],
+                correct: 3,
+                short: "AUKUS + QUAD",
+                detail: "Quadrilatérale (USA-Japon-Australie-Inde) + AUKUS (sous-marins AUS)."
+            },
+            {
+                question: "Quelle résolution ONU reconnaît Pékin comme 'Chine' ?",
+                options: ["2434", "2758", "3386", "425"],
+                correct: 1,
+                short: "2758 (1971)",
+                detail: "Expulsion Taïwan, Pékin = seul représentant légitime."
+            },
+            {
+                question: "Quelle visite US déclenche 1re crise détroit ?",
+                options: ["Nixon 1972", "Dulles 1954", "Kissinger 1971", "Reagan 1984"],
+                correct: 1,
+                short: "John Foster Dulles 1954",
+                detail: "Secrétaire d'État US visite Taïwan → riposte chinoise bombardements."
+            },
+            {
+                question: "Quelle est la position officielle de Pékin sur Taïwan ?",
+                options: ["Indépendance acceptée", "Statu quo permanent", "Réunification inévitable", "Statut spécial"],
+                correct: 2,
+                short: "Réunification par la force si nécessaire",
+                detail: "Anti-sécession 2005 : recours militaire autorisé si proclamation indépendance."
+            },
+            {
+                question: "Quel pourcentage du commerce mondial passe par détroit Taïwan ?",
+                options: ["10%", "25%", "50%", "75%"],
+                correct: 1,
+                short: "25%",
+                detail: "2e route maritime mondiale après détroit Malacca."
+            },
+            {
+                question: "Quelle présidente taïwanaise (2016-2024) a défié Pékin ?",
+                options: ["Ma Ying-jeou", "Tsai Ing-wen", "Lai Ching-te", "Chen Shui-bian"],
+                correct: 1,
+                short: "Tsai Ing-wen (DPP)",
+                detail: "Visites USA, discours indépendance → sanctions chinoises."
+            },
+            {
+                question: "Quelle loi US de 1979 encadre relations USA-Taïwan ?",
+                options: ["Taiwan Travel Act", "Taiwan Relations Act", "Taiwan Assurance Act", "Taipei Act"],
+                correct: 1,
+                short: "Taiwan Relations Act",
+                detail: "Armes défensives + ambiguïté stratégique (ni garantie, ni abandon)."
+            },
+            {
+                question: "Quelle est l'enjeu économique majeur bloquant invasion ?",
+                options: ["Pétrole Taïwan", "Usines TSMC", "Ports Taïwan", "Tourisme"],
+                correct: 1,
+                short: "Chaîne semi-conducteurs mondiale",
+                detail: "Destruction TSMC = récession mondiale. Pékin hésite malgré tentation militaire."
+            }
+        ];
+
+        let questions = [];
+        let questionOrder = [];
+        let answerMapping = {};
+        let currentQuestion = 0;
+        let answers = new Array(20).fill(null);
+        let score = 0;
+        let isInitialized = false;
+
+        const questionEl = document.getElementById('question-text');
+        const optionsEl = document.getElementById('options');
+        const feedbackEl = document.getElementById('feedback');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const finishBtn = document.getElementById('finish-btn');
+        const progressBar = document.getElementById('progress-bar');
+        const quizEl = document.getElementById('quiz');
+        const resultsEl = document.getElementById('results');
+        const scoreEl = document.getElementById('score');
+        const scoreTextEl = document.getElementById('score-text');
+        const detailedResultsEl = document.getElementById('detailed-results');
+
+        function shuffleArray(array) {
+            const shuffled = [...array];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+
+        function initializeQuiz() {
+            // Randomiser l'ordre des questions
+            questionOrder = shuffleArray([...Array(originalQuestions.length).keys()]);
+            questions = questionOrder.map(idx => originalQuestions[idx]);
+            
+            // Pour chaque question, randomiser l'ordre des réponses et mapper
+            answerMapping = {};
+            questions.forEach((q, displayIdx) => {
+                const origIdx = questionOrder[displayIdx];
+                const shuffledOptions = shuffleArray([...originalQuestions[origIdx].options]);
+                const correctOrigIdx = originalQuestions[origIdx].correct;
+                const correctNewIdx = shuffledOptions.indexOf(originalQuestions[origIdx].options[correctOrigIdx]);
+                
+                answerMapping[displayIdx] = {
+                    origIdx: origIdx,
+                    correctDisplayIdx: correctNewIdx,
+                    correctOrigIdx: correctOrigIdx,
+                    shuffledOptions: shuffledOptions
+                };
+                
+                questions[displayIdx].options = shuffledOptions;
+                questions[displayIdx].correct = correctNewIdx;
+            });
+            
+            isInitialized = true;
+        }
+
+        function loadQuestion(index) {
+            if (!isInitialized) initializeQuiz();
+            
+            const q = questions[index];
+            questionEl.textContent = `Q${index + 1}/20: ${q.question}`;
+            
+            optionsEl.innerHTML = '';
+            q.options.forEach((option, i) => {
+                const div = document.createElement('div');
+                div.className = 'option';
+                div.textContent = option;
+                div.onclick = () => selectOption(i);
+                optionsEl.appendChild(div);
+            });
+
+            feedbackEl.classList.remove('show', 'correct', 'incorrect');
+            updateButtons();
+            updateProgress();
+        }
+
+        function selectOption(selected) {
+            const q = questions[currentQuestion];
+            const options = optionsEl.children;
+            
+            // Reset previous selections
+            for (let opt of options) {
+                opt.classList.remove('selected', 'correct', 'incorrect');
+            }
+            
+            // Mark selected
+            options[selected].classList.add('selected');
+            
+            // If already answered, show feedback
+            if (answers[currentQuestion] !== null) {
+                showFeedback(answers[currentQuestion] === q.correct);
+                return;
+            }
+            
+            answers[currentQuestion] = selected;
+            showFeedback(selected === q.correct);
+            
+            if (selected === q.correct) score++;
+        }
+
+        function showFeedback(isCorrect) {
+            const q = questions[currentQuestion];
+            const mapping = answerMapping[currentQuestion];
+            const origQ = originalQuestions[mapping.origIdx];
+            
+            feedbackEl.textContent = isCorrect ? 
+                `✅ ${origQ.short}` : 
+                `❌ Bonne réponse : ${origQ.options[origQ.correct]} (${origQ.short})`;
+                
+            feedbackEl.className = `feedback show ${isCorrect ? 'correct' : 'incorrect'}`;
+            
+            // Visual feedback on options
+            const options = optionsEl.children;
+            for (let i = 0; i < options.length; i++) {
+                if (i === q.correct) {
+                    options[i].classList.add('correct');
+                } else if (answers[currentQuestion] === i && i !== q.correct) {
+                    options[i].classList.add('incorrect');
+                }
+            }
+        }
+
+        function updateButtons() {
+            prevBtn.disabled = currentQuestion === 0;
+            nextBtn.disabled = false;
+            finishBtn.disabled = false;
+        }
+
+        function updateProgress() {
+            const answered = answers.filter(a => a !== null).length;
+            progressBar.style.width = `${Math.max((currentQuestion + 1) / questions.length * 50, answered / questions.length * 50) * 100}%`;
+        }
+
+        function nextQuestion() {
+            if (currentQuestion < questions.length - 1) {
+                currentQuestion++;
+                loadQuestion(currentQuestion);
+            }
+        }
+
+        function prevQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                loadQuestion(currentQuestion);
+            }
+        }
+
+        function finishQuiz() {
+            quizEl.style.display = 'none';
+            resultsEl.style.display = 'block';
+            
+            const percentage = Math.round((score / questions.length) * 100);
+            scoreEl.textContent = `${score}/20`;
+            scoreTextEl.textContent = `${percentage}% - ${getGrade(percentage)}`;
+            
+            detailedResultsEl.innerHTML = '';
+            questions.forEach((q, displayIdx) => {
+                const mapping = answerMapping[displayIdx];
+                const origQ = originalQuestions[mapping.origIdx];
+                
+                const div = document.createElement('div');
+                div.className = `result-item ${answers[displayIdx] === mapping.correctDisplayIdx ? 'correct' : 'incorrect'}`;
+                div.innerHTML = `
+                    <strong>Q${displayIdx + 1}:</strong> ${origQ.question}<br>
+                    <strong>Votre réponse:</strong> ${answers[displayIdx] !== null ? questions[displayIdx].options[answers[displayIdx]] : 'Non répondu'}<br>
+                    <strong>Bonne réponse:</strong> ${origQ.options[origQ.correct]}<br>
+                    <em>${origQ.detail}</em>
+                `;
+                detailedResultsEl.appendChild(div);
+            });
+        }
+
+        function getGrade(percentage) {
+            if (percentage >= 90) return "🎖️ Excellent!";
+            if (percentage >= 80) return "🏆 Très bien!";
+            if (percentage >= 70) return "👍 Bien!";
+            if (percentage >= 60) return "✅ Satisfaisant";
+            return "📚 À travailler";
+        }
+
+        function restartQuiz() {
+            currentQuestion = 0;
+            answers = new Array(20).fill(null);
+            score = 0;
+            isInitialized = false;
+            questions = [];
+            questionOrder = [];
+            answerMapping = {};
+            quizEl.style.display = 'block';
+            resultsEl.style.display = 'none';
+            loadQuestion(0);
+        }
+
+        // Event listeners - TERMINER TOUJOURS ACTIF
+        nextBtn.onclick = nextQuestion;
+        prevBtn.onclick = prevQuestion;
+        finishBtn.onclick = finishQuiz;
+
+        // Init
+        loadQuestion(0);
+    </script>
+</body>
+</html>

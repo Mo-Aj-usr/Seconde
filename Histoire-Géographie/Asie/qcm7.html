@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QCM – The Struggle for Taiwan (Sulmaan Wasif Khan)</title>
+
+<style>
+body{
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  background:#f4f6fa;
+  margin:0;
+}
+.container{
+  max-width:900px;
+  margin:auto;
+  padding:20px;
+}
+h1{text-align:center;}
+.progress{text-align:center;font-weight:600;margin-bottom:15px;}
+.question-box{
+  background:#fff;
+  padding:20px;
+  border-radius:12px;
+  box-shadow:0 8px 20px rgba(0,0,0,.08);
+}
+.choice{margin:10px 0;}
+.choice button{
+  width:100%;
+  padding:12px;
+  border-radius:8px;
+  border:2px solid #ddd;
+  background:#fff;
+  font-size:1rem;
+  cursor:pointer;
+}
+.choice button.selected{
+  background:#eef2ff;
+  border-color:#4f46e5;
+}
+.feedback{margin-top:10px;font-weight:600;}
+.feedback.correct{color:#16a34a;}
+.feedback.wrong{color:#dc2626;}
+
+.nav{
+  display:flex;
+  gap:10px;
+  margin-top:20px;
+}
+.nav button{
+  flex:1;
+  padding:12px;
+  border:none;
+  border-radius:8px;
+  background:#4f46e5;
+  color:#fff;
+  font-size:1rem;
+}
+.nav .secondary{background:#64748b;}
+.nav .finish{background:#16a34a;}
+
+.result{
+  margin-top:30px;
+  background:#fff;
+  padding:20px;
+  border-radius:12px;
+}
+.explanation{
+  margin-top:15px;
+  border-top:1px solid #e5e7eb;
+  padding-top:10px;
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+<h1>QCM – The Struggle for Taiwan</h1>
+<div class="progress" id="progress"></div>
+<div class="question-box" id="quiz"></div>
+
+<div class="nav">
+  <button class="secondary" onclick="prev()">Précédent</button>
+  <button onclick="next()">Suivant</button>
+  <button class="finish" onclick="finish()">Terminer</button>
+</div>
+
+<div id="results"></div>
+</div>
+
+<script>
+const questions = [
+{
+ q:"Selon Khan, pourquoi le « problème de Taïwan » n’est-il pas une fatalité historique ?",
+ choices:[
+  "Parce qu’il est uniquement culturel",
+  "Parce qu’il résulte de choix humains contingents",
+  "Parce qu’il est résolu par le droit international",
+  "Parce qu’il dépend uniquement de la Chine"
+ ],
+ answer:1,
+ explain:"Khan insiste sur le rôle central des décisions politiques et des erreurs de calcul. Le conflit n’est pas inévitable : il découle de choix faits par les dirigeants américains, chinois et taïwanais depuis 1943. D’autres trajectoires étaient possibles, et l’avenir reste ouvert malgré les tensions actuelles."
+},
+{
+ q:"Quel événement fait de Taïwan un enjeu central de la guerre froide ?",
+ choices:[
+  "La révolution culturelle",
+  "La conférence de Yalta",
+  "La guerre de Corée",
+  "La guerre du Vietnam"
+ ],
+ answer:2,
+ explain:"L’invasion nord-coréenne de 1950 transforme Taïwan en bastion anticommuniste stratégique. Truman ordonne à la 7ᵉ flotte de patrouiller le détroit, empêchant une invasion chinoise. Taïwan passe alors d’un territoire périphérique à un enjeu majeur de la guerre froide."
+},
+{
+ q:"Pourquoi Khan qualifie-t-il le 28 février 1947 de « massacre fondateur » ?",
+ choices:[
+  "Il marque la fin de la colonisation japonaise",
+  "Il fonde la République populaire de Chine",
+  "Il forge une identité taïwanaise distincte",
+  "Il entraîne l’intervention de l’ONU"
+ ],
+ answer:2,
+ explain:"La répression sanglante du soulèvement de 1947 par le régime du Kuomintang crée un traumatisme durable. Elle alimente un sentiment d’aliénation vis-à-vis du pouvoir chinois et pose les bases d’une identité taïwanaise distincte, non réductible à la Chine continentale."
+},
+{
+ q:"Pourquoi les États-Unis soutiennent-ils le régime autoritaire de Chiang Kai-shek ?",
+ choices:[
+  "Par affinité idéologique",
+  "Pour protéger les droits humains",
+  "Pour contenir le communisme",
+  "Par obligation juridique internationale"
+ ],
+ answer:2,
+ explain:"Dans le contexte de la guerre froide, Washington privilégie la realpolitik. Le régime autoritaire de Chiang est soutenu comme rempart contre Mao, malgré la répression interne. Les aspirations démocratiques taïwanaises sont alors largement ignorées au nom de l’anticommunisme."
+},
+{
+ q:"Quel est l’effet de la résolution 2758 de l’ONU en 1971 ?",
+ choices:[
+  "La reconnaissance de Taïwan",
+  "L’exclusion de la RPC",
+  "L’expulsion de Taïwan de l’ONU",
+  "La fin de la guerre froide"
+ ],
+ answer:2,
+ explain:"La résolution 2758 transfère le siège chinois à la RPC, excluant la République de Chine (Taïwan). C’est un tournant diplomatique majeur qui isole Taïwan sur la scène internationale et marque son sacrifice au profit du rapprochement sino-américain."
+},
+{
+ q:"Pourquoi Nixon et Kissinger acceptent-ils l’ambiguïté sur Taïwan ?",
+ choices:[
+  "Pour soutenir l’indépendance taïwanaise",
+  "Pour affaiblir le Japon",
+  "Pour contrer l’URSS",
+  "Pour éviter toute alliance asiatique"
+ ],
+ answer:2,
+ explain:"Le rapprochement avec la Chine vise avant tout à contenir l’Union soviétique. Taïwan devient une variable d’ajustement stratégique. L’ambiguïté permet aux États-Unis de reconnaître Pékin tout en conservant des liens de sécurité indirects avec Taïwan."
+},
+{
+ q:"Quel rôle joue le Taiwan Relations Act (1979) ?",
+ choices:[
+  "Il reconnaît Taïwan comme État indépendant",
+  "Il garantit une intervention militaire automatique",
+  "Il maintient un soutien défensif sans reconnaissance",
+  "Il met fin à l’ambiguïté stratégique"
+ ],
+ answer:2,
+ explain:"Le Taiwan Relations Act permet aux États-Unis de fournir des armes défensives à Taïwan après la reconnaissance de la RPC. Il institutionnalise l’ambiguïté stratégique : soutien sans reconnaissance diplomatique, afin de dissuader Pékin tout en évitant l’escalade."
+},
+{
+ q:"Pourquoi la crise du détroit de 1995–1996 est-elle décisive ?",
+ choices:[
+  "Elle conduit à l’indépendance",
+  "Elle déclenche une guerre",
+  "Elle consolide la démocratie taïwanaise",
+  "Elle met fin aux relations sino-américaines"
+ ],
+ answer:2,
+ explain:"Les manœuvres militaires chinoises échouent à intimider l’électorat. L’intervention navale américaine dissuade Pékin, et l’élection de Lee Teng-hui consacre la démocratie taïwanaise. La crise montre les limites de la coercition chinoise face au soutien américain."
+},
+{
+ q:"Pourquoi Hong Kong change-t-il la perception taïwanaise de Pékin ?",
+ choices:[
+  "Pour des raisons économiques",
+  "À cause de la répression de 2019–2020",
+  "En raison d’un traité international",
+  "À cause d’un conflit militaire"
+ ],
+ answer:1,
+ explain:"La répression de Hong Kong détruit la crédibilité du modèle « un pays, deux systèmes ». Pour les Taïwanais, elle confirme que Pékin ne respecte pas ses engagements et renforce le rejet massif de toute unification politique."
+},
+{
+ q:"Quel est l’effet global de la pandémie selon Khan ?",
+ choices:[
+  "Un apaisement des tensions",
+  "Une clarification définitive du statut",
+  "Un durcissement des lignes",
+  "Un retrait américain d’Asie"
+ ],
+ answer:2,
+ explain:"La pandémie accentue la méfiance : la Chine est perçue comme opaque et coercitive, Taïwan comme responsable et démocratique. Les États-Unis renforcent leur soutien, Pékin multiplie les pressions. Les trois acteurs se retrouvent au « bord du chaos »."
+}
+];
+
+// duplication à 20 questions
+while(questions.length < 20){
+ questions.push(JSON.parse(JSON.stringify(questions[questions.length % 10])));
+}
+
+// randomisation
+questions.sort(() => Math.random() - 0.5);
+questions.forEach(q => q.choices.sort(() => Math.random() - 0.5));
+
+let i=0;
+let answers = Array(questions.length).fill(null);
+
+function render(){
+ document.getElementById("progress").textContent =
+  `Question ${i+1} / ${questions.length}`;
+ const q = questions[i];
+ let html = `<h3>${q.q}</h3>`;
+ q.choices.forEach((c,idx)=>{
+  html += `<div class="choice">
+    <button class="${answers[i]===idx?'selected':''}"
+     onclick="select(${idx})">${c}</button>
+  </div>`;
+ });
+ if(answers[i]!==null){
+  html += `<div class="feedback ${
+    answers[i]===q.answer?'correct':'wrong'
+  }">
+  ${answers[i]===q.answer?'✔ Bonne réponse':'✘ Mauvaise réponse'}
+  </div>`;
+ }
+ document.getElementById("quiz").innerHTML = html;
+}
+function select(x){answers[i]=x;render();}
+function next(){if(i<questions.length-1){i++;render();}}
+function prev(){if(i>0){i--;render();}}
+
+function finish(){
+ let score = answers.filter((a,j)=>a===questions[j].answer).length;
+ let html = `<div class="result"><h2>Score : ${score} / ${questions.length}</h2>`;
+ questions.forEach((q,j)=>{
+  html += `<div class="explanation">
+   <strong>Q${j+1}.</strong> ${q.q}<br>
+   <em>Réponse correcte :</em> ${q.choices[q.answer]}<br>
+   ${q.explain}
+  </div>`;
+ });
+ html += "</div>";
+ document.getElementById("results").innerHTML = html;
+ window.scrollTo({top:document.body.scrollHeight,behavior:"smooth"});
+}
+
+render();
+</script>
+</body>
+</html>

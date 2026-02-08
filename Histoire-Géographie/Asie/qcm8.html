@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz VN Taïwan - CORRIGÉ</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: Arial, sans-serif; 
+            max-width: 900px; margin: 0 auto; padding: 20px; 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .container { 
+            background: white; border-radius: 15px; 
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1); padding: 30px; 
+        }
+        h1 { text-align: center; color: #333; margin-bottom: 20px; }
+        .subtitle { text-align: center; color: #666; margin-bottom: 30px; }
+        .selector { text-align: center; margin-bottom: 20px; }
+        .selector button { 
+            background: #4CAF50; color: white; border: none; 
+            padding: 12px 24px; margin: 0 10px; border-radius: 25px; 
+            cursor: pointer; font-size: 16px; transition: all 0.3s; 
+        }
+        .selector button:hover { background: #45a049; }
+        .selector button.active { background: #2196F3; }
+        .question-container { display: none; }
+        .question-container.active { display: block; }
+        .question { 
+            font-size: 1.4em; color: #333; margin-bottom: 25px; 
+            font-weight: bold; padding: 20px; background: #f8f9fa; 
+            border-radius: 10px; 
+        }
+        .options { list-style: none; margin-bottom: 30px; }
+        .options li { margin-bottom: 15px; }
+        .options input[type="radio"] { display: none; }
+        .options label { 
+            display: block; padding: 18px 25px; background: #f8f9fa; 
+            border: 2px solid #e9ecef; border-radius: 12px; cursor: pointer; 
+            font-size: 1.1em; transition: all 0.3s; 
+        }
+        .options input[type="radio"]:checked + label { 
+            background: #2196F3 !important; color: white !important; 
+            border-color: #2196F3 !important; 
+        }
+        .options label:hover { background: #e3f2fd; border-color: #2196F3; }
+        .navigation { 
+            display: flex; gap: 15px; justify-content: space-between; 
+            margin-top: 30px; 
+        }
+        .nav-btn, .finish-btn { 
+            padding: 15px 25px; border: none; border-radius: 25px; 
+            cursor: pointer; font-size: 16px; font-weight: bold; 
+            transition: all 0.3s; flex: 1; 
+        }
+        .prev-btn { background: #6c757d; color: white; }
+        .prev-btn:disabled { background: #ccc; cursor: not-allowed; }
+        .next-btn { background: #007bff; color: white; }
+        .finish-btn { background: #28a745; color: white; }
+        .nav-btn:hover:not(:disabled), .finish-btn:hover { 
+            transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.2); 
+        }
+        .progress { 
+            text-align: center; margin: 20px 0; font-size: 1.3em; 
+            color: #666; font-weight: bold; 
+        }
+        .randomize-btn { 
+            background: #ff9800; color: white; border: none; 
+            padding: 10px 20px; border-radius: 20px; cursor: pointer; 
+            font-size: 14px; display: block; margin: 0 auto 20px; 
+        }
+        .results { display: none; }
+        .results.active { display: block; }
+        .score { 
+            font-size: 3em; font-weight: bold; text-align: center; 
+            margin: 30px 0; padding: 20px; border-radius: 15px; 
+        }
+        .detailed-answer { 
+            margin: 25px 0; padding: 20px; background: white; 
+            border-left: 6px solid #28a745; border-radius: 8px; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1); 
+        }
+        .detailed-answer.wrong { border-left-color: #dc3545; }
+        @media (max-width: 768px) {
+            .navigation { flex-direction: column; }
+            .nav-btn, .finish-btn { margin: 5px 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🇹🇼 VN Taïwan face à la Chine 🇨🇳</h1>
+        <p class="subtitle">Quiz interactif • 20 questions • Randomisation • Navigation libre</p>
+        
+        <div class="selector">
+            <button onclick="startQuiz(1)" class="active" id="quiz1Btn">📚 Quiz 1: Histoire</button>
+            <button onclick="startQuiz(2)" id="quiz2Btn">💼 Quiz 2: Économie</button>
+        </div>
+
+        <button class="randomize-btn" onclick="randomizeCurrentQuiz()">
+            🔀 Randomiser questions & réponses
+        </button>
+
+        <div class="progress" id="progress">Question <span id="currentQ">1</span> / 20</div>
+
+        <div id="quiz1-container" class="question-container active">
+            <!-- Questions chargées par JS -->
+        </div>
+        <div id="quiz2-container" class="question-container">
+            <!-- Questions chargées par JS -->
+        </div>
+
+        <div class="navigation">
+            <button class="nav-btn prev-btn" id="prevBtn" onclick="previousQuestion()">⬅️ Précédent</button>
+            <button class="nav-btn next-btn" id="nextBtn" onclick="nextQuestion()">➡️ Suivant</button>
+            <button class="finish-btn" id="finishBtn" onclick="finishQuiz()">✅ Terminer Quiz</button>
+        </div>
+
+        <div id="results" class="results">
+            <div class="score" id="score"></div>
+            <h3 style="text-align: center; margin: 30px 0;">📋 Réponses détaillées</h3>
+            <div id="detailedAnswers"></div>
+            <div style="text-align: center; margin-top: 30px;">
+                <button onclick="restartQuiz()" class="nav-btn" style="width: 48%; background: #6c757d;">
+                    🔄 Recommencer
+                </button>
+                <button onclick="switchQuiz()" class="nav-btn" style="width: 48%; background: #17a2b8;">
+                    🔄 Autre Quiz
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // DONNÉES SIMPLES - AUCUNE ERREUR
+        const quizzesData = {
+            1: [  // QUIZ 1: HISTOIRE (20 questions)
+                {question: "Quel est le nom officiel de Taïwan?", options: ["République populaire de Chine", "République de Chine (ROC)", "Province de Chine", "Formose"], correct: 1},
+                {question: "Taïwan cédé au Japon en?", options: ["1683", "1895", "1945", "1949"], correct: 1},
+                {question: "Quelle dynastie intégra Taïwan?", options: ["Ming", "Qing", "Yuan", "Han"], correct: 1},
+                {question: "Population originelle majoritaire?", options: ["Chinoise Han", "Austronésienne", "Mandchoue", "Japonaise"], correct: 1},
+                {question: "Colonisation avec éducation moderne?", options: ["Néerlandaise", "Britannique", "Japonaise", "Américaine"], correct: 2},
+                {question: "Déclencheur Terreur Blanche 1947?", options: ["Incident 228", "Arrivée Chiang", "Loi martiale", "Élection Lee"], correct: 0},
+                {question: "Fin loi martiale à Taïwan?", options: ["1975", "1987", "1996", "2000"], correct: 1},
+                {question: "1er président élu au suffrage universel?", options: ["Chiang Kaï-shek", "Lee Teng-hui", "Tsai Ing-wen", "Chen Shui-bian"], correct: 1},
+                {question: "Parti au pouvoir depuis 2016?", options: ["Kuomintang (KMT)", "DPP", "Nouveau Parti", "PFP"], correct: 1},
+                {question: "Résolution ONU excluant Taïwan?", options: ["Résolution 194", "Résolution 2758", "Résolution 242", "Résolution 181"], correct: 1},
+                {question: "Politique de Deng Xiaoping pour Taïwan?", options: ["Un pays, deux systèmes", "Réunification immédiate", "Statu quo éternel", "Indépendance"], correct: 0},
+                {question: "Quelle crise pousse la démocratisation?", options: ["Guerre Corée", "Choc pétrolier", "Perte siège ONU 1971", "Révolution culturelle"], correct: 2},
+                {question: "Héritage léniniste du KMT?", options: ["Centralisme démocratique", "Économie planifiée", "Propriété collective", "Aucun"], correct: 0},
+                {question: "Quelle élite parle encore japonais?", options: ["Aborigènes", "Nés avant 1945", "Continentaux 1949", "Jeunesse actuelle"], correct: 1},
+                {question: "Révolte aborigène contre Japon?", options: ["Révolte Musha 1930", "Incident 228", "Bataille Kinmen", "Mouvement Tournesols"], correct: 0},
+                {question: "Loi chinoise 2005 autorisant la force?", options: ["Loi anti-indépendance", "Loi anti-sécession", "Loi réunification", "Loi martiale"], correct: 1},
+                {question: "Successeur direct de Sun Yat-sen?", options: ["Mao Zedong", "Chiang Kaï-shek", "Deng Xiaoping", "Zhou Enlai"], correct: 1},
+                {question: "Priorité de Mao après 1949?", options: ["Conquête Taïwan", "Réforme agraire", "Guerre Corée", "Plan 5 ans"], correct: 2},
+                {question: "Stratégie chinoise contre Taïwan?", options: ["Guerre asymétrique", "Guerre éclair", "Guerre nucléaire", "Guerre économique"], correct: 0},
+                {question: "Identité majoritaire chez Taïwanais (2020)?", options: ["Chinoise (77%)", "Taïwanaise (67%)", "Mixte (50-50)", "Indépendantiste (90%)"], correct: 1}
+            ],
+            2: [  // QUIZ 2: ÉCONOMIE (20 questions)
+                {question: "Export dominant vers Chine?", options: ["Agriculture", "Semi-conducteurs", "Textile", "Tourisme"], correct: 1},
+                {question: "50% marché mondial microprocesseurs?", options: ["Foxconn", "TSMC", "MediaTek", "UMC"], correct: 1},
+                {question: "1er investisseur étranger en Chine?", options: ["USA", "Japon", "Taïwan", "Corée du Sud"], correct: 2},
+                {question: "% exportations Taïwan vers Chine?", options: ["10%", "26%", "44%", "70%"], correct: 2},
+                {question: "Fondateur Foxconn (Hon Hai)?", options: ["Morris Chang", "Terry Gou", "Chang Yung-fa", "Jack Ma"], correct: 1},
+                {question: "Classement PIB Taïwan mondial?", options: ["10e", "15e", "21e", "30e"], correct: 2},
+                {question: "Parc scientifique des semi-conducteurs?", options: ["Taipei", "Hsinchu", "Kaohsiung", "Tainan"], correct: 1},
+                {question: "% Taïwanais voyageant à l'étranger (2019)?", options: ["15%", "25%", "35%", "50%"], correct: 2},
+                {question: "Taïwan à l'OMC sous quel nom?", options: ["Taïwan", "ROC", "Chinese Taipei", "Formose"], correct: 2},
+                {question: "Accord commercial Taïwan-Chine?", options: ["1992 Consensus", "ECFA 2010", "1996", "2005"], correct: 1},
+                {question: "% population connectée Internet Taïwan?", options: ["75%", "85%", "92%", "99%"], correct: 2},
+                {question: "Nombre entrepreneurs taïwanais en Chine?", options: ["500 000", "1-3 millions", "5 millions", "10 millions"], correct: 1},
+                {question: "Classement budget défense Chine?", options: ["1er", "2e (209 Mds$)", "3e", "4e"], correct: 1},
+                {question: "Soft power taïwanais majeur?", options: ["Instituts Confucius", "Cinéma/musique", "Belt and Road", "Télévision"], correct: 1},
+                {question: "Festival cinéma taïwanais?", options: ["Taipei Film Festival", "Golden Horse", "Kaohsiung FF", "Taipei Golden", "Golden Horse"], correct: 1},
+                {question: "Première femme présidente Asie du Sud-Est?", options: ["Lee Teng-hui", "Tsai Ing-wen", "Chen Shui-bian", "Lu Hsiu-lien"], correct: 1},
+                {question: "Taïwan dans Livre blanc chinois 2019?", options: ["Intérêt cardinal n°1", "Priorité n°3", "Mention secondaire", "Non cité"], correct: 0},
+                {question: "Porte-avions chinois dans détroit Taïwan?", options: ["2018 Liaoning", "2020-2021 Shandong/Liaoning", "2015", "2023"], correct: 1},
+                {question: "+150% incursions aériennes chinoises?", options: ["2018-2019", "2020-2021", "2022-2023", "2016-2017"], correct: 1},
+                {question: "Classement liberté presse Taïwan RSF 2021?", options: ["Top 10", "43e", "100e", "177e"], correct: 1}
+            ]
+        };
+
+        let currentQuiz = 1;
+        let currentQuestionIndex = 0;
+        let userAnswers = [];
+        let currentQuestions = [];
+
+        function shuffle(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function randomizeOptions(options, correctIndex) {
+            const indices = shuffle(Array.from({length: options.length}, (_, i) => i));
+            const newOptions = indices.map(i => options[i]);
+            const newCorrect = indices.indexOf(correctIndex);
+            return {options: newOptions, correct: newCorrect};
+        }
+
+        function randomizeCurrentQuiz() {
+            currentQuestions = quizzesData[currentQuiz].map(q => {
+                const randomized = randomizeOptions(q.options, q.correct);
+                return {...q, ...randomized};
+            });
+            shuffle(currentQuestions);
+            userAnswers = new Array(20).fill(null);
+            currentQuestionIndex = 0;
+            showQuestion();
+        }
+
+        function startQuiz(quizNum) {
+            currentQuiz = quizNum;
+            document.getElementById('quiz1Btn').classList.toggle('active', quizNum === 1);
+            document.getElementById('quiz2Btn').classList.toggle('active', quizNum === 2);
+            document.getElementById('quiz1-container').classList.toggle('active', quizNum === 1);
+            document.getElementById('quiz2-container').classList.toggle('active', quizNum === 2);
+            document.getElementById('results').classList.remove('active');
+            randomizeCurrentQuiz();
+        }
+
+        function showQuestion() {
+            const question = currentQuestions[currentQuestionIndex];
+            const container = document.getElementById(`quiz${currentQuiz}-container`);
+            
+            container.innerHTML = `
+                <div class="question">
+                    Question ${currentQuestionIndex + 1} / 20<br>
+                    <strong>${question.question}</strong>
+                </div>
+                <ul class="options">
+                    ${question.options.map((option, index) => `
+                        <li>
+                            <input type="radio" id="opt${index}" name="answer" value="${index}">
+                            <label for="opt${index}">${option}</label>
+                        </li>
+                    `).join('')}
+                </ul>
+            `;
+
+            if (userAnswers[currentQuestionIndex] !== null) {
+                document.querySelector(`input[value="${userAnswers[currentQuestionIndex]}"]`).checked = true;
+            }
+
+            updateUI();
+        }
+
+        function nextQuestion() {
+            saveAnswer();
+            if (currentQuestionIndex < 19) {
+                currentQuestionIndex++;
+                showQuestion();
+            }
+        }
+
+        function previousQuestion() {
+            saveAnswer();
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                showQuestion();
+            }
+        }
+
+        function saveAnswer() {
+            const selected = document.querySelector('input[name="answer"]:checked');
+            if (selected) {
+                userAnswers[currentQuestionIndex] = parseInt(selected.value);
+            }
+        }
+
+        function updateUI() {
+            document.getElementById('prevBtn').disabled = currentQuestionIndex === 0;
+            document.getElementById('currentQ').textContent = currentQuestionIndex + 1;
+        }
+
+        function finishQuiz() {
+            saveAnswer();
+            let correct = 0;
+            currentQuestions.forEach((q, i) => {
+                if (userAnswers[i] === q.correct) correct++;
+            });
+
+            const score = Math.round(correct / 20 * 100);
+            const scoreDiv = document.getElementById('score');
+            scoreDiv.innerHTML = `
+                <div style="color: ${score >= 80 ? '#28a745' : score >= 60 ? '#ffc107' : '#dc3545'}; font-size: 1.2em; margin-bottom: 10px;">
+                    ${correct}/20 (${score}%)
+                </div>
+                <div style="font-size: 1.5em;">
+                    ${score >= 80 ? '🎉 Excellent !' : score >= 60 ? '👍 Bien joué !' : '📚 À réviser'}
+                </div>
+            `;
+
+            let details = '';
+            currentQuestions.forEach((q, i) => {
+                const userAnswer = userAnswers[i];
+                const isCorrect = userAnswer === q.correct;
+                details += `
+                    <div class="detailed-answer ${!isCorrect ? 'wrong' : ''}">
+                        <strong>Q${i+1}:</strong> ${q.question}<br><br>
+                        <strong>Votre réponse:</strong> ${userAnswer !== null ? q.options[userAnswer] : 'Non répondu'}<br>
+                        <strong>✅ Bonne réponse:</strong> ${q.options[q.correct]}<br>
+                        <em>Source: VN Taïwan face à la Chine [file:1]</em>
+                    </div>
+                `;
+            });
+            document.getElementById('detailedAnswers').innerHTML = details;
+            document.getElementById('results').classList.add('active');
+        }
+
+        function restartQuiz() {
+            randomizeCurrentQuiz();
+        }
+
+        function switchQuiz() {
+            const nextQuiz = currentQuiz === 1 ? 2 : 1;
+            startQuiz(nextQuiz);
+        }
+
+        // LANCE LE QUIZ AUTOMATIQUEMENT
+        window.onload = function() {
+            console.log("Quiz chargé !");
+            startQuiz(1);
+        };
+    </script>
+</body>
+</html>
